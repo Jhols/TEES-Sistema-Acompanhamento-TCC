@@ -1,5 +1,8 @@
 package model;
 
+import java.sql.SQLException;
+
+import enums.BancoTabela;
 import enums.PerfilPessoa;
 
 public class PessoaFactory {
@@ -7,6 +10,8 @@ public class PessoaFactory {
 	public static Pessoa getPessoa(PerfilPessoa perfil) {
 		if (perfil == PerfilPessoa.ALUNO)
 			return new Aluno();
+		if (perfil == PerfilPessoa.PROFESSOR)
+			return new Professor();
 		/*if (tipo.equals("secretario"))
 			return new Aluno(nome, matricula);
 		else if (tipo.equals("coordenador"))
@@ -26,6 +31,17 @@ public class PessoaFactory {
 			((Aluno) pessoa).setMatricula(matricula);
 		/*else if (perfil == PerfilPessoa.PROFESSOR)
 			((Professor) pessoa).setMatricula(matricula);*/
+		return pessoa;
+	}
+	
+	
+	/// Cria um objeto pessoa do perfil especificado e preenche os dados base de pessoa do resultado
+	public static Pessoa getPessoa(PerfilPessoa perfil, java.sql.ResultSet resultado) throws NumberFormatException, SQLException {
+		Pessoa pessoa = getPessoa(perfil);
+		pessoa.setId(Integer.parseInt(resultado.getString(BancoTabela.PESSOA + ".id_pessoa")));
+		pessoa.setNome(resultado.getString(BancoTabela.PESSOA + ".nome"));
+		pessoa.setEmail(resultado.getString(BancoTabela.PESSOA + ".email"));
+		pessoa.setTelefone(resultado.getString(BancoTabela.PESSOA + ".telefone"));
 		return pessoa;
 	}
 	

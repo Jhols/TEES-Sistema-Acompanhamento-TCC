@@ -1,4 +1,4 @@
-package Banco;
+package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,11 +17,11 @@ public class ConnectionFactory {
 		String senha = "1234";
 		
 		try {
-			//Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(servidor, usuario, senha);
 		}
 		catch(SQLException e) {
-			System.out.println(e.getMessage());
+			System.out.println("ERRO FATAL: " + e.getMessage());
 		}
 		finally {
 			return con;

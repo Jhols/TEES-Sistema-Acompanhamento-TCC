@@ -47,5 +47,7 @@ public abstract class Pessoa {
 		this.telefone = telefone;
 	}
 	
-	
+	public String toString() {
+		return "nome: "+nome+"; email: "+ email + "; telefone: "+ telefone;
+	}
 }
