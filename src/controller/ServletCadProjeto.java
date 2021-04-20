@@ -40,6 +40,7 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "      <link href=\"resources/bootstrap/css/sb-admin-2.css\" rel=\"stylesheet\">\r\n"
 	  		+ "   </head>\r\n"
 	  		+ "   <body class=\"bg-gradient-primary\">\r\n"
+	  		+ "     <form method=\"POST\" action= 'cadProjeto' name=\"form\">"
 	  		+ "      <div class=\"container\">\r\n"
 	  		+ "         <div class=\"card o-hidden border-0 shadow-lg my-5\">\r\n"
 	  		+ "            <div class=\"card-body p-0\">\r\n"
@@ -127,6 +128,7 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "      <!-- Custom scripts for all pages-->\r\n"
 	  		+ "      <script src=\"resources/bootstrap/js/sb-admin-2.min.js\"></script>\r\n"
 	  		+ "      \r\n"
+	  		+" </form>"
 	  		+ "   </body>\r\n"
 	  		+ "</html>";
 	  		

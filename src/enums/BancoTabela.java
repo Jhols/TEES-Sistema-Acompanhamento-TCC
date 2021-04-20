@@ -4,7 +4,8 @@ public enum BancoTabela {
 	PESSOA ("pessoa"),
 	ALUNO ("aluno"),
 	PROFESSOR ("professor"),
-	PROJETO ("projeto");
+	PROJETO ("projeto"),
+	LOGIN("login");
 	
 	private String nomeTabela;
 	
