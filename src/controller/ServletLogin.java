@@ -17,8 +17,8 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		//LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
-		System.out.println(LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha")));
-				
+		String nomePessoa=LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
+		request.getSession().setAttribute("nome", nomePessoa);
 				
 	}
 

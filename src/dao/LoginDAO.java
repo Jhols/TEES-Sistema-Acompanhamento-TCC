@@ -7,14 +7,16 @@ import java.sql.Statement;
 
 import enums.BancoTabela;
 import model.Login;
+import model.Pessoa;
 import util.ConnectionFactory;
 
 public class LoginDAO {
 
 	@SuppressWarnings("finally")
-	public static ResultSet pesquisaLogin(String login, String senha) {
+	public static String  pesquisaLogin(String login, String senha) {
 		ResultSet resultado = null;
 		String sql;
+		String nome = null;
 		
 		//conectarBanco();
 		Connection conexao = null;
@@ -33,7 +35,17 @@ public class LoginDAO {
             resultado = stm.executeQuery(sql);
             if(resultado.next()) {
             	int idPessoa=resultado.getInt("pessoa_id");
-            	System.out.print(idPessoa);
+            	System.out.println(idPessoa);
+            	sql= "SELECT * FROM pessoa where pessoa.id_pessoa = "+idPessoa;
+            	System.out.println(sql);
+            	stm = conexao.createStatement();
+                resultado = stm.executeQuery(sql);
+                if(resultado.next()) {
+                	System.out.println("Achou linha");
+                	nome=resultado.getString("nome");
+                	
+                }
+            	
             }
             
 		}
@@ -41,7 +53,7 @@ public class LoginDAO {
 			System.out.println(e.getMessage());
 		}
 		finally {
-			return resultado;
+			return nome;
 		}
 		
 	}

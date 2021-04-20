@@ -18,7 +18,11 @@ public class ServletCadProjeto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	  
+		
+		String nome_professor = ((String) request.getSession().getAttribute("nome"));
+		if (nome_professor == null) {
+			nome_professor = "Prof Teste";
+		}
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		var writer = response.getWriter();
@@ -53,65 +57,20 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "                     <label for=\"exampleFormControlInput1\">Título do projeto</label>\r\n"
 	  		+ "                     <input  class=\"form-control\" id=\"exampleFormControlInput1\" >\r\n"
 	  		+ "                  </div>\r\n"
-	  		+ "                  <div class=\"form-group\">\r\n"
-	  		+ "                     <label for=\"exampleFormControlSelect1\">Professores</label>\r\n"
-	  		+ "                     <select class=\"btn btn-secondary dropdown-toggle\" id=\"exampleFormControlSelect1\">\r\n";
-	  		                       
 	  		
-	  		
-	  		var professores = ProfessorDAO.pesquisarTodosProfessores();
-	  		if (professores.size() == 0) {
-	  			pagina += "<option>SEM PROFESSORES</option>\r\n";
-	  		}
-	  		for (Professor p : professores) {
-	  			pagina += "<option>"+p.getNome()+"</option>\r\n";
-	  		}
-	  		response.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html; charset=UTF-8");
-	  		pagina+= 
-	  		"                     </select>\r\n"
-	  		+ "                  </div>\r\n"
-	  	
-	  		
-			+ "                  <div class=\"form-group\">\r\n"
-			+ "                     <label for=\"exampleFormControlSelect1\">Alunos</label>\r\n"
-			+ "                     <select class=\"btn btn-secondary dropdown-toggle\" id=\"exampleFormControlSelect1\">\r\n";
-	                       
-	
-	
-			var alunos = AlunoDAO.pesquisarTodosAlunos();
-			if (alunos.size() == 0) {
-				pagina += "<option>SEM PROFESSORES</option>\r\n";
-			}
-			for (Aluno p : alunos) {
-				pagina += "<option>"+p.getNome()+"</option>\r\n";
-			}
-			response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html; charset=UTF-8");
-			pagina+= 
-			"                     </select>\r\n"
-			+ "                  </div>\r\n"
-	  		
-	  		
-
-
-	  		
-	  		
-			+ "<div class=\"form-group\">\r\n"
-			+ "<label for=\"exampleFormControlSelect1\">Situação</label>\r\n"
-			+ "<select class=\"btn btn-secondary dropdown-toggle\" id=\"exampleFormControlSelect1\">\r\n"
-               			
-			+ "<option value=\"1\">EXCLUIDO</option>"
-			+ "<option value=\"1\">DISPONIVEL</option>"
-			+ "<option value=\"1\">ATIVO</option>"
-			+ "<option value=\"1\">DESATIVADO</option>"
-			
-			+ "</select>\r\n"
-			+ "</div>\r\n"	  		
-	  		
-	  		
-	  		
-	  		
+								+"<div class=\"form-group\">\r\n"
+									+"<input type=\"text\" value=\"" + nome_professor +  "\" disabled>"
+								+"</div>\r\n"
+								+"<div class=\"form-group\">\r\n"
+									+ "<label for=\"exampleFormControlSelect1\">Situação</label>\r\n"
+									+ "<select class=\"btn btn-secondary dropdown-toggle\" id=\"exampleFormControlSelect1\">\r\n"
+							            + "<option value=\"1\">EXCLUIDO</option>"
+										+ "<option value=\"1\">DISPONIVEL</option>"
+										+ "<option value=\"1\">ATIVO</option>"
+										+ "<option value=\"1\">DESATIVADO</option>"
+									
+									+ "</select>\r\n"
+								+ "</div>\r\n"	  		
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"exampleFormControlTextarea1\">Descrição</label>\r\n"
 	  		+ "                     <textarea class=\"form-control\" id=\"exampleFormControlTextarea1\" rows=\"3\"></textarea>\r\n"
