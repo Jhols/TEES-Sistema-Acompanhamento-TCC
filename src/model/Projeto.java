@@ -5,7 +5,7 @@ import enums.SituacaoProjeto;
 public class Projeto {
 	
 	private int id;
-	private String titulo;
+	private String titulo, descricao;
 	private Aluno aluno;
 	private SituacaoProjeto situacao;
 	
@@ -18,6 +18,10 @@ public class Projeto {
 	public Projeto(String titulo, SituacaoProjeto situacao) {
 		this.titulo = titulo;
 		this.situacao = situacao;
+	}
+
+	public Projeto() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getId() {
@@ -42,6 +46,15 @@ public class Projeto {
 
 	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
+		this.situacao = SituacaoProjeto.ATIVO;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public SituacaoProjeto getSituacao() {

@@ -35,6 +35,7 @@ public class Aluno extends Pessoa {
 
 	public void setProjeto(Projeto projeto) {
 		this.projeto = projeto;
+		this.projeto.setAluno(this);
 	}
 	
 	

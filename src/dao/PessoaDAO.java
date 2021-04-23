@@ -9,14 +9,14 @@ import enums.BancoTabela;
 import util.ConnectionFactory;
 
 public class PessoaDAO {
-
+	
+	// Realiza e retorna uma consulta no banco de dados por uma pessoa que tenha um determinado perfil
 	@SuppressWarnings("finally")
 	public static ResultSet selecionarPorPerfil(BancoTabela tabela) {
 		
 		ResultSet resultado = null;
 		String sql;
 		
-		//conectarBanco();
 		Connection conexao = null;
 		try {
 			conexao = ConnectionFactory.getConnection();
@@ -26,7 +26,7 @@ public class PessoaDAO {
 		}
 		
 		sql = "SELECT * FROM " + tabela + " inner join " + BancoTabela.PESSOA + 
-				" where " + tabela +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa;";
+				" WHERE " + tabela +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa;";
 		
 		try {
             Statement stm = conexao.createStatement();

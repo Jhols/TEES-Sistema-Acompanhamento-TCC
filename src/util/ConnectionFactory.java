@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
+	// Cria uma conexão com o banco de dados.
 	@SuppressWarnings("finally")
 	public static Connection getConnection() throws SQLException {
 		Connection con = null;
@@ -17,7 +18,6 @@ public class ConnectionFactory {
 		String senha = "1234";
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(servidor, usuario, senha);
 		}
 		catch(SQLException e) {
