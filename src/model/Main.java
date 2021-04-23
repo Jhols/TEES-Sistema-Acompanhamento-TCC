@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import dao.AlunoDAO;
 import dao.ProfessorDAO;
+import dao.ProjetoDAO;
+import enums.BancoTabela;
 import enums.PerfilPessoa;
 import enums.SituacaoProjeto;
 
@@ -11,16 +13,30 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		var pessoas = AlunoDAO.pesquisarTodosAlunos();
+		Pessoa prof1 = PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR, "Amorim", "0158532");
+		Pessoa alun1 = PessoaFactory.getPessoa(PerfilPessoa.ALUNO, "Joao", "071234567");
+		ArrayList<Projeto> projetos = new ArrayList<>();
 		
-		for (Pessoa pessoa : pessoas) {
-			System.out.println("Nome: " + pessoa.getNome() + " | matricula: " + ((Aluno) pessoa).getMatricula());
+		projetos = ProjetoDAO.pesquisarProjetosDisponiveis();
+		
+		System.out.println("Projetos Disponiveis:");
+		for (Projeto projeto : projetos) {
+			System.out.println("  - " + projeto.getTitulo());
 		}
 		
-		ArrayList<Professor> professores = ProfessorDAO.pesquisarTodosProfessores();
-		for (Professor p : professores) {
-			System.out.println(p);
-		}
+		System.out.println("\n\nOutros:");
+		Projeto proj = new Projeto();
+		proj = projetos.get(1);
+		//Projeto proj = new Projeto("Controle de fluido no ambiente com arduino");
+		System.out.println("Situacao antes de ser atribuida: " + proj.getSituacao());
+		
+		((Professor) prof1).addProjeto(proj);
+		((Aluno) alun1).setProjeto(proj);
+		
+		System.out.println("\nProfessor: " + prof1.getNome() + " | Titulo Projeto: " + ((Professor) prof1).getProjeto(0).getTitulo());
+		System.out.println("Aluno: " + alun1.getNome() + " | Titulo Projeto: " + ((Aluno) alun1).getProjeto().getTitulo());
+		System.out.println("Descricao projeto: " + ((Aluno) alun1).getProjeto().getDescricao());
+		System.out.println("Situacao Projeto agora: " + proj.getSituacao());
 		
 	}
 

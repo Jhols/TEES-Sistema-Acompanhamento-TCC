@@ -11,13 +11,14 @@ import model.PessoaFactory;
 
 public class AlunoDAO {
 	
+	//Consulta todos os alunos no banco de dados e os inclui numa lista a ser retornada.
 	@SuppressWarnings("finally")
 	public static ArrayList<Aluno> pesquisarTodosAlunos() {
 		ArrayList<Aluno> alunos = new ArrayList<>();
-		ResultSet resultado = PessoaDAO.selecionarPorPerfil(BancoTabela.ALUNO);
+		ResultSet resultado = PessoaDAO.selecionarPorPerfil(BancoTabela.ALUNO); //Realiza a consulta no banco
 		
 		try {
-			while(resultado.next()) {
+			while(resultado.next()) { //Atribui os valores encontrados em uma lista de objetos de alunos
 				Aluno aluno = ((Aluno) PessoaFactory.getPessoa(PerfilPessoa.ALUNO, resultado));
 				aluno.setMatricula(resultado.getString(BancoTabela.ALUNO + ".matricula"));
 				alunos.add(aluno);
@@ -28,7 +29,6 @@ public class AlunoDAO {
 		} finally {
 			return alunos;			
 		}
-		
 	}
 	
 	
