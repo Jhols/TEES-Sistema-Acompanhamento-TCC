@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.AlunoDAO;
-import dao.ProfessorDAO;
+import dao.AlunoDAOImpl;
+import dao.ProfessorDAOImpl;
 import model.Aluno;
 import model.Professor;
 

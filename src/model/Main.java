@@ -2,42 +2,40 @@ package model;
 
 import java.util.ArrayList;
 
-import dao.AlunoDAO;
-import dao.ProfessorDAO;
-import dao.ProjetoDAO;
+import dao.AlunoDAOImpl;
+import dao.ProfessorDAOImpl;
+import dao.ProjetoDAOImpl;
 import enums.BancoTabela;
 import enums.PerfilPessoa;
+import enums.SituacaoInscricao;
 import enums.SituacaoProjeto;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		Pessoa prof1 = PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR, "Amorim", "0158532");
-		Pessoa alun1 = PessoaFactory.getPessoa(PerfilPessoa.ALUNO, "Joao", "071234567");
-		ArrayList<Projeto> projetos = new ArrayList<>();
+		Pessoa a1 = PessoaFactory.getPessoa(PerfilPessoa.ALUNO);
+		a1.setId(3);
+		System.out.println("ID: " + a1.getId());
+		a1 = AlunoDAOImpl.getInstance().findById(a1.getId());
+		System.out.println("ID: " + a1.getId());
+		System.out.println(a1.getNome() + " | " + ((Aluno) a1).getMatricula());
 		
-		projetos = ProjetoDAO.pesquisarProjetosDisponiveis();
+		Projeto projeto = new Projeto();
+		projeto.setId(2);
+		projeto = ProjetoDAOImpl.getInstance().findById(projeto.getId());
 		
-		System.out.println("Projetos Disponiveis:");
-		for (Projeto projeto : projetos) {
-			System.out.println("  - " + projeto.getTitulo());
-		}
+		InscricaoProjeto inscricao = new InscricaoProjeto();
 		
-		System.out.println("\n\nOutros:");
-		Projeto proj = new Projeto();
-		proj = projetos.get(1);
-		//Projeto proj = new Projeto("Controle de fluido no ambiente com arduino");
-		System.out.println("Situacao antes de ser atribuida: " + proj.getSituacao());
-		
-		((Professor) prof1).addProjeto(proj);
-		((Aluno) alun1).setProjeto(proj);
-		
-		System.out.println("\nProfessor: " + prof1.getNome() + " | Titulo Projeto: " + ((Professor) prof1).getProjeto(0).getTitulo());
-		System.out.println("Aluno: " + alun1.getNome() + " | Titulo Projeto: " + ((Aluno) alun1).getProjeto().getTitulo());
-		System.out.println("Descricao projeto: " + ((Aluno) alun1).getProjeto().getDescricao());
-		System.out.println("Situacao Projeto agora: " + proj.getSituacao());
-		
+		inscricao.setAluno((Aluno) a1);
+		inscricao.setProjeto(projeto);
+		inscricao.setSituacaoInscricao(SituacaoInscricao.CANDIDATO);
+		System.out.println("Projeto: " + inscricao.getProjeto().getTitulo());
+		System.out.println("Situação: " + inscricao.getProjeto().getSituacao());
+		//antes de ser associado
+		((Aluno) a1).setProjeto(projeto);
+		//depois de ser associado
+		System.out.println("Situação: " + inscricao.getProjeto().getSituacao());
 	}
 
 }
