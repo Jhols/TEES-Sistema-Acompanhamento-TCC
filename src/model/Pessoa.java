@@ -1,9 +1,20 @@
 package model;
 
+import enums.Perfil;
+
 public abstract class Pessoa {
 	private int id;
 	private String nome, email, telefone;
+	private Perfil perfil;
 	
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	protected void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
+
 	public Pessoa() {
 		
 	}

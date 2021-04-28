@@ -1,12 +1,14 @@
 package enums;
 
 public enum BancoTabela {
+	NONE(""),
 	PESSOA ("pessoa"),
 	ALUNO ("aluno"),
 	PROFESSOR ("professor"),
 	PROJETO ("projeto"),
 	LOGIN("login"),
-	SITUACAO_PROJETO ("situacao_projeto");
+	SITUACAO_PROJETO ("situacao_projeto"),
+	PERFIL_PESSOA ("perfil_pessoa");
 	
 	private String nomeTabela;
 	

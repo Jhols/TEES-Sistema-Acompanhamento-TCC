@@ -5,11 +5,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
-import enums.PerfilPessoa;
+import enums.Perfil;
 import model.Professor;
 import model.PessoaFactory;
 
 public class ProfessorDAO {
+	
+	@SuppressWarnings("finally")
+	public static Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
+		Professor professor = null;
+		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.PROFESSOR, idPessoa);
+		
+		try {
+			if (resultado.next()) {
+				professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
+				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			return professor;			
+		}
+		
+	}
 
 	@SuppressWarnings("finally")
 	public static ArrayList<Professor> pesquisarTodosProfessores() {
@@ -18,9 +38,7 @@ public class ProfessorDAO {
 		
 		try {
 			while(resultado.next()) {
-				Professor professor = ((Professor) PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR, resultado));
-				professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
-				
+				Professor professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
 				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
 				
 				professores.add(professor);

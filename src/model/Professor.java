@@ -2,10 +2,36 @@ package model;
 
 import java.util.ArrayList;
 
+import enums.Perfil;
+
+
 public class Professor extends Pessoa {
+
+	enum Tipo {
+		PROFESSOR_TCC,
+		PROFESSOR_ORIENTADOR,
+		PROFESSOR_TCC_E_ORIENTADOR;
+		
+		public static Tipo fromInt(int value) {
+			switch (value) {
+			case 0: return Tipo.PROFESSOR_TCC;
+			case 1: return Tipo.PROFESSOR_ORIENTADOR;
+			case 2: return Tipo.PROFESSOR_TCC_E_ORIENTADOR;
+			default:
+				//throw new Exception();
+				return Tipo.PROFESSOR_TCC;
+			}
+		}
+	}
+	
+	public Professor() {
+		this.setPerfil(Perfil.PROFESSOR);
+	}
 	
 	String matricula;
 	ArrayList<Projeto> projetos = new ArrayList<>();
+	
+	Tipo tipo;
 	
 	public String getMatricula() {
 		return matricula;
@@ -14,7 +40,7 @@ public class Professor extends Pessoa {
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
-	
+
 	public void addProjeto(Projeto projeto) {
 		this.projetos.add(projeto);
 	}
@@ -27,10 +53,29 @@ public class Professor extends Pessoa {
 	public Projeto getProjeto(int indice) {
 		return projetos.get(indice);
 	}
+
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
+	public boolean isOrientador() {
+		return tipo == Tipo.PROFESSOR_ORIENTADOR || tipo == Tipo.PROFESSOR_TCC_E_ORIENTADOR;
+	}
+	
+	@Override
+	public String toString() {
+		return "Professor [matricula=" + matricula + ", projetos=" + projetos + ", tipo=" + tipo + ", Pessoa="
+				+ super.toString() + "]";
+	}
+	
+
+
 	
 	// TODO: CalendarioDeEntregas calendarioDeEntregas
 	
-	public String toString() {
-		return "Professor: matricula " + matricula + "; " + super.toString();
-	}
+	
 }

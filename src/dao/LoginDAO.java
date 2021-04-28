@@ -5,18 +5,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import enums.BancoTabela;
-import model.Login;
+import enums.Perfil;
 import model.Pessoa;
 import util.ConnectionFactory;
 
 public class LoginDAO {
 
 	@SuppressWarnings("finally")
-	public static String  pesquisaLogin(String login, String senha) {
+	public static Pessoa pesquisaPessoa(String login, String senha) {
 		ResultSet resultado = null;
 		String sql;
-		String nome = null;
+		Pessoa pessoa = null;
 		
 		//conectarBanco();
 		Connection conexao = null;
@@ -28,21 +27,39 @@ public class LoginDAO {
 		}
 		
 		sql = "SELECT * FROM login  where login.login = '" + login + "' and login.senha = '" + senha + "'";
-		System.out.println(sql);
 		
 		try {
             Statement stm = conexao.createStatement();
             resultado = stm.executeQuery(sql);
             if(resultado.next()) {
-            	int idPessoa=resultado.getInt("pessoa_id");
-            	System.out.println(idPessoa);
-            	sql= "SELECT * FROM pessoa where pessoa.id_pessoa = "+idPessoa;
-            	System.out.println(sql);
+            	int idPessoa = resultado.getInt("pessoa_id");
+            	//System.out.println("id encontrado " + idPessoa);
+            	sql = "SELECT * FROM perfil_pessoa where id_pessoa = " + idPessoa;
+            	//System.out.println(sql);
             	stm = conexao.createStatement();
                 resultado = stm.executeQuery(sql);
+                
                 if(resultado.next()) {
-                	System.out.println("Achou linha");
-                	nome=resultado.getString("nome");
+                	var perfil = Perfil.fromId(resultado.getInt("id_perfil"));
+                	switch (perfil) {
+					case ADMINISTRADOR:
+						break;
+					case ALUNO:
+						//pessoa = AlunoDAO.pesquisarTodosAlunos()
+						break;
+					case COORDENADOR:
+						break;
+					case NENHHUM:
+						break;
+					case PROFESSOR:
+						pessoa = ProfessorDAO.pesquisarProfessorPorIdPessoa(idPessoa);
+						break;
+					case SECRETARIO:
+						break;
+					default:
+						break;
+                	
+                	} 
                 	
                 }
             	
@@ -53,7 +70,7 @@ public class LoginDAO {
 			System.out.println(e.getMessage());
 		}
 		finally {
-			return nome;
+			return pessoa;
 		}
 		
 	}

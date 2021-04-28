@@ -1,15 +1,13 @@
 package model;
 
-import java.util.ArrayList;
-
-import enums.SituacaoProjeto;
+import enums.Perfil;
 
 public class Aluno extends Pessoa {
 	private String matricula;
 	private	Projeto projeto;
 
 	public Aluno() {
-		
+		this.setPerfil(Perfil.ALUNO);
 	}
 	
 	public Aluno (String matricula) {
@@ -37,6 +35,12 @@ public class Aluno extends Pessoa {
 		this.projeto = projeto;
 		this.projeto.setAluno(this);
 	}
+
+	@Override
+	public String toString() {
+		return "Aluno [matricula=" + matricula + ", projeto=" + projeto + ", Pessoa=" + super.toString() + "]";
+	}
+	
 	
 	
 	

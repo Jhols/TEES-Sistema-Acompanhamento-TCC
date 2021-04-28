@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
-import enums.PerfilPessoa;
+import enums.Perfil;
 import model.Aluno;
 import model.PessoaFactory;
 
@@ -19,7 +19,7 @@ public class AlunoDAO {
 		
 		try {
 			while(resultado.next()) { //Atribui os valores encontrados em uma lista de objetos de alunos
-				Aluno aluno = ((Aluno) PessoaFactory.getPessoa(PerfilPessoa.ALUNO, resultado));
+				Aluno aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
 				aluno.setMatricula(resultado.getString(BancoTabela.ALUNO + ".matricula"));
 				alunos.add(aluno);
 			}

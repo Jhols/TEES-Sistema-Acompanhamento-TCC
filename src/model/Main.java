@@ -6,15 +6,15 @@ import dao.AlunoDAO;
 import dao.ProfessorDAO;
 import dao.ProjetoDAO;
 import enums.BancoTabela;
-import enums.PerfilPessoa;
+import enums.Perfil;
 import enums.SituacaoProjeto;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		Pessoa prof1 = PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR, "Amorim", "0158532");
-		Pessoa alun1 = PessoaFactory.getPessoa(PerfilPessoa.ALUNO, "Joao", "071234567");
+		Pessoa prof1 = PessoaFactory.getPessoa(Perfil.PROFESSOR, "Amorim", "0158532");
+		Pessoa alun1 = PessoaFactory.getPessoa(Perfil.ALUNO, "Joao", "071234567");
 		ArrayList<Projeto> projetos = new ArrayList<>();
 		
 		projetos = ProjetoDAO.pesquisarProjetosDisponiveis();

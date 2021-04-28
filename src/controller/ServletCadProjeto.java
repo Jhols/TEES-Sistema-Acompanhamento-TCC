@@ -47,7 +47,7 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "     <form method=\"POST\" action= 'cadProjeto' name=\"form\">"
 	  		+ "      <div class=\"container\">\r\n"
 	  		+ "         <div class=\"card o-hidden border-0 shadow-lg my-5\">\r\n"
-	  		+ "            <div class=\"card-body p-0\">\r\n"
+	  		+ "            <div class=\"card-body\">\r\n"
 	  		+ "               <!-- Nested Row within Card Body -->\r\n"
 	  		+ "               <div class=\"page-header\">\r\n"
 	  		+ "                  <h1 class=\"text-center font-weight-bold\">CADASTRO DE PROJETOS</h1>\r\n"
