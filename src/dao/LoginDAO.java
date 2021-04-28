@@ -33,7 +33,7 @@ public class LoginDAO {
             resultado = stm.executeQuery(sql);
             if(resultado.next()) {
             	int idPessoa = resultado.getInt("pessoa_id");
-            	//System.out.println("id encontrado " + idPessoa);
+            	System.out.println("id encontrado " + idPessoa);
             	sql = "SELECT * FROM perfil_pessoa where id_pessoa = " + idPessoa;
             	//System.out.println(sql);
             	stm = conexao.createStatement();
@@ -41,11 +41,12 @@ public class LoginDAO {
                 
                 if(resultado.next()) {
                 	var perfil = Perfil.fromId(resultado.getInt("id_perfil"));
+                	System.out.println("Perfil = "+perfil);
                 	switch (perfil) {
 					case ADMINISTRADOR:
 						break;
 					case ALUNO:
-						//pessoa = AlunoDAO.pesquisarTodosAlunos()
+						pessoa = AlunoDAO.pesquisarAlunoPorIdPessoa(idPessoa);
 						break;
 					case COORDENADOR:
 						break;
@@ -59,8 +60,10 @@ public class LoginDAO {
 					default:
 						break;
                 	
-                	} 
-                	
+                	}
+                }
+                else {
+                	System.out.println("Erro: perfil não encontrado para pessoa id = "+idPessoa);
                 }
             	
             }

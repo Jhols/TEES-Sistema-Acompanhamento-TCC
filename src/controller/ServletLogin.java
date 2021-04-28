@@ -42,6 +42,9 @@ public class ServletLogin extends HttpServlet {
 			case SECRETARIO:
 				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;
+			case ALUNO:
+				requestDispatcher = request.getRequestDispatcher("/alunoDashboard");
+				break;
 			default:
 				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;

@@ -8,6 +8,7 @@ import enums.BancoTabela;
 import enums.Perfil;
 import model.Aluno;
 import model.PessoaFactory;
+import model.Professor;
 
 public class AlunoDAO {
 	
@@ -30,6 +31,27 @@ public class AlunoDAO {
 			return alunos;			
 		}
 	}
+	
+	@SuppressWarnings("finally")
+	public static Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
+		Aluno aluno = null;
+		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
+		
+		try {
+			if (resultado.next()) {
+				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
+				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			return aluno;			
+		}
+		
+	}
+	
 	
 	
 }
