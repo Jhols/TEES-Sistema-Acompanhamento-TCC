@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,16 +11,53 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.AlunoDAO;
 import dao.ProfessorDAO;
+import dao.ProjetoDAO;
+import enums.SituacaoProjeto;
 import model.Aluno;
 import model.Professor;
+import model.Projeto;
 
 @WebServlet(name = "Usuarios", urlPatterns = {"/cadProjeto"})
 public class ServletCadProjeto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		ProjetoDAO dao = new ProjetoDAO();
+		
+		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
+		Projeto projeto = new Projeto();
+		
+		projeto.setIdProfessor(professor.getIdProfessor());
+		
+		projeto.setTitulo(request.getParameter("tituloProjeto"));
+		
+		String situacao = request.getParameter("situacao");
+		int situacaoIndex = Integer.parseInt(situacao);
+		SituacaoProjeto situacaoEnum = SituacaoProjeto.fromInt(situacaoIndex);
+		projeto.setSituacao(situacaoEnum);
+		//System.out.println("string:"+situacao + " int:"+situacaoIndex+" enum:"+situacaoEnum);
+		
+		projeto.setDescricao(request.getParameter("descricao"));
+		
+		System.out.println(projeto);
+		
+		dao.addProjeto(projeto);
+		System.out.print("adicionou"); 
+		
+		
+		response.sendRedirect("professorDashboard?cadastroProjeto=OK");
+		 
+	}
+	
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String nome_professor = ((String) request.getSession().getAttribute("nome"));
+		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
+		
+		String nome_professor = professor.getNome();
+		;
 		if (nome_professor == null) {
 			nome_professor = "Prof Teste";
 		}
@@ -55,27 +93,30 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "               <form>\r\n"
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"exampleFormControlInput1\">Título do projeto</label>\r\n"
-	  		+ "                     <input  class=\"form-control\" id=\"exampleFormControlInput1\" >\r\n"
+	  		+ "                     <input  class=\"form-control\" id=\"tituloProjeto\" name=\"tituloProjeto\">\r\n"
 	  		+ "                  </div>\r\n"
 	  		
 								+"<div class=\"form-group\">\r\n"
+            +                    "<label for=\\\"exampleFormControlInput1\\\">Nome</label>\n"
 									+"<input type=\"text\" value=\"" + nome_professor +  "\" disabled>"
 								+"</div>\r\n"
 								+"<div class=\"form-group\">\r\n"
 									+ "<label for=\"exampleFormControlSelect1\">Situação</label>\r\n"
-									+ "<select class=\"btn btn-secondary dropdown-toggle\" id=\"exampleFormControlSelect1\">\r\n"
+									+ "<select class=\"btn btn-secondary dropdown-toggle\" id=\"situacao\" name=\"situacao\" >\r\n"
 							            + "<option value=\"1\">EXCLUIDO</option>"
-										+ "<option value=\"1\">DISPONIVEL</option>"
-										+ "<option value=\"1\">ATIVO</option>"
-										+ "<option value=\"1\">DESATIVADO</option>"
+										+ "<option value=\"2\">DISPONIVEL</option>"
+										+ "<option value=\"3\">ATIVO</option>"
+										+ "<option value=\"4\">DESATIVADO</option>"
 									
 									+ "</select>\r\n"
 								+ "</div>\r\n"	  		
 	  		+ "                  <div class=\"form-group\">\r\n"
-	  		+ "                     <label for=\"exampleFormControlTextarea1\">Descrição</label>\r\n"
-	  		+ "                     <textarea class=\"form-control\" id=\"exampleFormControlTextarea1\" rows=\"3\"></textarea>\r\n"
+	  		+ "                     <label for=\"descricao\">Descrição</label>\r\n"
+	  		+ "                     <textarea class=\"form-control\" value=\"<c:out value=\"${user.descricao}\" id=\"exampleFormControlTextarea1\" name=\"descricao\" rows=\"3\"></textarea>\r\n"
+	  			
 	  		+ "                  </div>\r\n"
 	  		+ "               </form>\r\n"
+	  		+	"<input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\">"
 	  		+ "            </div>\r\n"
 	  		+ "         </div>\r\n"
 	  		+ "      </div>\r\n"
@@ -90,7 +131,8 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+" </form>"
 	  		+ "   </body>\r\n"
 	  		+ "</html>";
-	  		
+	  	String teste=request.getParameter("descricao");
+	  	System.out.println(teste);
 	  	writer.write(pagina);
 	  
 	}

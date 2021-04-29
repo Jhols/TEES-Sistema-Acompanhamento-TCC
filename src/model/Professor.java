@@ -32,7 +32,16 @@ public class Professor extends Pessoa {
 	ArrayList<Projeto> projetos = new ArrayList<>();
 	
 	Tipo tipo;
+	int idProfessor;
 	
+	public int getIdProfessor() {
+		return idProfessor;
+	}
+
+	public void setIdProfessor(int idProfessor) {
+		this.idProfessor = idProfessor;
+	}
+
 	public String getMatricula() {
 		return matricula;
 	}

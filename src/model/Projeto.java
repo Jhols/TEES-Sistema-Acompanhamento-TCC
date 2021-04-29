@@ -8,8 +8,17 @@ public class Projeto {
 	private String titulo, descricao;
 	private Aluno aluno;
 	private SituacaoProjeto situacao;
+	private int idProfessor;
 	
 	
+	public int getIdProfessor() {
+		return idProfessor;
+	}
+
+	public void setIdProfessor(int idProfessor) {
+		this.idProfessor = idProfessor;
+	}
+
 	public Projeto(String titulo) {
 		this.titulo = titulo;
 		this.situacao = SituacaoProjeto.DISPONIVEL;
@@ -64,6 +73,13 @@ public class Projeto {
 	public void setSituacao(SituacaoProjeto situacao) {
 		this.situacao = situacao;
 	}
+
+	@Override
+	public String toString() {
+		return "Projeto [id=" + id + ", titulo=" + titulo + ", descricao=" + descricao + ", situacao=" + situacao
+				+ ", idProfessor=" + idProfessor + "]";
+	}
+	
 	
 	
 	

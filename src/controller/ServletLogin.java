@@ -25,32 +25,26 @@ public class ServletLogin extends HttpServlet {
 		request.getSession().setAttribute("perfil", pessoa.getPerfil());
 		request.getSession().setAttribute("pessoa", pessoa);
 		
-		RequestDispatcher requestDispatcher;
+		
 		switch(pessoa.getPerfil()) {
 			case ADMINISTRADOR:
-				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;
 			case COORDENADOR:
-				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;
 			case NENHHUM:
-				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;
 			case PROFESSOR:
-				requestDispatcher = request.getRequestDispatcher("/professorDashboard");
+				response.sendRedirect("professorDashboard");
 				break;
 			case SECRETARIO:
-				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;
 			case ALUNO:
-				requestDispatcher = request.getRequestDispatcher("/alunoDashboard");
+				response.sendRedirect("alunoDashboard");
 				break;
 			default:
-				requestDispatcher = request.getRequestDispatcher("/WEB-INF/paginas/UsuarioLogado.jsp");
 				break;
 			
 		}
-		requestDispatcher.forward(request, response);
 	}
 
 }

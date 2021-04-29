@@ -15,7 +15,7 @@ import model.Professor;
 public class ServletDashboardProfessor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		System.out.println(professor);
@@ -130,8 +130,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "    <!-- Custom scripts for all pages-->\r\n"
 		+ "    <script src=\"resources/bootstrap/js/sb-admin-2.min.js\"></script>\r\n"
 		+ "\r\n"
-		+ "</body>\r\n"
-		+ "\r\n"
+		+ "</body>\r\n";
+		
+		System.out.println(request.getParameter("cadastroProjeto"));
+		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
+			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
+		}
+		
+		html += "\r\n"
 		+ "</html>";
 		
 		writer.write(html);

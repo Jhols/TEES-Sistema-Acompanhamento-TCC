@@ -75,6 +75,7 @@ public class PessoaFactory {
 	private static void popularDadosProfessor(Professor professor, ResultSet resultado) throws SQLException {
 		professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
 		var tipo_prof = resultado.getInt(BancoTabela.PROFESSOR + ".tipo_prof");
+		professor.setIdProfessor(resultado.getInt(BancoTabela.PROFESSOR + ".id_professor"));
 		System.out.println(tipo_prof);
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
 	}
