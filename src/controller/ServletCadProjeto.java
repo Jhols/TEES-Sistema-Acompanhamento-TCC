@@ -33,10 +33,7 @@ public class ServletCadProjeto extends HttpServlet {
 		
 		projeto.setTitulo(request.getParameter("tituloProjeto"));
 		
-		String situacao = request.getParameter("situacao");
-		int situacaoIndex = Integer.parseInt(situacao);
-		SituacaoProjeto situacaoEnum = SituacaoProjeto.fromInt(situacaoIndex);
-		projeto.setSituacao(situacaoEnum);
+		projeto.setSituacao(SituacaoProjeto.DISPONIVEL);
 		//System.out.println("string:"+situacao + " int:"+situacaoIndex+" enum:"+situacaoEnum);
 		
 		projeto.setDescricao(request.getParameter("descricao"));
@@ -45,7 +42,6 @@ public class ServletCadProjeto extends HttpServlet {
 		
 		dao.addProjeto(projeto);
 		System.out.print("adicionou"); 
-		
 		
 		response.sendRedirect("professorDashboard?cadastroProjeto=OK");
 		 
@@ -91,25 +87,18 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "                  <h1 class=\"text-center font-weight-bold\">CADASTRO DE PROJETOS</h1>\r\n"
 	  		+ "               </div>\r\n"
 	  		+ "               <form>\r\n"
+	  		+                  "<div class=\"form-group\">\r\n"
+            +                    "<label for=\\\"exampleFormControlInput1\\\">Nome</label>\n"
+									+"<input type=\"text\" value=\"" + nome_professor +  "\" disabled>"
+								+"</div>\r\n"
+	  		
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"exampleFormControlInput1\">Título do projeto</label>\r\n"
 	  		+ "                     <input  class=\"form-control\" id=\"tituloProjeto\" name=\"tituloProjeto\">\r\n"
 	  		+ "                  </div>\r\n"
 	  		
-								+"<div class=\"form-group\">\r\n"
-            +                    "<label for=\\\"exampleFormControlInput1\\\">Nome</label>\n"
-									+"<input type=\"text\" value=\"" + nome_professor +  "\" disabled>"
-								+"</div>\r\n"
-								+"<div class=\"form-group\">\r\n"
-									+ "<label for=\"exampleFormControlSelect1\">Situação</label>\r\n"
-									+ "<select class=\"btn btn-secondary dropdown-toggle\" id=\"situacao\" name=\"situacao\" >\r\n"
-							            + "<option value=\"1\">EXCLUIDO</option>"
-										+ "<option value=\"2\">DISPONIVEL</option>"
-										+ "<option value=\"3\">ATIVO</option>"
-										+ "<option value=\"4\">DESATIVADO</option>"
-									
-									+ "</select>\r\n"
-								+ "</div>\r\n"	  		
+								
+									  		
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"descricao\">Descrição</label>\r\n"
 	  		+ "                     <textarea class=\"form-control\" value=\"<c:out value=\"${user.descricao}\" id=\"exampleFormControlTextarea1\" name=\"descricao\" rows=\"3\"></textarea>\r\n"
