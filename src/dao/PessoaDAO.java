@@ -9,15 +9,15 @@ import enums.BancoTabela;
 import enums.PerfilPessoa;
 import util.ConnectionFactory;
 
-public class PessoaDAOImpl implements InterfaceDAO {
+public class PessoaDAO {
 	
-	private static PessoaDAOImpl uniqueInstance; //Singleton
+	private static PessoaDAO uniqueInstance; //Singleton
 	
-	private PessoaDAOImpl() { }
+	private PessoaDAO() { }
 	
-	public static synchronized PessoaDAOImpl getInstance() {
+	public static synchronized PessoaDAO getInstance() {
 		if (uniqueInstance == null)
-			uniqueInstance = new PessoaDAOImpl();
+			uniqueInstance = new PessoaDAO();
 		return uniqueInstance;
 	}
 	
@@ -42,11 +42,14 @@ public class PessoaDAOImpl implements InterfaceDAO {
 		try {
             Statement stm = conexao.createStatement();
             resultado = stm.executeQuery(sql);
+            stm.close();
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 			return resultado;
 		}
 		
@@ -85,19 +88,16 @@ public class PessoaDAOImpl implements InterfaceDAO {
 		
 	}
 
-	@Override
 	public boolean incluir() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public void atualizar() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public boolean deletar() {
 		// TODO Auto-generated method stub
 		return false;

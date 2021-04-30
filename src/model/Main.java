@@ -2,9 +2,10 @@ package model;
 
 import java.util.ArrayList;
 
-import dao.AlunoDAOImpl;
-import dao.ProfessorDAOImpl;
-import dao.ProjetoDAOImpl;
+import dao.AlunoDAO;
+import dao.InscricaoProjetoDAO;
+import dao.ProfessorDAO;
+import dao.ProjetoDAO;
 import enums.BancoTabela;
 import enums.PerfilPessoa;
 import enums.SituacaoInscricao;
@@ -14,28 +15,22 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Pessoa a1 = PessoaFactory.getPessoa(PerfilPessoa.ALUNO);
-		a1.setId(3);
-		System.out.println("ID: " + a1.getId());
-		a1 = AlunoDAOImpl.getInstance().findById(a1.getId());
-		System.out.println("ID: " + a1.getId());
-		System.out.println(a1.getNome() + " | " + ((Aluno) a1).getMatricula());
+		Pessoa aluno = PessoaFactory.getPessoa(PerfilPessoa.ALUNO, null, "0715123");
+		Projeto projeto = new Projeto("projeto roots");
 		
-		Projeto projeto = new Projeto();
-		projeto.setId(2);
-		projeto = ProjetoDAOImpl.getInstance().findById(projeto.getId());
+		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
+		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
 		
-		InscricaoProjeto inscricao = new InscricaoProjeto();
+		InscricaoProjeto inscricao = new InscricaoProjeto(((Aluno) aluno), projeto);
 		
-		inscricao.setAluno((Aluno) a1);
-		inscricao.setProjeto(projeto);
-		inscricao.setSituacaoInscricao(SituacaoInscricao.CANDIDATO);
-		System.out.println("Projeto: " + inscricao.getProjeto().getTitulo());
-		System.out.println("Situação: " + inscricao.getProjeto().getSituacao());
-		//antes de ser associado
-		((Aluno) a1).setProjeto(projeto);
-		//depois de ser associado
-		System.out.println("Situação: " + inscricao.getProjeto().getSituacao());
+		/*Boolean b = InscricaoProjetoDAOImpl.getInstance().incluir(inscricao);
+		
+		System.out.println(b.toString());*/
+		
+		Boolean b = InscricaoProjetoDAO.getInstance().deletar(inscricao);
+		
+		System.out.println(b.toString());
+		
 	}
 
 }

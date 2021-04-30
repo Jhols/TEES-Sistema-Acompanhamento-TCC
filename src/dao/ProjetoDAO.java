@@ -9,19 +9,20 @@ import java.sql.Statement;
 import enums.BancoTabela;
 import enums.SituacaoProjeto;
 import model.Aluno;
+import model.Professor;
 import model.Projeto;
 import util.ConnectionFactory;
 import model.Projeto;
 
-public class ProjetoDAOImpl implements InterfaceDAO {
+public class ProjetoDAO {
 	
-	private static ProjetoDAOImpl uniqueInstance; //Singleton
+	private static ProjetoDAO uniqueInstance; //Singleton
 	
-	private ProjetoDAOImpl() { }
+	private ProjetoDAO() { }
 	
-	public static synchronized ProjetoDAOImpl getInstance() {
+	public static synchronized ProjetoDAO getInstance() {
 		if (uniqueInstance == null)
-			uniqueInstance = new ProjetoDAOImpl();
+			uniqueInstance = new ProjetoDAO();
 		return uniqueInstance;
 	}
 	
@@ -46,20 +47,22 @@ public class ProjetoDAOImpl implements InterfaceDAO {
 		try {
             Statement stm = conexao.createStatement();
             resultado = stm.executeQuery(sql);
-		}
-		catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		
-		try {
-			resultado.next();
+            
+            resultado.next();
 			projeto.setId(id);
 			projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
 			projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
+			projeto.getProfessor().setId(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getId()));
 			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString(BancoTabela.SITUACAO_PROJETO+".descricao").toUpperCase()));
-		} catch (SQLException e) {
+            
+			stm.close();
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 			return projeto;
 		}
 	}
@@ -95,32 +98,95 @@ public class ProjetoDAOImpl implements InterfaceDAO {
 				projeto.setId(resultado.getInt(BancoTabela.PROJETO + ".id_projeto"));
 				projeto.setTitulo(resultado.getString(BancoTabela.PROJETO + ".titulo"));
 				projeto.setDescricao(resultado.getString(BancoTabela.PROJETO + ".descricao"));
-				
+				projeto.setProfessor(ProfessorDAO.getInstance().findById(resultado.getInt(BancoTabela.PROJETO+".id_professor")));
 				String situacao = resultado.getString(BancoTabela.SITUACAO_PROJETO + ".descricao");
 				projeto.setSituacao(SituacaoProjeto.valueOf(situacao.toUpperCase()));
 				
 				projetos.add(projeto);
 			}
+			stm.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 			return projetos;			
 		}
 	}
 
-	@Override
-	public boolean incluir() {
+	
+	@SuppressWarnings("finally")
+	public Projeto findByTitulo(String titulo) {
+		Projeto projeto = new Projeto();
+		ResultSet resultado = null;
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO +
+				" WHERE " + BancoTabela.PROJETO+".titulo = '" + titulo + "' AND " + BancoTabela.PROJETO+".id_situacao = " + BancoTabela.SITUACAO_PROJETO+".id_situacao_projeto;";
+		
+		try {
+            Statement stm = conexao.createStatement();
+            resultado = stm.executeQuery(sql);
+            
+            resultado.next();
+			projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_"+BancoTabela.PROJETO.toString().toLowerCase()));
+			projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
+			projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
+			projeto.getProfessor().setId(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getId()));
+			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString(BancoTabela.SITUACAO_PROJETO+".descricao").toUpperCase()));
+            
+			stm.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+			return projeto;
+		}
+	}
+	
+	public Professor findProfessorById(int idProjeto) {
+		Professor professor = new Professor();
+		
+		
+		
+		return professor;
+	}
+	
+	public boolean incluir(Projeto projeto) {
 		// TODO Auto-generated method stub
+		String sql;
+		try {
+			Connection conexao = ConnectionFactory.getConnection();
+			
+			Statement stm = conexao.createStatement();
+			
+			//sql = "INSERT INTO " 
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
-	@Override
 	public void atualizar() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public boolean deletar() {
 		// TODO Auto-generated method stub
 		return false;

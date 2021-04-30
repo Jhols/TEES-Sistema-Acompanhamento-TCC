@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.LoginDAOImpl;
+import dao.LoginDAO;
 
 
 
@@ -17,7 +17,7 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		//LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
-		String nomePessoa=LoginDAOImpl.getInstance().pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
+		String nomePessoa=LoginDAO.getInstance().pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
 		request.getSession().setAttribute("nome", nomePessoa);
 				
 	}

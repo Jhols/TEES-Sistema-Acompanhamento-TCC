@@ -18,6 +18,7 @@ public abstract class ConnectionFactory {
 		String senha = "123456";
 		
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection(servidor, usuario, senha);
 		}
 		catch(SQLException e) {

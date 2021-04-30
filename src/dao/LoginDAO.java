@@ -10,15 +10,15 @@ import model.Login;
 import model.Pessoa;
 import util.ConnectionFactory;
 
-public class LoginDAOImpl implements InterfaceDAO {
+public class LoginDAO {
 
-	private static LoginDAOImpl uniqueInstance; //Singleton
+	private static LoginDAO uniqueInstance; //Singleton
 	
-	private LoginDAOImpl() { }
+	private LoginDAO() { }
 	
-	public static synchronized LoginDAOImpl getInstance() {
+	public static synchronized LoginDAO getInstance() {
 		if (uniqueInstance == null)
-			uniqueInstance = new LoginDAOImpl();
+			uniqueInstance = new LoginDAO();
 		return uniqueInstance;
 	}
 	
@@ -57,30 +57,29 @@ public class LoginDAOImpl implements InterfaceDAO {
                 }
             	
             }
-            
+            stm.close();
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 			return nome;
 		}
 		
 	}
 
-	@Override
 	public boolean incluir() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public void atualizar() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public boolean deletar() {
 		// TODO Auto-generated method stub
 		return false;

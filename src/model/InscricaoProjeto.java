@@ -1,6 +1,7 @@
 package model;
 
 import enums.SituacaoInscricao;
+import enums.SituacaoProjeto;
 
 public class InscricaoProjeto {
 	private int id;
@@ -9,25 +10,26 @@ public class InscricaoProjeto {
 	private SituacaoInscricao situacaoInscricao;
 	
 	public InscricaoProjeto() {
-		
+		aluno = new Aluno();
+		projeto = new Projeto();
 	}
 
 	public InscricaoProjeto(Aluno aluno, Projeto projeto) {
+		this();
 		this.aluno = aluno;
 		this.projeto = projeto;
 		this.situacaoInscricao = SituacaoInscricao.CANDIDATO;
 	}
 	
 	public InscricaoProjeto(Aluno aluno, Projeto projeto, SituacaoInscricao situacaoInscricao) {
+		this();
 		this.aluno = aluno;
 		this.projeto = projeto;
 		this.situacaoInscricao = situacaoInscricao;
 		if (this.situacaoInscricao == SituacaoInscricao.ASSOCIADO) {
-			this.aluno.setProjeto(this.projeto);
+			this.projeto.setSituacao(SituacaoProjeto.ATIVO);
 		}
 	}
-	
-	
 
 	public int getId() {
 		return id;
