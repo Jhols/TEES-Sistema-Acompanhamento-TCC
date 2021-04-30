@@ -22,7 +22,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		
 		if (professor == null) {
 			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
+			professor = (Professor) LoginDAO.getInstance().pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
 		

@@ -32,11 +32,11 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		if (professor == null) {
 			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
+			professor = (Professor) LoginDAO.getInstance().pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
 		
-		var projetos = ProjetoDAO.pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.DISPONIVEL);
+		var projetos = ProjetoDAO.getInstance().pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.DISPONIVEL);
 		
 		
 		var linhas = new ArrayList<HashMap<String, String>>();
@@ -45,7 +45,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		for (Projeto p:projetos) {
 			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesParaProjeto(p.getId());
+			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesParaProjeto(p.getId());
 			for (InscricaoProjeto in : inscricoes) {
 				System.out.println(in);
 				System.out.println(in.getAluno());

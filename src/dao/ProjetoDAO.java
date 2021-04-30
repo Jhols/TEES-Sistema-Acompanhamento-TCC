@@ -69,7 +69,7 @@ public class ProjetoDAO {
 	}
 
 	
-	public static ArrayList<Projeto> pesquisarProjetosPorProfessorESituacao(int idProfessor, SituacaoProjeto situacao) {
+	public  ArrayList<Projeto> pesquisarProjetosPorProfessorESituacao(int idProfessor, SituacaoProjeto situacao) {
 		ArrayList<Projeto> projetos = new ArrayList<Projeto>();
 		
 		
@@ -98,7 +98,7 @@ public class ProjetoDAO {
 		return projetos;
 	}
 	
-	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {
+	private  void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {
 		projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_projeto"));
 		projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
 		projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));

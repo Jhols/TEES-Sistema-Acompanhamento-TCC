@@ -11,8 +11,18 @@ import util.ConnectionFactory;
 
 public class LoginDAO {
 
+	private static LoginDAO uniqueInstance = null;
+	
+	private LoginDAO() {}
+	
+	public static synchronized LoginDAO getInstance() {
+		if (uniqueInstance == null)
+			uniqueInstance = new LoginDAO();
+		return uniqueInstance;
+	}
+	
 	@SuppressWarnings("finally")
-	public static Pessoa pesquisaPessoa(String login, String senha) {
+	public  Pessoa pesquisaPessoa(String login, String senha) {
 		ResultSet resultado = null;
 		String sql;
 		Pessoa pessoa = null;
@@ -46,7 +56,7 @@ public class LoginDAO {
 					case ADMINISTRADOR:
 						break;
 					case ALUNO:
-						pessoa = AlunoDAO.pesquisarAlunoPorIdPessoa(idPessoa);
+						pessoa = AlunoDAO.getInstance().pesquisarAlunoPorIdPessoa(idPessoa);
 						break;
 					case COORDENADOR:
 						break;

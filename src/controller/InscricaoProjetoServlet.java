@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.AlunoDAO;
 import dao.InscricaoProjetoDAO;
 import dao.ProjetoDAO;
-import enums.PerfilPessoa;
+import enums.Perfil;
 import model.Aluno;
 import model.InscricaoProjeto;
 import model.Pessoa;
@@ -47,7 +47,7 @@ public class InscricaoProjetoServlet extends HttpServlet {
 	    		Projeto projeto = new Projeto();
 	    		projeto.setTitulo(request.getParameter("titulo"));
 	    		String professor = request.getParameter("professor");
-	    		Pessoa aluno = PessoaFactory.getPessoa(PerfilPessoa.ALUNO, null, request.getParameter("alunoMatricula"));
+	    		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
 	    		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
 	    		InscricaoProjeto inscricao = null;
 	    		
@@ -76,7 +76,7 @@ public class InscricaoProjetoServlet extends HttpServlet {
 	    		Projeto projeto2 = new Projeto();
 	    		projeto2.setTitulo(request.getParameter("titulo"));
 	    		professor = request.getParameter("professor");
-	    		Pessoa aluno2 = PessoaFactory.getPessoa(PerfilPessoa.ALUNO, null, request.getParameter("alunoMatricula"));
+	    		Pessoa aluno2 = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
 	    		aluno2 = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno2).getMatricula());
 	    		InscricaoProjeto inscricao2 = null;
 	    		

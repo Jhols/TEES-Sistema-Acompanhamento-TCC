@@ -36,7 +36,7 @@ public class ServletCadProjeto extends HttpServlet {
 		
 		System.out.println(projeto);
 		
-		ProjetoDAO.addProjeto(projeto);
+		ProjetoDAO.getInstance().addProjeto(projeto);
 		System.out.print("adicionou"); 
 		
 		response.sendRedirect("professorDashboard?cadastroProjeto=OK");
@@ -49,7 +49,7 @@ public class ServletCadProjeto extends HttpServlet {
 		
 		if (professor == null) {
 			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
+			professor = (Professor) LoginDAO.getInstance().pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
 		

@@ -1,6 +1,7 @@
 package model;
 
 import dao.AlunoDAO;
+import enums.SituacaoInscricao;
 
 public class InscricaoProjeto {
 	
@@ -9,9 +10,26 @@ public class InscricaoProjeto {
 	private int idProjeto;
 	private int idSituacaoInscricao;
 	
+	//A ser discutido:
+	private Aluno aluno = null;
+	private Projeto projeto = null;
+	private SituacaoInscricao situacaoInscricao = null;
 	
+	public InscricaoProjeto() {
+		aluno = new Aluno();
+		projeto = new Projeto();
+		situacaoInscricao = SituacaoInscricao.CANDIDATO;
+	}
+
+	public InscricaoProjeto(Aluno aluno, Projeto projeto) {
+		this();
+		this.aluno = aluno;
+		this.projeto = projeto;
+	}
+
+	//A ser discutido:
 	public Aluno getAluno() {
-		return AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+		return AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
 	}
 	
 	public int getIdInscricao() {
@@ -43,8 +61,27 @@ public class InscricaoProjeto {
 		return "InscricaoProjeto [idInscricao=" + idInscricao + ", idAluno=" + idAluno + ", idProjeto=" + idProjeto
 				+ ", idSituacaoInscricao=" + idSituacaoInscricao + "]";
 	}
-	
-	
+
+	public Projeto getProjeto() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
+	}
+
+	public void setAluno(Aluno aluno) {
+		this.aluno = aluno;
+	}
+
+	public SituacaoInscricao getSituacaoInscricao() {
+		return situacaoInscricao;
+	}
+
+	public void setSituacaoInscricao(SituacaoInscricao situacaoInscricao) {
+		this.situacaoInscricao = situacaoInscricao;
+	}
 	
 	
 

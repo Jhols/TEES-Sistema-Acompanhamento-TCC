@@ -11,9 +11,19 @@ import util.ConnectionFactory;
 
 public class PessoaDAO {
 	
+	private static PessoaDAO uniqueInstance = null;
+	
+	private PessoaDAO() {}
+	
+	public static synchronized PessoaDAO getInstance() {
+		if (uniqueInstance == null)
+			uniqueInstance = new PessoaDAO();
+		return uniqueInstance;
+	}
+	
 	// Realiza e retorna uma consulta no banco de dados por uma pessoa que tenha um determinado perfil e determinado ID
 		@SuppressWarnings("finally")
-		public static ResultSet selecionarPorPerfilEId(Perfil perfil, int idPessoa) {
+		public  ResultSet selecionarPorPerfilEId(Perfil perfil, int idPessoa) {
 			
 			ResultSet resultado = null;
 			String sql;
@@ -46,7 +56,7 @@ public class PessoaDAO {
 	
 	// Realiza e retorna uma consulta no banco de dados por uma pessoa que tenha um determinado perfil
 	@SuppressWarnings("finally")
-	public static ResultSet selecionarPorPerfil(BancoTabela tabela) {
+	public  ResultSet selecionarPorPerfil(BancoTabela tabela) {
 		
 		ResultSet resultado = null;
 		String sql;
