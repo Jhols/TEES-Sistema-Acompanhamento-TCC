@@ -76,7 +76,6 @@ public abstract class PessoaFactory {
 		professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
 		var tipo_prof = resultado.getInt(BancoTabela.PROFESSOR + ".tipo_prof");
 		professor.setIdProfessor(resultado.getInt(BancoTabela.PROFESSOR + ".id_professor"));
-		System.out.println(tipo_prof);
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
 	}
 	

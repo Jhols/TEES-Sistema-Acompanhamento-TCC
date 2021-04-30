@@ -49,7 +49,7 @@ public class InscricaoProjetoDAO {
 			stm = conexao.createStatement();
 			resultado = stm.executeQuery(sql);
 			
-			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados à inscrição a ser retornada
+			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados ï¿½ inscriï¿½ï¿½o a ser retornada
 				inscricao = new InscricaoProjeto();
 				
 				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
@@ -59,7 +59,7 @@ public class InscricaoProjetoDAO {
 				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
 			}
 			else {
-				System.out.println("Não foi encontrada a inscrição procurada");
+				System.out.println("Nï¿½o foi encontrada a inscriï¿½ï¿½o procurada");
 			}
 			
 		} catch (SQLException e) {
@@ -126,7 +126,7 @@ public class InscricaoProjetoDAO {
 			
 			stm = conexao.createStatement();
 			
-			//Se a inscrição não existir no banco, cria uma nova
+			//Se a inscriï¿½ï¿½o nï¿½o existir no banco, cria uma nova
 			if (findByAlunoAndProjeto(inscricao.getAluno(), inscricao.getProjeto()) == null) {
 				sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
 						+ "VALUES ("
@@ -137,7 +137,7 @@ public class InscricaoProjetoDAO {
 				
 				respostaInsert = stm.executeUpdate(sql);
 			}
-			//Senão, atualiza a situação da inscrição encontrada para 'candidato'
+			//Senï¿½o, atualiza a situaï¿½ï¿½o da inscriï¿½ï¿½o encontrada para 'candidato'
 			else {
 				SituacaoInscricao situacao = SituacaoInscricao.CANDIDATO;
 				respostaInsert = atualizar(inscricao, situacao) ? 1 : 0;
@@ -174,7 +174,7 @@ public class InscricaoProjetoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			inscricao.setSituacaoInscricao(situacaoInscricao); //Atualiza a situação da inscrição em caso de sucesso. 
+			inscricao.setSituacaoInscricao(situacaoInscricao); //Atualiza a situaï¿½ï¿½o da inscriï¿½ï¿½o em caso de sucesso. 
 			try {stm.close();}catch(SQLException e){e.printStackTrace();}
 			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 		}
@@ -188,6 +188,39 @@ public class InscricaoProjetoDAO {
 		respostaDelete = atualizar(inscricao, situacao);
 		
 		return respostaDelete;
+	}
+
+	public static ArrayList<InscricaoProjeto> pesquisarInscricoesParaProjeto(int idProjeto) {
+		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
+		
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.INSCRICAO_PROJETO.getNomeTabela()
+					+ " where " + BancoTabela.INSCRICAO_PROJETO.getNomeTabela() +".id_projeto = ? ";
+			
+			PreparedStatement stm =  con.prepareStatement(sql);
+			stm.setInt(1, idProjeto);
+			ResultSet resultado = stm.executeQuery();
+			
+			while (resultado.next()) {
+				InscricaoProjeto inscricao = new InscricaoProjeto();
+				popularInscricao(inscricao, resultado);
+				inscricoes.add(inscricao);
+			}
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return inscricoes;
+	}
+	
+	public static void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
+		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
+		inscricao.setIdAluno(resultado.getInt("id_aluno"));
+		inscricao.setIdProjeto(resultado.getInt("id_projeto"));
+		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
 	}
 
 }

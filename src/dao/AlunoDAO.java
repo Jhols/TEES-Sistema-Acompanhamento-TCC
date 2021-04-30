@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import enums.Perfil;
 import model.Aluno;
 import model.PessoaFactory;
 import model.Professor;
+import util.ConnectionFactory;
 
 public class AlunoDAO {
 	
@@ -49,9 +51,35 @@ public class AlunoDAO {
 		} finally {
 			return aluno;			
 		}
-		
 	}
 	
-	
+
+	@SuppressWarnings("finally")
+	public static Aluno pesquisarAlunoPorIdAluno(int idAluno) {
+		
+		Aluno aluno = null;
+		
+		try {
+			var connection = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.ALUNO 
+					+ " where " + BancoTabela.ALUNO +".id_aluno = ? ";
+			
+			PreparedStatement stm =  connection.prepareStatement(sql);
+			stm.setInt(1, idAluno);
+			var resultado = stm.executeQuery();
+			
+			if (resultado.next()) {
+				int idPessoa = resultado.getInt(BancoTabela.ALUNO+".id_pessoa");
+				aluno = pesquisarAlunoPorIdPessoa(idPessoa);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			return aluno;			
+		}
+		
+	}
 	
 }
