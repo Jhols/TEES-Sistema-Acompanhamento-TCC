@@ -8,7 +8,8 @@ public enum BancoTabela {
 	PROJETO ("projeto"),
 	LOGIN("login"),
 	SITUACAO_PROJETO ("situacao_projeto"),
-	PERFIL_PESSOA ("perfil_pessoa");
+	PERFIL_PESSOA ("perfil_pessoa"),
+	INSCRICAO_PROJETO("inscricao_aluno_projeto");
 	
 	private String nomeTabela;
 	

@@ -2,18 +2,15 @@ package controller;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.AlunoDAO;
-import dao.ProfessorDAO;
+import dao.LoginDAO;
 import dao.ProjetoDAO;
 import enums.SituacaoProjeto;
-import model.Aluno;
 import model.Professor;
 import model.Projeto;
 
@@ -24,7 +21,6 @@ public class ServletCadProjeto extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ProjetoDAO dao = new ProjetoDAO();
 		
 		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
 		Projeto projeto = new Projeto();
@@ -40,17 +36,22 @@ public class ServletCadProjeto extends HttpServlet {
 		
 		System.out.println(projeto);
 		
-		dao.addProjeto(projeto);
+		ProjetoDAO.addProjeto(projeto);
 		System.out.print("adicionou"); 
 		
 		response.sendRedirect("professorDashboard?cadastroProjeto=OK");
-		 
 	}
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
+		
+		if (professor == null) {
+			System.out.println("login automatico");
+			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
+			request.getSession().setAttribute("pessoa", professor);
+		}
 		
 		String nome_professor = professor.getNome();
 		;

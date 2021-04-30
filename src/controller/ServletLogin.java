@@ -21,7 +21,6 @@ public class ServletLogin extends HttpServlet {
 		
 		//LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
 		Pessoa pessoa = LoginDAO.pesquisaPessoa(request.getParameter("login"), request.getParameter("senha"));
-		System.out.println(pessoa.getPerfil());
 		request.getSession().setAttribute("perfil", pessoa.getPerfil());
 		request.getSession().setAttribute("pessoa", pessoa);
 		

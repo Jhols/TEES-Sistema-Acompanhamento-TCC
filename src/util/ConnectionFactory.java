@@ -18,7 +18,7 @@ public class ConnectionFactory {
 		String senha = "1234";
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection(servidor, usuario, senha);
 		}
 		catch(SQLException e) {

@@ -15,6 +15,44 @@ import util.ConnectionFactory;
 
 public class ProjetoDAO {
 
+	
+	public static ArrayList<Projeto> pesquisarProjetosPorProfessorESituacao(int idProfessor, SituacaoProjeto situacao) {
+		ArrayList<Projeto> projetos = new ArrayList<Projeto>();
+		
+		
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.PROJETO 
+					+ " where " + BancoTabela.PROJETO +".id_professor = ? and "
+					+ BancoTabela.PROJETO + ".id_situacao = ?";
+			
+			PreparedStatement stm =  con.prepareStatement(sql);
+			stm.setInt(1, idProfessor);
+			stm.setInt(2, SituacaoProjeto.toInt(situacao));
+			ResultSet resultado = stm.executeQuery();
+			
+			while (resultado.next()) {
+				Projeto projeto = new Projeto();
+				popularProjeto(projeto, resultado);
+				projetos.add(projeto);
+			}
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return projetos;
+	}
+	
+	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {
+		projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_projeto"));
+		projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
+		projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
+		projeto.setIdProfessor(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+		projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt(BancoTabela.PROJETO+".id_situacao")));
+	}
+	
 	// Consulta todos os projetos que estão no banco e retorna os que estão disponíveis para o Projeto escolher se candidatar
 	@SuppressWarnings("finally")
 	public static ArrayList<Projeto> pesquisarProjetosDisponiveis() {
@@ -59,7 +97,7 @@ public class ProjetoDAO {
 		}
 	}
 	
-	public void addProjeto(Projeto projeto) {
+	public static void addProjeto(Projeto projeto) {
 		
 		String sql;
 		Connection conexao = null;

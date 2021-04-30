@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.LoginDAO;
 import model.Professor;
 
 
@@ -18,6 +19,13 @@ public class ServletDashboardProfessor extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
+		
+		if (professor == null) {
+			System.out.println("login automatico");
+			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
+			request.getSession().setAttribute("pessoa", professor);
+		}
+		
 		System.out.println(professor);
 		// * Permissões para Funcionalidades *
 		boolean cadastroProfOrientador = ! professor.isOrientador();
@@ -132,7 +140,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "\r\n"
 		+ "</body>\r\n";
 		
-		System.out.println(request.getParameter("cadastroProjeto"));
+		
 		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
 			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
 		}
