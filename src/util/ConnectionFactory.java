@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionFactory {
+public abstract class ConnectionFactory {
 
 	// Cria uma conexão com o banco de dados.
 	@SuppressWarnings("finally")
@@ -15,10 +15,10 @@ public class ConnectionFactory {
 		String schema = "tees_acompanhamento_tcc";
 		String servidor = "jdbc:mysql://localhost:" + porta + "/" + schema;
 		String usuario = "root";
-		String senha = "1234";
+		String senha = "123456";
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection(servidor, usuario, senha);
 		}
 		catch(SQLException e) {

@@ -1,15 +1,20 @@
 package model;
 
+import enums.PerfilPessoa;
 import enums.SituacaoProjeto;
 
 public class Projeto {
 	
 	private int id;
 	private String titulo, descricao;
-	private Aluno aluno;
+	private Professor professor;
 	private SituacaoProjeto situacao;
 	private int idProfessor;
 	
+	public Projeto() {
+		// TODO Auto-generated constructor stub
+		professor = (Professor) PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR);
+	}
 	
 	public int getIdProfessor() {
 		return idProfessor;
@@ -20,17 +25,25 @@ public class Projeto {
 	}
 
 	public Projeto(String titulo) {
+		this();
 		this.titulo = titulo;
 		this.situacao = SituacaoProjeto.DISPONIVEL;
 	}
 	
 	public Projeto(String titulo, SituacaoProjeto situacao) {
+		this();
 		this.titulo = titulo;
 		this.situacao = situacao;
 	}
 
-	public Projeto() {
-		// TODO Auto-generated constructor stub
+	public Projeto(String titulo, Professor professor) {
+		this(titulo);
+		this.professor = professor;
+	}
+	
+	public Projeto(String titulo, Professor professor, SituacaoProjeto situacao) {
+		this(titulo, situacao);
+		this.professor = professor;
 	}
 
 	public int getId() {
@@ -49,21 +62,20 @@ public class Projeto {
 		this.titulo = titulo;
 	}
 
-	public Aluno getAluno() {
-		return aluno;
-	}
-
-	public void setAluno(Aluno aluno) {
-		this.aluno = aluno;
-		this.situacao = SituacaoProjeto.ATIVO;
-	}
-
 	public String getDescricao() {
 		return descricao;
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Professor getProfessor() {
+		return professor;
+	}
+
+	public void setProfessor(Professor professor) {
+		this.professor = professor;
 	}
 
 	public SituacaoProjeto getSituacao() {
