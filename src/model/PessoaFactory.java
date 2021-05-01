@@ -9,7 +9,7 @@ import enums.Perfil;
 public class PessoaFactory {
 	
 	//Cria a instância de uma pessoa a partir de seu perfil. 
-	public static Pessoa getPessoa(Perfil perfil) {
+	public static Pessoa getPessoa(Perfil  perfil) {
 		if (perfil == Perfil.ALUNO)
 			return new Aluno();
 		if (perfil == Perfil.PROFESSOR)

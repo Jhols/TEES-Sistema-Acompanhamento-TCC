@@ -45,14 +45,19 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		for (Projeto p:projetos) {
 			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesParaProjeto(p.getId());
+			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesDeCandidatoParaProjeto(p.getId());
 			for (InscricaoProjeto in : inscricoes) {
 				System.out.println(in);
 				System.out.println(in.getAluno());
-				var linha = new HashMap<String, String>();
-				linha.put("titulo", p.getTitulo());
-				linha.put("nome candidato", in.getAluno().getNome());
-				linhas.add(linha);
+				var listIncricoes=InscricaoProjetoDAO.pesquisarInscricoesPorAluno(in.getIdAluno());
+				if(listIncricoes.isEmpty()) {
+					var linha = new HashMap<String, String>();
+					linha.put("titulo", p.getTitulo());
+					linha.put("nome candidato", in.getAluno().getNome());
+					linha.put("idProjeto", String.valueOf(in.getIdProjeto()));
+					linha.put("aluno", String.valueOf(in.getAluno().getId()));
+					linhas.add(linha);
+				}
 			}
 		}
 		
@@ -121,7 +126,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		for (var linha : linhas) {
 			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("nome candidato");
-			html+="<td ><a class=\"btn btn-primary\" href=\"gerarTermo\" role=\"button\">Aceitar</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"GerarTermo?idProjeto="+ linha.get("idProjeto") + "&aluno="+linha.get("aluno")+"\" role=\"button\">Aceitar</a>";
 			html+="<td ><a class=\"btn btn-primary\" href=\"#\" role=\"button\">Rejeitar</a>";
 			html += "</tr>";
 		}

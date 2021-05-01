@@ -9,6 +9,7 @@ import java.sql.Statement;
 
 import enums.BancoTabela;
 import enums.SituacaoProjeto;
+import model.Aluno;
 import model.Projeto;
 import util.ConnectionFactory;
 
@@ -125,6 +126,33 @@ public class ProjetoDAO {
             e.printStackTrace();
         }
     }
+	
+	@SuppressWarnings("finally")
+	public static Projeto pesquisarProjetoPorIdProjeto(int idProjeto) {
+		
+		Projeto projeto = null;
+		
+		try {
+			var connection = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.PROJETO
+					+ " where " + BancoTabela.PROJETO +".id_projeto = ? ";
+			
+			PreparedStatement stm =  connection.prepareStatement(sql);
+			stm.setInt(1, idProjeto);
+			var resultado = stm.executeQuery();
+			
+			if (resultado.next()) {
+				projeto = new Projeto();
+				popularProjeto(projeto, resultado);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			return projeto;			
+		}
+		
+	}
 		
 		
 }
