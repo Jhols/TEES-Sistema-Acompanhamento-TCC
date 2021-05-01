@@ -277,10 +277,26 @@ public class ProjetoDAO {
 		return false;
 	}
 
-	public void atualizar() {
+	public void atualizar(int idProjeto) {
+		
+		try {
+				var connection = ConnectionFactory.getConnection();
+				String sql;
+				sql = "Update " + BancoTabela.PROJETO + " set  id_situacao = 3 where id_projeto = ? ";
+				
+				System.out.print(sql);
+				PreparedStatement stm =  connection.prepareStatement(sql);
+				stm.setInt(1, idProjeto);
+				stm.executeUpdate();
+						
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+	}
 		// TODO Auto-generated method stub
 		
-	}
+
 
 	public boolean deletar() {
 		// TODO Auto-generated method stub

@@ -121,7 +121,7 @@ public class ServletGerarTermo extends HttpServlet {
 				+ "                            \r\n"
 				+ "                            </table>\r\n"
 				+ "                             <br /><br />\r\n"
-				+ "                            <a class= \"btn btn-primary\" href= \"professorDashboard?acao=gerar&aluno="+aluno.getId()+"&projeto="+projeto.getId()+  "\" role=\"button\">Gerar termo</a>\r\n"
+				+ "                            <a class= \"btn btn-primary\" href= \"professorDashboard?acao=gerar&aluno="+aluno.getIdAluno()+"&projeto="+projeto.getId()+  "\" role=\"button\">Gerar termo</a>\r\n"
 				+ "                            </div>\r\n"
 				+ "                        </div>\r\n"
 				+ "                    </div>\r\n"

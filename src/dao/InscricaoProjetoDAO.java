@@ -43,7 +43,7 @@ public class InscricaoProjetoDAO {
 		}
 		
 		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO
-				+ " WHERE id_aluno = " + aluno.getId() + " AND id_projeto = " + projeto.getId() + ";";
+				+ " WHERE id_aluno = " + aluno.getIdAluno() + " AND id_projeto = " + projeto.getId() + ";";
 		
 		Statement stm = null;
 		try {
@@ -52,13 +52,8 @@ public class InscricaoProjetoDAO {
 			
 			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados ï¿½ inscriï¿½ï¿½o a ser retornada
 				inscricao = new InscricaoProjeto();
-				
-				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
-				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
-				// dando erro pois o select acima não puxa da tabela situacao_aluno_projeto
-				//inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));  
-				
-				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+				inscricao.setAluno(aluno);
+				inscricao.setProjeto(projeto);
 			}
 			else {
 				System.out.println("Nao foi encontrada a inscricao procurada");
@@ -169,8 +164,9 @@ public class InscricaoProjetoDAO {
 				+ " SET " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "
 					+ "(SELECT id_situacao_aluno_projeto FROM " + BancoTabela.SITUACAO_ALUNO_PROJETO 
 						+ " WHERE " + BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ situacaoInscricao.toString().toLowerCase() +"') "
-				+ " WHERE id_aluno = " + inscricao.getAluno().getId() + " AND id_projeto = " + inscricao.getProjeto().getId() + ";";
+				+ " WHERE id_aluno = " + inscricao.getAluno().getIdAluno() + " AND id_projeto = " + inscricao.getProjeto().getId() + ";";
 			
+			System.out.println("Update SQL= "+sql);
 			respostaUpdate = stm.executeUpdate(sql);
 
 		} catch (SQLException e) {
