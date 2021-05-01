@@ -11,6 +11,16 @@ import util.ConnectionFactory;
 
 public class LoginDAO {
 
+	private static LoginDAO uniqueInstance; //Singleton
+	
+	private LoginDAO() { }
+	
+	public static synchronized LoginDAO getInstance() {
+		if (uniqueInstance == null)
+			uniqueInstance = new LoginDAO();
+		return uniqueInstance;
+	}
+
 	@SuppressWarnings("finally")
 	public static Pessoa pesquisaPessoa(String login, String senha) {
 		ResultSet resultado = null;
@@ -63,7 +73,7 @@ public class LoginDAO {
                 	}
                 }
                 else {
-                	System.out.println("Erro: perfil não encontrado para pessoa id = "+idPessoa);
+                	System.out.println("Erro: perfil nï¿½o encontrado para pessoa id = "+idPessoa);
                 }
             	
             }

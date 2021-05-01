@@ -9,7 +9,8 @@ public enum BancoTabela {
 	LOGIN("login"),
 	SITUACAO_PROJETO ("situacao_projeto"),
 	PERFIL_PESSOA ("perfil_pessoa"),
-	INSCRICAO_PROJETO("inscricao_aluno_projeto");
+	INSCRICAO_ALUNO_PROJETO("inscricao_aluno_projeto"),
+	SITUACAO_ALUNO_PROJETO ("situacao_aluno_projeto");
 	
 	private String nomeTabela;
 	

@@ -9,4 +9,14 @@
     <welcome-file>login.html</welcome-file>
     
   </welcome-file-list>
+  
+  <servlet>
+  	<display-name>ProjetoServlet</display-name>
+  	<servlet-name>ProjetoServlet</servlet-name>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>ProjetoServlet</servlet-name>
+    <url-pattern>/ProjetoServlet/*</url-pattern>
+  </servlet-mapping>
 </web-app>

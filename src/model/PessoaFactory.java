@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import enums.BancoTabela;
 import enums.Perfil;
 
-public class PessoaFactory {
+public abstract class PessoaFactory {
 	
 	//Cria a instância de uma pessoa a partir de seu perfil. 
 	public static Pessoa getPessoa(Perfil  perfil) {

@@ -4,7 +4,6 @@ import enums.Perfil;
 
 public class Aluno extends Pessoa {
 	private String matricula;
-	private	Projeto projeto;
 
 	public Aluno() {
 		this.setPerfil(Perfil.ALUNO);
@@ -40,8 +39,6 @@ public class Aluno extends Pessoa {
 	public String toString() {
 		return "Aluno [matricula=" + matricula + ", projeto=" + projeto + ", Pessoa=" + super.toString() + "]";
 	}
-	
-	
 	
 	
 }
