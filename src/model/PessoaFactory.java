@@ -80,7 +80,7 @@ public abstract class PessoaFactory {
 	}
 	
 	
-	private static void popularDadosAluno(Aluno aluno, ResultSet resulato) throws SQLException {
-		/// TODO
+	private static void popularDadosAluno(Aluno aluno, ResultSet resultado) throws SQLException {
+		aluno.setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
 	}
 }

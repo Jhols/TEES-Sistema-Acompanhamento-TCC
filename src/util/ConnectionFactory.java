@@ -15,7 +15,7 @@ public abstract class ConnectionFactory {
 		String schema = "tees_acompanhamento_tcc";
 		String servidor = "jdbc:mysql://localhost:" + porta + "/" + schema;
 		String usuario = "root";
-		String senha = "123456";
+		String senha = "1234";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

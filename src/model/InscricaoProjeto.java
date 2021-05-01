@@ -14,7 +14,7 @@ public class InscricaoProjeto {
 	public InscricaoProjeto() {
 		aluno = new Aluno();
 		projeto = new Projeto();
-	}
+	} 
 
 	public InscricaoProjeto(Aluno aluno, Projeto projeto) {
 		this();

@@ -43,9 +43,9 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		System.out.println(BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela());
 		
-		for (Projeto p:projetos) {
+		for (Projeto p : projetos) {
 			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesDeCandidatoParaProjeto(p.getId());
+			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesDeCandidatoParaProjeto(p);
 			for (InscricaoProjeto in : inscricoes) {
 				System.out.println(in);
 				System.out.println(in.getAluno());

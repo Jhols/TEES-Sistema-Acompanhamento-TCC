@@ -191,7 +191,7 @@ public class InscricaoProjetoDAO {
 		return respostaDelete;
 	}
 
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(int idProjeto) {
+	public static ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(Projeto projeto) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
@@ -200,12 +200,13 @@ public class InscricaoProjetoDAO {
 					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_projeto = ? and id_situacao_aluno_projeto = 1";
 			
 			PreparedStatement stm =  con.prepareStatement(sql);
-			stm.setInt(1, idProjeto);
+			stm.setInt(1, projeto.getId());
 			ResultSet resultado = stm.executeQuery();
 			
 			while (resultado.next()) {
 				InscricaoProjeto inscricao = new InscricaoProjeto();
 				popularInscricao(inscricao, resultado);
+				inscricao.setProjeto(projeto);
 				inscricoes.add(inscricao);
 			}
 			
@@ -219,9 +220,9 @@ public class InscricaoProjetoDAO {
 	
 	public static void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
 		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
-		inscricao.setIdAluno(resultado.getInt("id_aluno"));
-		inscricao.setIdProjeto(resultado.getInt("id_projeto"));
+		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
 		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
+		
 	}
 	
 	
