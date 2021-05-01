@@ -106,14 +106,14 @@ public class ProjetoDAO {
 		projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt(BancoTabela.PROJETO+".id_situacao")));
 	}
 	
-	// Consulta todos os projetos que est�o no banco e retorna os que est�o dispon�veis para o Projeto escolher se candidatar
+	// Consulta todos os projetos que estao no banco e retorna os que estao disponiveis para o aluno escolher se candidatar
 	@SuppressWarnings("finally")
 	public ArrayList<Projeto> pesquisarProjetosDisponiveis() {
 			
 		ArrayList<Projeto> projetos = new ArrayList<>();
 		ResultSet resultado = null;
 		String sql;
-		
+		SituacaoProjeto situacao = SituacaoProjeto.DISPONIVEL;
 		
 		Connection conexao = null;
 		try {
@@ -123,9 +123,10 @@ public class ProjetoDAO {
 			e.printStackTrace();
 		}
 		
-		
-		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO + 
-				" WHERE " + BancoTabela.SITUACAO_PROJETO + ".descricao = 'disponivel'";
+		sql = "SELECT * FROM " + BancoTabela.PROJETO 
+				+ " WHERE " + BancoTabela.PROJETO+".id_situacao = "
+						+ "(SELECT id_situacao_projeto FROM " + BancoTabela.SITUACAO_PROJETO
+						+ " WHERE descricao = '"+ situacao +"')";  
 		
 		
 		try {
@@ -138,14 +139,14 @@ public class ProjetoDAO {
 				projeto.setTitulo(resultado.getString(BancoTabela.PROJETO + ".titulo"));
 				projeto.setDescricao(resultado.getString(BancoTabela.PROJETO + ".descricao"));
 				projeto.setProfessor(ProfessorDAO.getInstance().findById(resultado.getInt(BancoTabela.PROJETO+".id_professor")));
-				String situacao = resultado.getString(BancoTabela.SITUACAO_PROJETO + ".descricao");
-				projeto.setSituacao(SituacaoProjeto.valueOf(situacao.toUpperCase()));
+				projeto.setSituacao(situacao);
 				
 				projetos.add(projeto);
 			}
 			stm.close();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
 			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
