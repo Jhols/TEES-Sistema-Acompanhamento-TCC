@@ -8,7 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.AlunoDAO;
+import dao.InscricaoProjetoDAO;
 import dao.LoginDAO;
+import dao.ProjetoDAO;
+import enums.SituacaoInscricao;
 import model.Professor;
 
 
@@ -32,6 +36,10 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
+		
+		
+		verificarAcao(request, response);
+		
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -144,11 +152,32 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
 			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
 		}
+		if ("gerar".equals(request.getParameter("acao"))) {
+			html += "<script>alert(\"Aluno associado ao projeto com sucesso!\");</script>";
+		}
 		
 		html += "\r\n"
 		+ "</html>";
 		
 		writer.write(html);
+	}
+	
+	private void verificarAcao(HttpServletRequest request, HttpServletResponse response) {
+		switch (request.getParameter("acao")) {
+		case "gerar":
+			int idAluno = Integer.parseInt(request.getParameter("aluno"));
+			int idProjeto = Integer.parseInt(request.getParameter("projeto"));
+			System.out.println("Ação gerar detectada");
+			System.out.println("Id Aluno = " + idAluno);
+			System.out.println("Id Projeto = " + idProjeto);
+			// Associar aluno ao projeto, mudando o status da sua inscrição
+			var aluno = AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+			var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
+			var inscricao = InscricaoProjetoDAO.getInstance().findByAlunoAndProjeto(aluno, projeto);
+			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.ASSOCIADO);
+			// TODO atualizar projeto para colocar situacao = ATIVO
+			break;
+		}
 	}
 
 }

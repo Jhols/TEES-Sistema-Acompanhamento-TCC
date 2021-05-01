@@ -55,7 +55,8 @@ public class InscricaoProjetoDAO {
 				
 				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
 				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
-				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
+				// dando erro pois o select acima não puxa da tabela situacao_aluno_projeto
+				//inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));  
 				
 				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
 			}
