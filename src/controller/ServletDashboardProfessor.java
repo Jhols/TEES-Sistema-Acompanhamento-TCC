@@ -8,7 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.AlunoDAO;
+import dao.InscricaoProjetoDAO;
 import dao.LoginDAO;
+import dao.ProjetoDAO;
+import enums.SituacaoInscricao;
 import model.Professor;
 
 
@@ -32,6 +36,12 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
+		
+		
+		if (verificarAcao(request, response)) {
+			return;
+		}
+		
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -107,7 +117,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if (alunosCandidatos) {
 			html += "            <!-- Item alunos candidatos -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"charts.html\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"candidatos\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Alunos candidatos</span></a>\r\n"
 			+ "            </li>\r\n";
@@ -144,11 +154,46 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
 			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
 		}
+		if ("gerar".equals(request.getParameter("msg"))) {
+			html += "<script>alert(\"Aluno associado ao projeto com sucesso!\");</script>";
+		}
 		
 		html += "\r\n"
 		+ "</html>";
 		
 		writer.write(html);
+	}
+	
+	// retorna true se a acao redireciona a pagina
+	private boolean verificarAcao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String acao= request.getParameter("acao");
+		if(acao==null)
+		{
+			return false;
+		}
+		switch (acao) {
+		case "gerar":
+			int idAluno = Integer.parseInt(request.getParameter("aluno"));
+			int idProjeto = Integer.parseInt(request.getParameter("projeto"));
+			System.out.println("Ação gerar detectada");
+			System.out.println("Id Aluno = " + idAluno);
+			System.out.println("Id Projeto = " + idProjeto);
+			// Associar aluno ao projeto, mudando o status da sua inscrição
+			var aluno = AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+			System.out.println(aluno.toString());
+			
+			var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
+			System.out.println("Projeto "+projeto);
+			var inscricao = InscricaoProjetoDAO.getInstance().findByAlunoAndProjeto(aluno, projeto);
+			System.out.println("inscricao" +inscricao);
+			
+			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.ASSOCIADO);
+			ProjetoDAO.getInstance().atualizar(idProjeto);
+			
+			response.sendRedirect("professorDashboard?msg=gerar");
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -55,7 +55,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 					linha.put("titulo", p.getTitulo());
 					linha.put("nome candidato", in.getAluno().getNome());
 					linha.put("idProjeto", String.valueOf(in.getIdProjeto()));
-					linha.put("aluno", String.valueOf(in.getAluno().getId()));
+					linha.put("aluno", String.valueOf(in.getAluno().getIdAluno()));
 					linhas.add(linha);
 				}
 			}
