@@ -45,11 +45,11 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		for (Projeto p : projetos) {
 			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesDeCandidatoParaProjeto(p);
+			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesDeCandidatoParaProjeto(p);
 			for (InscricaoProjeto in : inscricoes) {
 				System.out.println(in);
 				System.out.println(in.getAluno());
-				var listIncricoes=InscricaoProjetoDAO.pesquisarInscricoesPorAluno(in.getIdAluno());
+				var listIncricoes=InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(in.getIdAluno());
 				if(listIncricoes.isEmpty()) {
 					var linha = new HashMap<String, String>();
 					linha.put("titulo", p.getTitulo());

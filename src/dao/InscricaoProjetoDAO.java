@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.text.TabExpander;
+
 import enums.BancoTabela;
 import enums.SituacaoInscricao;
 import model.Aluno;
@@ -26,10 +28,63 @@ public class InscricaoProjetoDAO {
 		return uniqueInstance;
 	}
 	
+	//Procura por uma inscricao pelo seu id
 	public InscricaoProjeto findById() {
 		return null;
 	}
 	
+	//Pesquisa por todas as inscricoes de um aluno
+	public ArrayList<InscricaoProjeto> findAllByAluno(Aluno aluno) {
+		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<>();
+		InscricaoProjeto inscricao = null;
+		String sql;
+		ResultSet resultado = null;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM "+ BancoTabela.INSCRICAO_ALUNO_PROJETO 
+				+ " INNER JOIN ( "+ BancoTabela.SITUACAO_ALUNO_PROJETO + "," + BancoTabela.PROJETO + ")"
+				+ " WHERE " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = " + BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto"
+					+ " AND "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_projeto = "+ BancoTabela.PROJETO+".id_projeto"
+					+ " AND id_aluno = "+ aluno.getId() +";";
+		
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			while (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados a inscricao a ser retornada
+				inscricao = new InscricaoProjeto();
+				
+				inscricao.setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_inscricao_aluno_projeto"));
+				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
+				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
+				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
+				
+				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+				inscricao.setProjeto(ProjetoDAO.getInstance().findById(inscricao.getProjeto().getId()));
+				
+				inscricoes.add(inscricao); //Insere a inscricao na lista de inscricoes do aluno
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		
+		return inscricoes;
+	}
+	
+	//Procura por uma inscricao especifica de um aluno em relacao a um projeto
 	public InscricaoProjeto findByAlunoAndProjeto(Aluno aluno, Projeto projeto) {
 		InscricaoProjeto inscricao = null;
 		String sql;
@@ -42,8 +97,9 @@ public class InscricaoProjetoDAO {
 			e.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO
-				+ " WHERE id_aluno = " + aluno.getId() + " AND id_projeto = " + projeto.getId() + ";";
+		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_ALUNO_PROJETO
+				+ " WHERE id_aluno = " + aluno.getId() + " AND id_projeto = " + projeto.getId()
+						+ " AND "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto;";
 		
 		Statement stm = null;
 		try {
@@ -53,6 +109,7 @@ public class InscricaoProjetoDAO {
 			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados � inscri��o a ser retornada
 				inscricao = new InscricaoProjeto();
 				
+				inscricao.setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_inscricao_aluno_projeto"));
 				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
 				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
 				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
@@ -74,6 +131,50 @@ public class InscricaoProjetoDAO {
 		return inscricao;
 	}
 	
+	public InscricaoProjeto pesquisarProjetoAssociado(Aluno aluno) {
+		InscricaoProjeto inscricao = null;
+		ResultSet resultado = null;
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM "+ BancoTabela.INSCRICAO_ALUNO_PROJETO +" INNER JOIN "+ BancoTabela.SITUACAO_ALUNO_PROJETO 
+				+ " WHERE id_aluno = "+ aluno.getId() 
+				+ " AND "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto"
+				+ " AND "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ SituacaoInscricao.ASSOCIADO +"';";
+		
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			if (resultado.next()) {
+				inscricao = new InscricaoProjeto();
+				
+				inscricao.setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_inscricao_aluno_projeto"));
+				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
+				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
+				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
+				
+				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		return inscricao;
+	}
+	
+	//Pesquisa por todas as inscricoes cadastradas
 	public ArrayList<InscricaoProjeto> pesquisarTodasInscricoes() {
 		
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<>();		
@@ -87,7 +188,7 @@ public class InscricaoProjetoDAO {
 			e.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO +
+		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_ALUNO_PROJETO +
 				" WHERE " + BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_situacao_aluno_projeto = " + BancoTabela.SITUACAO_ALUNO_PROJETO + ".id_situacao_aluno_projeto;";
 		
 		Statement stm = null;
@@ -116,82 +217,9 @@ public class InscricaoProjetoDAO {
 		return inscricoes;
 	}
 	
-	public boolean incluir(InscricaoProjeto inscricao) {
-		String sql = null;
-		int respostaInsert = 0;
-		
-		Connection conexao = null;
-		Statement stm = null;
-		try {
-			conexao = ConnectionFactory.getConnection();
-			
-			stm = conexao.createStatement();
-			
-			//Se a inscri��o n�o existir no banco, cria uma nova
-			if (findByAlunoAndProjeto(inscricao.getAluno(), inscricao.getProjeto()) == null) {
-				sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
-						+ "VALUES ("
-						+ inscricao.getAluno().getId() +", "
-						+ inscricao.getProjeto().getId() +", "
-						+ "(SELECT id_situacao_aluno_projeto FROM "+ BancoTabela.SITUACAO_ALUNO_PROJETO 
-						+" WHERE "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '" + inscricao.getSituacaoInscricao().toString().toLowerCase() + "'));";
-				
-				respostaInsert = stm.executeUpdate(sql);
-			}
-			//Sen�o, atualiza a situa��o da inscri��o encontrada para 'candidato'
-			else {
-				SituacaoInscricao situacao = SituacaoInscricao.CANDIDATO;
-				respostaInsert = atualizar(inscricao, situacao) ? 1 : 0;
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {stm.close();}catch(SQLException e){e.printStackTrace();}
-			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
-		}
-		return respostaInsert > 0 ? true : false;
-	}
-	
-	public boolean atualizar(InscricaoProjeto inscricao, SituacaoInscricao situacaoInscricao) {
-		String sql;
-		int respostaUpdate = 0;
-
-		Connection conexao = null;
-		Statement stm = null;
-		try {
-			conexao = ConnectionFactory.getConnection();
-			
-			stm = conexao.createStatement();
-			
-			sql = "UPDATE " + BancoTabela.INSCRICAO_ALUNO_PROJETO
-				+ " SET " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "
-					+ "(SELECT id_situacao_aluno_projeto FROM " + BancoTabela.SITUACAO_ALUNO_PROJETO 
-						+ " WHERE " + BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ situacaoInscricao.toString().toLowerCase() +"') "
-				+ " WHERE id_aluno = " + inscricao.getAluno().getId() + " AND id_projeto = " + inscricao.getProjeto().getId() + ";";
-			
-			respostaUpdate = stm.executeUpdate(sql);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			inscricao.setSituacaoInscricao(situacaoInscricao); //Atualiza a situa��o da inscri��o em caso de sucesso. 
-			try {stm.close();}catch(SQLException e){e.printStackTrace();}
-			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
-		}
-		return respostaUpdate > 0 ? true : false;
-	}
-
-	public Boolean deletar(InscricaoProjeto inscricao) {
-		SituacaoInscricao situacao = SituacaoInscricao.DESVINCULADO;
-		boolean respostaDelete = false;
-		
-		respostaDelete = atualizar(inscricao, situacao);
-		
-		return respostaDelete;
-	}
-
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(Projeto projeto) {
+	//Nome a ser discutido
+	//Pesquisa por inscricoes de um projeto que tenha determinada situacao (Nesta funcao: 'candidato')
+	public ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(Projeto projeto) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
@@ -218,15 +246,15 @@ public class InscricaoProjetoDAO {
 		return inscricoes;
 	}
 	
-	public static void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
+	public void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
 		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
 		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
 		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
-		
 	}
 	
-	
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno) {
+	//Nome a ser discutido
+	//Pesquisa por inscricoes de um aluno que possuam uma determinada situacao (nesta funcao: 'associado')
+	public ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
@@ -251,5 +279,84 @@ public class InscricaoProjetoDAO {
 		
 		return inscricoes;
 	}
+	
+	//Inclui uma incricao no banco de dados
+	public boolean incluir(InscricaoProjeto inscricao) {
+		String sql = null;
+		int respostaInsert = 0;
+		
+		Connection conexao = null;
+		Statement stm = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+			
+			stm = conexao.createStatement();
+			
+			//Se a inscricao nao existir no banco, cria uma nova
+			if (findByAlunoAndProjeto(inscricao.getAluno(), inscricao.getProjeto()) == null) {
+				sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
+						+ "VALUES ("
+						+ inscricao.getAluno().getId() +", "
+						+ inscricao.getProjeto().getId() +", "
+						+ "(SELECT id_situacao_aluno_projeto FROM "+ BancoTabela.SITUACAO_ALUNO_PROJETO 
+						+" WHERE "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '" + inscricao.getSituacaoInscricao().toString().toLowerCase() + "'));";
+				
+				respostaInsert = stm.executeUpdate(sql);
+			}
+			//Senao, atualiza a situacao da inscricao encontrada para 'candidato'
+			else {
+				SituacaoInscricao situacao = SituacaoInscricao.CANDIDATO;
+				respostaInsert = atualizar(inscricao, situacao) ? 1 : 0;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		return respostaInsert > 0 ? true : false;
+	}
+	
+	//Atualiza a situacao de uma inscricao
+	public boolean atualizar(InscricaoProjeto inscricao, SituacaoInscricao situacaoInscricao) {
+		String sql;
+		int respostaUpdate = 0;
+
+		Connection conexao = null;
+		Statement stm = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+			
+			stm = conexao.createStatement();
+			
+			sql = "UPDATE " + BancoTabela.INSCRICAO_ALUNO_PROJETO
+				+ " SET " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "
+					+ "(SELECT id_situacao_aluno_projeto FROM " + BancoTabela.SITUACAO_ALUNO_PROJETO 
+						+ " WHERE " + BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ situacaoInscricao.toString().toLowerCase() +"') "
+				+ " WHERE id_aluno = " + inscricao.getAluno().getId() + " AND id_projeto = " + inscricao.getProjeto().getId() + ";";
+			
+			respostaUpdate = stm.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			inscricao.setSituacaoInscricao(situacaoInscricao); //Atualiza a situacao da inscricao em caso de sucesso. 
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		return respostaUpdate > 0 ? true : false;
+	}
+
+	//Deletar uma inscricao: atualiza a situacao da inscricao para 'desvinculado'.
+	public Boolean deletar(InscricaoProjeto inscricao) {
+		SituacaoInscricao situacao = SituacaoInscricao.DESVINCULADO;
+		boolean respostaDelete = false;
+		
+		respostaDelete = atualizar(inscricao, situacao);
+		
+		return respostaDelete;
+	}
+
 
 }
