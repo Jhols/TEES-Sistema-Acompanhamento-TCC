@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -59,7 +60,7 @@ public class InscricaoProjetoDAO {
 				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
 			}
 			else {
-				System.out.println("N�o foi encontrada a inscri��o procurada");
+				System.out.println("Nao foi encontrada a inscricao procurada");
 			}
 			
 		} catch (SQLException e) {
@@ -195,8 +196,8 @@ public class InscricaoProjetoDAO {
 		
 		try {
 			Connection con = ConnectionFactory.getConnection();
-			String sql = "Select * from " + BancoTabela.INSCRICAO_PROJETO.getNomeTabela()
-					+ " where " + BancoTabela.INSCRICAO_PROJETO.getNomeTabela() +".id_projeto = ? and id_situacao_aluno_projeto = 1";
+			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
+					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_projeto = ? and id_situacao_aluno_projeto = 1";
 			
 			PreparedStatement stm =  con.prepareStatement(sql);
 			stm.setInt(1, idProjeto);
@@ -229,8 +230,8 @@ public class InscricaoProjetoDAO {
 		
 		try {
 			Connection con = ConnectionFactory.getConnection();
-			String sql = "Select * from " + BancoTabela.INSCRICAO_PROJETO.getNomeTabela()
-					+ " where " + BancoTabela.INSCRICAO_PROJETO.getNomeTabela() +".id_aluno = ? and id_situacao_aluno_projeto = 2";
+			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
+					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_aluno = ? and id_situacao_aluno_projeto = 2";
 			
 			PreparedStatement stm =  con.prepareStatement(sql);
 			stm.setInt(1, idAluno);

@@ -1,6 +1,6 @@
 package model;
 
-import enums.PerfilPessoa;
+import enums.Perfil;
 import enums.SituacaoProjeto;
 
 public class Projeto {
@@ -13,7 +13,7 @@ public class Projeto {
 	
 	public Projeto() {
 		// TODO Auto-generated constructor stub
-		professor = (Professor) PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR);
+		professor = (Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR);
 	}
 	
 	public int getIdProfessor() {

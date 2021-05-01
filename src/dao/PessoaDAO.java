@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import enums.BancoTabela;
-import enums.PerfilPessoa;
+import enums.Perfil;
 import util.ConnectionFactory;
 
 public class PessoaDAO {

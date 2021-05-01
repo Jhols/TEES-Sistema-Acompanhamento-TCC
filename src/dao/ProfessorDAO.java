@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
-import enums.PerfilPessoa;
+import enums.Perfil;
 import model.Professor;
 import model.Aluno;
 import model.Pessoa;
@@ -25,7 +25,7 @@ public class ProfessorDAO {
 	
 	@SuppressWarnings("finally")
 	public Professor findById(int id) {
-		Pessoa professor = PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR);
+		Pessoa professor = PessoaFactory.getPessoa(Perfil.PROFESSOR);
 		
 		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.PROFESSOR, id);
 		
@@ -71,7 +71,7 @@ public class ProfessorDAO {
 		
 		try {
 			while(resultado.next()) {
-				Professor professor = ((Professor) PessoaFactory.getPessoa(PerfilPessoa.PROFESSOR, resultado));
+				Professor professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
 				professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
 				
 				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor

@@ -41,7 +41,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
-		System.out.println(BancoTabela.INSCRICAO_PROJETO.getNomeTabela());
+		System.out.println(BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela());
 		
 		for (Projeto p:projetos) {
 			System.out.println(p);

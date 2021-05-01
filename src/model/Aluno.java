@@ -26,18 +26,9 @@ public class Aluno extends Pessoa {
 		this.matricula = matricula;
 	}
 
-	public Projeto getProjeto() {
-		return projeto;
-	}
-
-	public void setProjeto(Projeto projeto) {
-		this.projeto = projeto;
-		this.projeto.setAluno(this);
-	}
-
 	@Override
 	public String toString() {
-		return "Aluno [matricula=" + matricula + ", projeto=" + projeto + ", Pessoa=" + super.toString() + "]";
+		return "Aluno [matricula=" + matricula + ", Pessoa=" + super.toString() + "]";
 	}
 	
 	

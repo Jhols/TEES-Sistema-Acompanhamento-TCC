@@ -1,5 +1,6 @@
 package model;
 
+import dao.AlunoDAO;
 import enums.SituacaoInscricao;
 import enums.SituacaoProjeto;
 
@@ -8,6 +9,7 @@ public class InscricaoProjeto {
 	private Aluno aluno;
 	private Projeto projeto;
 	private SituacaoInscricao situacaoInscricao;
+	int idSituacaoInscricao;
 	
 	public InscricaoProjeto() {
 		aluno = new Aluno();
@@ -39,7 +41,7 @@ public class InscricaoProjeto {
 		this.id = id;
 	}
 
-	public Aluno getAlunoObject() {
+	public Aluno getAluno() {
 		return aluno;
 	}
 
@@ -63,27 +65,27 @@ public class InscricaoProjeto {
 		this.situacaoInscricao = situacaoInscricao;
 	}
 
-	public Aluno getAluno() {
-		return AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
-	}
+	/*public Aluno getAluno() {
+		return AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(this.aluno.getId());
+	}*/
 	
 	public int getIdInscricao() {
-		return idInscricao;
+		return id;
 	}
 	public void setIdInscricao(int idInscricao) {
-		this.idInscricao = idInscricao;
+		this.id = idInscricao;
 	}
 	public int getIdAluno() {
-		return idAluno;
+		return this.aluno.getId();
 	}
 	public void setIdAluno(int idAluno) {
-		this.idAluno = idAluno;
+		this.aluno.setId(idAluno);
 	}
 	public int getIdProjeto() {
-		return idProjeto;
+		return projeto.getId();
 	}
 	public void setIdProjeto(int idProjeto) {
-		this.idProjeto = idProjeto;
+		this.projeto.setId(idProjeto);
 	}
 	public int getIdSituacaoInscricao() {
 		return idSituacaoInscricao;
@@ -93,7 +95,7 @@ public class InscricaoProjeto {
 	}
 	@Override
 	public String toString() {
-		return "InscricaoProjeto [idInscricao=" + idInscricao + ", idAluno=" + idAluno + ", idProjeto=" + idProjeto
+		return "InscricaoProjeto [idInscricao=" + id + ", idAluno=" + aluno.getId() + ", idProjeto=" + projeto.getId()
 				+ ", idSituacaoInscricao=" + idSituacaoInscricao + "]";
 	}
 	

@@ -29,7 +29,7 @@ public class AlunoDAO {
 	
 	@SuppressWarnings("finally")
 	public Aluno findById(int id) {
-		Pessoa aluno = PessoaFactory.getPessoa(PerfilPessoa.ALUNO);
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
 		
 		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.ALUNO, id);
 		
@@ -52,7 +52,7 @@ public class AlunoDAO {
 	
 	@SuppressWarnings("finally")
 	public Aluno findByMatricula(String matricula) {
-		Pessoa aluno = PessoaFactory.getPessoa(PerfilPessoa.ALUNO);
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
 		
 		ResultSet resultado = null;
 		String sql;
@@ -135,7 +135,7 @@ public class AlunoDAO {
 	@SuppressWarnings("finally")
 	public static Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
 		Aluno aluno = null;
-		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
 		
 		try {
 			if (resultado.next()) {
