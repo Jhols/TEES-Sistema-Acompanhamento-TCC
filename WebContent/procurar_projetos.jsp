@@ -53,15 +53,18 @@
 						
 						Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
 						((Aluno) aluno).setMatricula("0715456"); //Deve capturar da sessao do aluno
+						//Preenche o objeto aluno com seus dados a partir da matricula
 						aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
 						
 						ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
+						 //Procura por todos as inscricoes que o aluno acima possui
 						inscricoes = InscricaoProjetoDAO.getInstance().findAllByAluno((Aluno)aluno);
 						
+						//Este bloco insere os dados dos projetos disponiveis em uma tabela
 						int x = 1;
-						boolean flag;
+						boolean eCandidato; //Flag que identifica se o aluno ja e' candidato ou nao a um projeto
 						for (Projeto projeto : projetos) {
-							flag = true;
+							eCandidato = false;
 							out.println("<tr>");
 								out.println("<td id='titulo" + x + "'>" + projeto.getTitulo() + "</td>");
 								out.println("<td>" + projeto.getDescricao() + "</td>");
@@ -69,16 +72,17 @@
 
 								for (InscricaoProjeto inscricao : inscricoes) {
 									if (inscricao.getProjeto().getId() == projeto.getId() && inscricao.getSituacaoInscricao() == SituacaoInscricao.CANDIDATO) {
+										//Caso o aluno ja seja candidato a este projeto, e' inserido um botao de aguardar a aprovacao do professor
 										out.println(
 												"<td><input type='button' class='btn btn-info btn-icon-split, text' style='width:95%' id='btn-candidatar-"
 														+ x + "' onClick=\"enviarSolicitacao('btn-candidatar-" + x + "','titulo" + x + "', 'professor" + x
 														+ "')\" name='btn-candidatar' value='Aguardando'></td>");
-										flag = false;
+										eCandidato = true;
 										break;
 									}
 								}
 								
-								if (flag) {
+								if (!eCandidato) { //Se o aluno nao e' candidato ao projeto, insere um botao para candidatura
 									out.println(
 									"<td><input type='button' class='btn btn-primary btn-icon-split, text' style='width:95%' id='btn-candidatar-"
 											+ x + "' onClick=\"enviarSolicitacao('btn-candidatar-" + x + "','titulo" + x + "', 'professor" + x

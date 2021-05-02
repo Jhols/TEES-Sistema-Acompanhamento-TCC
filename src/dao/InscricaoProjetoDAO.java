@@ -106,7 +106,7 @@ public class InscricaoProjetoDAO {
 			stm = conexao.createStatement();
 			resultado = stm.executeQuery(sql);
 			
-			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados � inscri��o a ser retornada
+			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados 'a inscricao a ser retornada
 				inscricao = new InscricaoProjeto();
 				
 				inscricao.setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_inscricao_aluno_projeto"));
@@ -115,9 +115,12 @@ public class InscricaoProjetoDAO {
 				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
 				
 				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+				inscricao.setProjeto(ProjetoDAO.getInstance().findById(inscricao.getProjeto().getId()));
+				System.out.println("Inscricao encontrada: AlunoId: " + inscricao.getAluno().getId() + " | ProjetoId: " + inscricao.getProjeto().getId());
 			}
 			else {
 				System.out.println("Nao foi encontrada a inscricao procurada");
+				System.out.println("SQL: " +sql);
 			}
 			
 		} catch (SQLException e) {
@@ -199,6 +202,7 @@ public class InscricaoProjetoDAO {
 			while (resultado.next()) {
 				InscricaoProjeto inscricao = new InscricaoProjeto();
 				
+				inscricao.setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_inscricao_aluno_projeto"));
 				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
 				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
 				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
@@ -241,6 +245,7 @@ public class InscricaoProjetoDAO {
 						+" WHERE "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '" + inscricao.getSituacaoInscricao().toString().toLowerCase() + "'));";
 				
 				respostaInsert = stm.executeUpdate(sql);
+				System.out.println("Inscricao incluida: AlunoId: " + inscricao.getAluno().getId() + " | ProjetoId: " + inscricao.getProjeto().getId());
 			}
 			//Senao, atualiza a situacao da inscricao encontrada para 'candidato'
 			else {
@@ -275,9 +280,9 @@ public class InscricaoProjetoDAO {
 						+ " WHERE " + BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ situacaoInscricao.toString().toLowerCase() +"') "
 				+ " WHERE id_aluno = " + inscricao.getAluno().getIdAluno() + " AND id_projeto = " + inscricao.getProjeto().getId() + ";";
 			
-			System.out.println("Update SQL= "+sql);
 			respostaUpdate = stm.executeUpdate(sql);
 
+			System.out.println("Inscricao atualizada: id:" + inscricao.getIdInscricao() + " | Situacao: " + inscricao.getSituacaoInscricao().toString());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
