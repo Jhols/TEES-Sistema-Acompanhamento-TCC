@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,8 +20,8 @@ import model.InscricaoProjeto;
 import model.Professor;
 import model.Projeto;
 
-@WebServlet(name = "Candidatos", urlPatterns = {"/candidatos"})
-public class ServletVisualizarCandidatos extends HttpServlet{
+@WebServlet(name = "ProjetosAtivos", urlPatterns = {"/projetosAtivos"})
+public class ServletVisualizarProjetosAtivos extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -39,32 +40,21 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 			return;
 		}
 		
-		var projetos = ProjetoDAO.pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.DISPONIVEL);
-		
+		var projetos = ProjetoDAO.pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.ATIVO);		
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
 		for (Projeto p : projetos) {
 			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesDeCandidatoParaProjeto(p);
-			for (InscricaoProjeto in : inscricoes) {
-				System.out.println("\t"+in);
-				System.out.println("\t"+in.getAluno());
-				// Verificar se aluno está associado a outro projeto
-				var listIncricoes=InscricaoProjetoDAO.pesquisarInscricoesPorAluno(in.getAluno().getIdAluno(), SituacaoInscricao.ASSOCIADO);
-				// Só mostrar na tabela se ele não possuir inscricao do tipo associado
-				if(listIncricoes.isEmpty()) {
-					var linha = new HashMap<String, String>();
-					linha.put("titulo", p.getTitulo());
-					linha.put("nome candidato", in.getAluno().getNome());
-					linha.put("idProjeto", String.valueOf(in.getIdProjeto()));
-					linha.put("aluno", String.valueOf(in.getAluno().getIdAluno()));
-					linha.put("idInscricao", String.valueOf(in.getId()));
-					linhas.add(linha);
-				}
-				else {
-					System.out.println("\tAluno tem inscricao do tipo associado");
-				}
-			}
+			
+			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesParaProjeto(p, SituacaoInscricao.ASSOCIADO);
+			var inscricao = inscricoes.get(0);
+			
+			var linha = new HashMap<String, String>();
+			
+			linha.put("titulo", p.getTitulo());
+			linha.put("nomeAluno", inscricao.getAluno().getNome());
+			linha.put("idInscricao", String.valueOf(inscricao.getId()));
+			linhas.add(linha);
 		}
 		
 		response.setCharacterEncoding("UTF-8");
@@ -81,7 +71,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "    <meta name=\"description\" content=\"\">\r\n"
 		+ "    <meta name=\"author\" content=\"\">\r\n"
 		+ "\r\n"
-		+ "    <title>Alunos Candidatos</title>\r\n"
+		+ "    <title>Projetos Associados</title>\r\n"
 		+ "\r\n"
 		+ "    <!-- Custom fonts for this template -->\r\n"
 		+ "    <link href=\"resources/bootstrap/vendor/fontawesome-free/css/all.min.css\" rel=\"stylesheet\" type=\"text/css\">\r\n"
@@ -112,7 +102,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Alunos Candidatos</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Projetos Associados</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -124,16 +114,15 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "                                        <tr>\r\n"
 		+ "                                            <th>Título do Projeto</th>\r\n"
 		+ "                                            <th>Nome do Aluno</th>\r\n"
-		+ "                                            <th>Aceitar</th>\r\n"
-		+ "                                            <th>Rejeitar</th>\r\n"
+		+ "                                            <th>Desvincular</th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
 		for (var linha : linhas) {
-			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("nome candidato");
-			html+="<td ><a class=\"btn btn-primary\" href=\"GerarTermo?idProjeto="+ linha.get("idProjeto") + "&aluno="+linha.get("aluno")+"\" role=\"button\">Aceitar</a>";
-			html+="<td ><a class=\"btn btn-primary\" href=\"candidatos?acao=rejeitar&inscricao="+linha.get("idInscricao")+"\" role=\"candidatos\">Rejeitar</a>";
+			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("nomeAluno");
+			html+="<td ><a class=\"btn btn-primary\" href=\"projetosAtivos?acao=desvincular&inscricao="+ linha.get("idInscricao") +"\" role=\"button\">Desvincular</a>";
+			//html+="<td ><a class=\"btn btn-primary\" href=\"candidatos?acao=rejeitar&inscricao="+linha.get("idInscricao")+"\" role=\"candidatos\">Rejeitar</a>";
 			html += "</tr>";
 		}
 		
@@ -217,16 +206,23 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		}
 		
 		switch (acao) {
-		case "rejeitar":
-			System.out.println("Rejeitando inscricao ");
+		case "desvincular":
+			System.out.println("Desvinculando inscricao ");
 			var idInscricao = Integer.parseInt(request.getParameter("inscricao"));
 			System.out.println("Id = "+idInscricao);
 			InscricaoProjeto inscricao = InscricaoProjetoDAO.pesquisarInscricaoPorId(idInscricao);
 			System.out.println(""+inscricao);
 			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.DESVINCULADO);
-			response.sendRedirect("candidatos");
+			
+			Projeto projeto = inscricao.getProjeto();
+			projeto.setSituacao(SituacaoProjeto.DISPONIVEL);
+			ProjetoDAO.getInstance().atualizar(projeto);
+			System.out.println(""+projeto);
+			
+			response.sendRedirect("projetosAtivos");
 			return true;
 		}
+		
 		return false;
 	}
 }

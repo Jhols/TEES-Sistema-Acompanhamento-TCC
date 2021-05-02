@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.Perfil;
 import model.Professor;
+import util.ConnectionFactory;
 import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
@@ -86,6 +88,30 @@ public class ProfessorDAO {
 			return professores;			
 		}
 		
+	}
+	
+	public static Professor pesquisarPorIdProfessor(int idProfessor) {
+		Professor professor = null;
+		
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from "+BancoTabela.PROFESSOR + " inner join "
+					+BancoTabela.PESSOA + " on "+BancoTabela.PESSOA+".id_pessoa = "+BancoTabela.PROFESSOR+".id_pessoa"
+					+ " where " + BancoTabela.PROFESSOR + ".id_professor = ?";
+			
+			var stm = con.prepareStatement(sql);
+			stm.setInt(1, idProfessor);
+			var resultado = stm.executeQuery();
+			if (resultado.next()) {
+				professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
+				
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return professor;
 	}
 
 	public boolean incluir() {

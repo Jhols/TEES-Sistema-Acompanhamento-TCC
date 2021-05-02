@@ -125,7 +125,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if (projetosComOrientandos) {
 			html += "            <!-- Item alunos candidatos -->\r\n"
 			+ "			 <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"charts.html\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"projetosAtivos\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Projetos com orientandos</span></a>\r\n"
 			+ "            </li>\r\n";

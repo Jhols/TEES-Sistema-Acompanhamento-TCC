@@ -3,7 +3,6 @@ package controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
-import java.util.Calendar;
 import java.util.Locale;
 
 import javax.servlet.ServletException;
@@ -12,15 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.AlunoDAO;
+import dao.InscricaoProjetoDAO;
 import dao.LoginDAO;
-import dao.ProjetoDAO;
 import model.Aluno;
-import model.Professor;
-import model.Projeto;
+import model.InscricaoProjeto;
 
-@WebServlet(name = "GerarTermo", urlPatterns = {"/GerarTermo"})
-public class ServletGerarTermo extends HttpServlet {
+@WebServlet(name = "ImprimirTermo", urlPatterns = {"/ImprimirTermo"})
+public class ServletImprimirTermo  extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,24 +25,19 @@ public class ServletGerarTermo extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
-		var professor = (Professor) request.getSession().getAttribute("pessoa");
-		if (professor == null) {
+		Aluno aluno = (Aluno) request.getSession().getAttribute("pessoa");
+		if (aluno == null) {
 			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
-			request.getSession().setAttribute("pessoa", professor);
+			aluno = (Aluno) LoginDAO.pesquisaPessoa("caroline", "1234");
+			request.getSession().setAttribute("pessoa", aluno);
 		}
-		
-		
-		int idAluno= Integer.parseInt(request.getParameter("aluno"));
-		int idProjeto= Integer.parseInt(request.getParameter("idProjeto")); 
-		
-		Aluno aluno= AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
-		Projeto projeto=ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
+
+		int idInscricao = Integer.parseInt(request.getParameter("inscricao"));
+		InscricaoProjeto inscricao = InscricaoProjetoDAO.pesquisarInscricaoPorId(idInscricao);
 		
 		LocalDateTime ldt = LocalDateTime.now();
 		
-		String html = "\r\n"
-				+ "<!DOCTYPE html>\r\n"
+		String html = "<!DOCTYPE html>\r\n"
 				+ "<html lang=\"en\">\r\n"
 				+ "\r\n"
 				+ "<head>\r\n"
@@ -56,7 +48,7 @@ public class ServletGerarTermo extends HttpServlet {
 				+ "    <meta name=\"description\" content=\"\">\r\n"
 				+ "    <meta name=\"author\" content=\"\">\r\n"
 				+ "\r\n"
-				+ "    <title>Alunos Candidatos</title>\r\n"
+				+ "    <title>Imprimir Termo de Aceitação</title>\r\n"
 				+ "\r\n"
 				+ "    <!-- Custom fonts for this template -->\r\n"
 				+ "    <link href=\"resources/bootstrap/vendor/fontawesome-free/css/all.min.css\" rel=\"stylesheet\" type=\"text/css\">\r\n"
@@ -75,7 +67,7 @@ public class ServletGerarTermo extends HttpServlet {
 				+ "<body id=\"page-top\">\r\n"
 				+ "\r\n"
 				+ "    <!-- Page Wrapper -->\r\n"
-				+ "    <div id=\"wrapper\" class=\"card o-hidden border-0 shadow-lg my-5\">\r\n"
+				+ "    <div id=\"wrapper\" class=\"card o-hidden border-0 my-5\">\r\n"
 				+ "    \r\n"
 				+ "        <!-- Content Wrapper -->\r\n"
 				+ "        <div id=\"content-wrapper\" class=\"card-body\">\r\n"
@@ -88,31 +80,35 @@ public class ServletGerarTermo extends HttpServlet {
 				+ "\r\n"
 				+ "\r\n"
 				+ "                    <!-- DataTales Example -->\r\n"
-				+ "                    <div class=\"card shadow mb-4\" style=\"width:60%; margin:auto\">\r\n"
+				+ "                    <div class=\"card mb-4\" style=\"width:100%; margin:auto\">\r\n"
 				+ "                        \r\n"
-				+ "                        <div class=\"card-body\" id=\"print-content\">\r\n"
+				+ "                        <div class=\"card-body\">\r\n"
 				+ "                            <div class=\"table-responsive\">\r\n"
-				+ "                                <div class=\"text-center\">\r\n"
+				+ "                                <div class=\"text-center\" style=\"font-size: x-large\">\r\n"
+				+ "                                <br />\r\n"
+				+ "                                <br />\r\n"
 				+ "                                <p>CARTA DE ACEITAÇÃO DE ORIENTAÇÃO </p>	\r\n"
-				+ "\r\n"
-				+ "							<p style=\"text-align:justify\">Eu, "
-				+ "<b>"+ professor.getNome()+ "</b>"
-				
+				+ "								<br />\r\n"
+				+ "								<br />\r\n"
+				+ "								<br />\r\n"
+				+ "							<p style=\"text-align:justify; line-height:2\">Eu, "
+				+ inscricao.getProjeto().getProfessor().getNome()
 				+ ", professor da Universidade do Estado da Bahia (UNEB), \r\n"
 				+ "e-mail: "
-				+ "<b>"+ professor.getEmail()  + "</b>"
+				+ inscricao.getProjeto().getProfessor().getEmail()
 				+ " comprometo-me a orientar o Trabalho de Conclusão de Curso com título provisório: \r\n"
-				+ "<b>"+ projeto.getTitulo() +"</b>"
+				+ inscricao.getProjeto().getTitulo()
 				+ " que será executado pelo(a) aluno(a) "
-				+ "<b>"+ aluno.getNome() +"</b>"
+				+ inscricao.getAluno().getNome()
 				+ ". Confirmo que irei estar disponível \r\n"
-				+ "							de forma regular para orientar o(a) referido(a) aluno até a conclusão deste projeto, seguindo todas as normas\r\n"
-				+ "							definidas nas disciplinas Trabalho de Conclusão de Curso I e II. Desta forma, assino este documento como prova \r\n"
-				+ "							do compromisso assumido.   \r\n"
+				+ "de forma regular para orientar o(a) referido(a) aluno até a conclusão deste projeto, seguindo todas as normas\r\n"
+				+ "definidas nas disciplinas Trabalho de Conclusão de Curso I e II. Desta forma, assino este documento como prova \r\n"
+				+ "do compromisso assumido.   \r\n"
 				+ "							</p>\r\n"
-				+ "							 \r\n"
+				+ "							 <br />\r\n"
+				+ "							 <br />\r\n"
 				+ "							<p>\r\n"
-				+ "							Salvador, "+ldt.getDayOfMonth()+" de "+ldt.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())+" de "+ldt.getYear()+". \r\n"
+				+ "							Salvador, "+ldt.getDayOfMonth()+" de "+ldt.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())+" de "+ldt.getYear()+ " \r\n"
 				+ "                                </p>\r\n"
 				+ "                                <br /><br />\r\n"
 				+ "                            <table style=\"margin:auto\">\r\n"
@@ -121,7 +117,7 @@ public class ServletGerarTermo extends HttpServlet {
 				+ "                            \r\n"
 				+ "                            </table>\r\n"
 				+ "                             <br /><br />\r\n"
-				+ "                            <a class= \"btn btn-primary\" href= \"professorDashboard?acao=gerar&aluno="+aluno.getIdAluno()+"&projeto="+projeto.getId()+  "\" role=\"button\">Gerar termo</a>\r\n"
+				+ "                            \r\n"
 				+ "                            </div>\r\n"
 				+ "                        </div>\r\n"
 				+ "                    </div>\r\n"
@@ -180,13 +176,16 @@ public class ServletGerarTermo extends HttpServlet {
 				+ "\r\n"
 				+ "    <!-- Page level custom scripts -->\r\n"
 				+ "    <script src=\"resources/bootstrap/js/demo/datatables-demo.js\"></script>\r\n"
+				+ "    \r\n"
+				+ "    <script>\r\n"
+				+ "    	window.print();\r\n"
+				+ "    </script>\r\n"
 				+ "\r\n"
 				+ "</body>\r\n"
 				+ "\r\n"
-				+ "</script>"
 				+ "</html>";
 		
 		response.getWriter().write(html);
-		
 	}
+
 }

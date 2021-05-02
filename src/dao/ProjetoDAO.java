@@ -103,6 +103,9 @@ public class ProjetoDAO {
 		projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
 		projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
 		projeto.setIdProfessor(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+		System.out.println("ID DO PROFESSOR DO PROJETO = " +projeto.getIdProfessor());
+		projeto.setProfessor(ProfessorDAO.pesquisarPorIdProfessor(projeto.getIdProfessor()));
+		System.out.println("PROFESSOR DO PROJETO = " +projeto.getProfessor());
 		projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt(BancoTabela.PROJETO+".id_situacao")));
 	}
 	
@@ -283,7 +286,7 @@ public class ProjetoDAO {
 		try {
 				var connection = ConnectionFactory.getConnection();
 				String sql;
-				sql = "Update " + BancoTabela.PROJETO + " set  id_situacao = 3 where id_projeto = ? ";
+				sql = "Update " + BancoTabela.PROJETO + " set id_situacao = 3 where id_projeto = ? ";
 				
 				System.out.print(sql);
 				PreparedStatement stm =  connection.prepareStatement(sql);
@@ -295,8 +298,32 @@ public class ProjetoDAO {
 				e.printStackTrace();
 			} 
 	}
-		// TODO Auto-generated method stub
+	
+	public void atualizar(Projeto projeto) {
 		
+		try {
+				var connection = ConnectionFactory.getConnection();
+				String sql;
+				sql = "Update " + BancoTabela.PROJETO + " set id_situacao = ?"
+						+ ", titulo = ? "
+						+ ", descricao = ? "
+						+ " where id_projeto = ? ";
+				
+				System.out.print(sql);
+				PreparedStatement stm =  connection.prepareStatement(sql);
+				stm.setInt(1, SituacaoProjeto.toInt(projeto.getSituacao()));
+				stm.setString(2, projeto.getTitulo());
+				stm.setString(3, projeto.getDescricao());
+				stm.setInt(4, projeto.getId());
+				stm.executeUpdate();
+						
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+	}
+	
+	
 
 
 	public boolean deletar() {

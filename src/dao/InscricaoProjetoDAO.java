@@ -215,24 +215,61 @@ public class InscricaoProjetoDAO {
 		return inscricoes;
 	}
 	
-	public static void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
-		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
-		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
-		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
-		
-	}
-	
-	
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno) {
+	public static ArrayList<InscricaoProjeto> pesquisarInscricoesParaProjeto(Projeto projeto, SituacaoInscricao situacaoInscricao) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
 			Connection con = ConnectionFactory.getConnection();
 			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
-					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_aluno = ? and id_situacao_aluno_projeto = 2";
+					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_projeto = ? and id_situacao_aluno_projeto = "
+					+ "(Select id_situacao_aluno_projeto from "+ BancoTabela.SITUACAO_ALUNO_PROJETO.getNomeTabela() 
+					+ " where "+BancoTabela.SITUACAO_ALUNO_PROJETO.getNomeTabela()+".descricao = ?)";
+			
+			PreparedStatement stm =  con.prepareStatement(sql);
+			stm.setInt(1, projeto.getId());
+			stm.setString(2, situacaoInscricao.toString().toLowerCase());
+			ResultSet resultado = stm.executeQuery();
+			
+			while (resultado.next()) {
+				InscricaoProjeto inscricao = new InscricaoProjeto();
+				popularInscricao(inscricao, resultado);
+				inscricao.setProjeto(projeto);
+				inscricoes.add(inscricao);
+			}
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return inscricoes;
+	}
+	
+	
+	
+	public static void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
+		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
+		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
+		inscricao.setProjeto(ProjetoDAO.pesquisarProjetoPorIdProjeto(resultado.getInt("id_projeto")));
+		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
+		
+	}
+	
+	
+	public static ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno, SituacaoInscricao situacaoInscricao) {
+		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
+		
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
+					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_aluno = ? and"
+					+ " id_situacao_aluno_projeto = " 
+					+ "(SELECT id_situacao_aluno_projeto FROM " + BancoTabela.SITUACAO_ALUNO_PROJETO 
+					+ " WHERE " + BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = ?) ";
 			
 			PreparedStatement stm =  con.prepareStatement(sql);
 			stm.setInt(1, idAluno);
+			stm.setString(2, situacaoInscricao.toString().toLowerCase());
 			ResultSet resultado = stm.executeQuery();
 			
 			while (resultado.next()) {
@@ -247,6 +284,29 @@ public class InscricaoProjetoDAO {
 		}
 		
 		return inscricoes;
+	}
+	public static InscricaoProjeto pesquisarInscricaoPorId(int idInscricao) {
+		InscricaoProjeto inscricao = null;
+		
+		
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
+			+ " where "+BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()+".id_inscricao_aluno_projeto = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, idInscricao);
+			ResultSet resultado = stm.executeQuery();
+			if (resultado.next()) {
+				inscricao = new InscricaoProjeto();
+				popularInscricao(inscricao, resultado);
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return inscricao;
 	}
 
 }
