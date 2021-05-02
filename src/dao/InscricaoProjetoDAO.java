@@ -157,11 +157,10 @@ public class InscricaoProjetoDAO {
 				inscricao = new InscricaoProjeto();
 				
 				inscricao.setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_inscricao_aluno_projeto"));
-				inscricao.getAluno().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno"));
-				inscricao.getProjeto().setId(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_projeto"));
 				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
-				
+				// PRECISA SEMPRE PREENCHER OS OBJECTOS DENTRO DO OBJETO SENAO LÀ FORA DA ERRO
 				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+				inscricao.setProjeto(ProjetoDAO.getInstance().findById(resultado.getInt(BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_projeto")));
 			}
 			
 		} catch (Exception e) {

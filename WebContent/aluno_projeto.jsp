@@ -15,11 +15,11 @@
 	<% //Instanciacao da inscricao do projeto associado
 	Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, "0715123"); //Deve capturar da sessao do login
 	aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
-	
 	InscricaoProjeto inscricao = new InscricaoProjeto();
 	
 	//Pesquisa no banco a inscricao com o projeto pelo qual o aluno e' associado
 	inscricao = InscricaoProjetoDAO.getInstance().pesquisarProjetoAssociado((Aluno) aluno);
+	
 	%>
 	
 	<% //Condicao da pagina. Caso haja ou não um projeto associado ao aluno logado.
@@ -30,9 +30,6 @@
 			<h4 style="display: inline">Título: </h4> <span> <%= inscricao.getProjeto().getTitulo() %> </span> <br>
 			<h4 style="display: inline">Descricao: </h4> <span> <%= inscricao.getProjeto().getDescricao() %> </span> <br>
 			<h4 style="display: inline">Orientador: </h4> <span> <%= inscricao.getProjeto().getProfessor().getNome() %> </span> <br>
-			<br>
-			<br>
-			<br>
 			<br>
 			<br>
 			<br>

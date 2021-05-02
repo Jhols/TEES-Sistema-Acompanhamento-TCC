@@ -55,7 +55,7 @@
 						((Aluno) aluno).setMatricula("0715456"); //Deve capturar da sessao do aluno
 						//Preenche o objeto aluno com seus dados a partir da matricula
 						aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
-						
+						out.println("Aluno Logado: " + aluno.getNome()+"<br />");
 						ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 						 //Procura por todos as inscricoes que o aluno acima possui
 						inscricoes = InscricaoProjetoDAO.getInstance().findAllByAluno((Aluno)aluno);
@@ -70,6 +70,7 @@
 								out.println("<td>" + projeto.getDescricao() + "</td>");
 								out.println("<td id='professor" + x + "'>" + projeto.getProfessor().getNome() + "</td>");
 								for (InscricaoProjeto inscricao : inscricoes) {
+									
 									if (inscricao.getProjeto().getId() == projeto.getId() && inscricao.getSituacaoInscricao() == SituacaoInscricao.CANDIDATO) {
 										//Caso o aluno ja seja candidato a este projeto, e' inserido um botao de aguardar a aprovacao do professor
 										out.println(
@@ -114,7 +115,7 @@
 	function enviarSolicitacao(idBotao, idTitulo, idProfessor) {
 		var titulo = $("#" + idTitulo).text();
 		var professor = $("#" + idProfessor).text();
-		var alunoMatricula = "0715456"; //Deve capturar da sessao do aluno
+		var alunoMatricula = "0715123"; //Deve capturar da sessao do aluno
 		if (document.getElementById(idBotao).getAttribute("value") == "Candidatar-se") {
 			$.ajax({
 				method : "POST",
