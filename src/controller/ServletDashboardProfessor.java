@@ -184,7 +184,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			
 			var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
 			System.out.println("Projeto "+projeto);
-			var inscricao = InscricaoProjetoDAO.getInstance().findByAlunoAndProjeto(aluno, projeto);
+			var inscricao = InscricaoProjetoDAO.getInstance().pesquisarAlunoNoProjeto(aluno, projeto);
 			System.out.println("inscricao" +inscricao);
 			
 			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.ASSOCIADO);

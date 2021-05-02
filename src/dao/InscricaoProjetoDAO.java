@@ -449,5 +449,48 @@ public class InscricaoProjetoDAO {
 		
 		return inscricao;
 	}
+	
+	
+	//feito por @carol, por favor não modificar a funcâo abaixo
+		public InscricaoProjeto pesquisarAlunoNoProjeto(Aluno aluno, Projeto projeto) {
+		InscricaoProjeto inscricao = null;
+		String sql;
+		ResultSet resultado = null;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO
+				+ " WHERE id_aluno = " + aluno.getIdAluno() + " AND id_projeto = " + projeto.getId() + ";";
+		
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			if (resultado.next()) {	//Caso encontre algum resultado na consulta, atribui os dados ï¿½ inscriï¿½ï¿½o a ser retornada
+				inscricao = new InscricaoProjeto();
+				inscricao.setAluno(aluno);
+				inscricao.setProjeto(projeto);
+			}
+			else {
+				System.out.println("Nao foi encontrada a inscricao procurada");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		
+		return inscricao;
+	}
+	
 
 }
