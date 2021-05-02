@@ -17,7 +17,18 @@ public class Main {
 
 	public static void main(String[] args) throws SQLException {
 		
-		var situacaoInscricao = SituacaoInscricao.ASSOCIADO;
+		ArrayList<Projeto> projetos = new ArrayList<Projeto>();
+		projetos = ProjetoDAO.getInstance().pesquisarProjetosDisponiveis();
+		
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
+		
+		((Aluno) aluno).setMatricula("0715456");
+		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
+		
+		InscricaoProjeto inscricao = new InscricaoProjeto();
+		
+		inscricao = InscricaoProjetoDAO.getInstance().pesquisarProjetoAssociado((Aluno) aluno);
+		System.out.println();
 		
 		System.out.println(situacaoInscricao.toString().toLowerCase());
 		System.out.println(BancoTabela.SITUACAO_ALUNO_PROJETO);
@@ -35,5 +46,4 @@ public class Main {
 		}
 		
 	}
-
 }

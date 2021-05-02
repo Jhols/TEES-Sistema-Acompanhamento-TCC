@@ -45,13 +45,13 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		for (Projeto p : projetos) {
 			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesDeCandidatoParaProjeto(p);
+			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesDeCandidatoParaProjeto(p);
 			for (InscricaoProjeto in : inscricoes) {
 				System.out.println("\t"+in);
 				System.out.println("\t"+in.getAluno());
-				// Verificar se aluno está associado a outro projeto
+				// Verificar se aluno esta associado a outro projeto
 				var listIncricoes=InscricaoProjetoDAO.pesquisarInscricoesPorAluno(in.getAluno().getIdAluno(), SituacaoInscricao.ASSOCIADO);
-				// Só mostrar na tabela se ele não possuir inscricao do tipo associado
+				// So mostrar na tabela se ele nao possuir inscricao do tipo associado
 				if(listIncricoes.isEmpty()) {
 					var linha = new HashMap<String, String>();
 					linha.put("titulo", p.getTitulo());
@@ -122,7 +122,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
-		+ "                                            <th>Título do Projeto</th>\r\n"
+		+ "                                            <th>Tï¿½tulo do Projeto</th>\r\n"
 		+ "                                            <th>Nome do Aluno</th>\r\n"
 		+ "                                            <th>Aceitar</th>\r\n"
 		+ "                                            <th>Rejeitar</th>\r\n"
@@ -172,7 +172,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "                <div class=\"modal-header\">\r\n"
 		+ "                    <h5 class=\"modal-title\" id=\"exampleModalLabel\">Ready to Leave?</h5>\r\n"
 		+ "                    <button class=\"close\" type=\"button\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n"
-		+ "                        <span aria-hidden=\"true\">×</span>\r\n"
+		+ "                        <span aria-hidden=\"true\">ï¿½</span>\r\n"
 		+ "                    </button>\r\n"
 		+ "                </div>\r\n"
 		+ "                <div class=\"modal-body\">Select \"Logout\" below if you are ready to end your current session.</div>\r\n"
