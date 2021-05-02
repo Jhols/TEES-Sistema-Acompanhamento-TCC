@@ -65,8 +65,8 @@ public class AlunoDAO {
 			e1.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + BancoTabela.ALUNO + " INNER JOIN " + BancoTabela.PESSOA +
-				" WHERE "+BancoTabela.ALUNO+".matricula = '" + matricula + "'" + 
+		sql = "SELECT * FROM " + BancoTabela.ALUNO + " INNER JOIN " + BancoTabela.PESSOA + 
+				" ON " + BancoTabela.ALUNO +".id_pessoa = "+ BancoTabela.PESSOA + ".id_pessoa WHERE "+BancoTabela.ALUNO+".matricula = '" + matricula + "'" + 
 				" AND "+BancoTabela.ALUNO+".id_pessoa = "+BancoTabela.PESSOA +".id_pessoa;";
 		
 		try {

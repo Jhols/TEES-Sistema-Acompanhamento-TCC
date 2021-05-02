@@ -52,7 +52,7 @@
 						projetos = ProjetoDAO.getInstance().pesquisarProjetosDisponiveis();
 						
 						Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
-						((Aluno) aluno).setMatricula("0715456"); //Deve capturar da sessao do aluno
+						((Aluno) aluno).setMatricula("0715789"); //Deve capturar da sessao do aluno
 						aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
 						
 						ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
@@ -111,7 +111,7 @@
 	function enviarSolicitacao(idBotao, idTitulo, idProfessor) {
 		var titulo = $("#" + idTitulo).text();
 		var professor = $("#" + idProfessor).text();
-		var alunoMatricula = "0715456"; //Deve capturar da sessao do aluno
+		var alunoMatricula = "0715789"; //Deve capturar da sessao do aluno
 
 		if (document.getElementById(idBotao).getAttribute("value") == "Candidatar-se") {
 			$.ajax({
