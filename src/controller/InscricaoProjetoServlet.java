@@ -42,7 +42,7 @@ public class InscricaoProjetoServlet extends HttpServlet {
 	    	case "buscar":
 	    		break;
 	    		
-	    	case "incluir":
+	    	case "incluir": //Insere uma inscricao no banco de dados e atualiza a situacao do aluno em relacao ao projeto
 	    		Boolean resultadoInsert = false;
 	    		Projeto projeto = new Projeto();
 	    		projeto.setTitulo(request.getParameter("titulo"));
@@ -51,9 +51,11 @@ public class InscricaoProjetoServlet extends HttpServlet {
 	    		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
 	    		InscricaoProjeto inscricao = null;
 	    		
+	    		//Preenche os dados do projeto a partir do titulo coletado na pagina
 	    		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
 	    		
-	    		if (projeto.getProfessor().getNome().equals(professor)) {
+	    		if (projeto.getProfessor().getNome().equals(professor)) { //Se este projeto e' do mesmo professor encontrado no banco...
+	    			//Insere a inscricao no banco de dados
 	    			inscricao = new InscricaoProjeto((Aluno) aluno, projeto);
 	    			resultadoInsert = InscricaoProjetoDAO.getInstance().incluir(inscricao);
 	    		}
@@ -71,7 +73,7 @@ public class InscricaoProjetoServlet extends HttpServlet {
 	    	case "listar":   		
 	    		break;
 	    		
-	    	case "deletar":
+	    	case "deletar": //Desvincula o aluno do projeto atraves de uma atualizacao da situacao da inscricao.
 	    		Boolean resultadoDelete = false;
 	    		Projeto projeto2 = new Projeto();
 	    		projeto2.setTitulo(request.getParameter("titulo"));
@@ -84,6 +86,7 @@ public class InscricaoProjetoServlet extends HttpServlet {
 	    		
 	    		if (projeto2.getProfessor().getNome().equals(professor)) {
 	    			inscricao2 = new InscricaoProjeto((Aluno) aluno2, projeto2);
+	    			//Envia a requisicao para desvinculacao do aluno ao projeto
 	    			resultadoDelete = InscricaoProjetoDAO.getInstance().deletar(inscricao2);
 	    		}
 	    		

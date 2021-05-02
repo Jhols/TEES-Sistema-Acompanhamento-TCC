@@ -75,11 +75,13 @@ public class AlunoDAO {
             
             resultado.next();
 			aluno.setId(resultado.getInt(BancoTabela.ALUNO+".id_"+BancoTabela.ALUNO.toString().toLowerCase()));
+			((Aluno)aluno).setIdAluno(resultado.getInt(BancoTabela.ALUNO+".id_"+BancoTabela.ALUNO.toString().toLowerCase()));
 			aluno.setNome(resultado.getString(BancoTabela.PESSOA+".nome"));
 			((Aluno) aluno).setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
 			aluno.setEmail(resultado.getString(BancoTabela.PESSOA+".email"));
 			aluno.setTelefone(resultado.getString(BancoTabela.PESSOA+".telefone"));
 			
+			System.out.println("Aluno encontrado por matricula: id: " + aluno.getId() + " " + ((Aluno)aluno).toString());
 			stm.close();
 		}
 		catch (SQLException e) {
