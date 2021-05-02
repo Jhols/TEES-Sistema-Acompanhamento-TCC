@@ -165,6 +165,7 @@ public class InscricaoProjetoDAO {
 				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString(BancoTabela.SITUACAO_ALUNO_PROJETO + ".descricao").toUpperCase()));
 				
 				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+				inscricao.setProjeto(ProjetoDAO.getInstance().findById(inscricao.getProjeto().getId()));
 			}
 			
 		} catch (Exception e) {
