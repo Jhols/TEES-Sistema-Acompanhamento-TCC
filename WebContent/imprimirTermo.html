@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Alunos Candidatos</title>
+    <title>Imprimir Termo de Aceitação</title>
 
     <!-- Custom fonts for this template -->
     <link href="resources/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -28,7 +28,7 @@
 <body id="page-top">
 
     <!-- Page Wrapper -->
-    <div id="wrapper" class="card o-hidden border-0 shadow-lg my-5">
+    <div id="wrapper" class="card o-hidden border-0 my-5">
     
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="card-body">
@@ -41,21 +41,26 @@
 
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4" style="width:60%; margin:auto">
+                    <div class="card mb-4" style="width:100%; margin:auto">
                         
                         <div class="card-body">
                             <div class="table-responsive">
-                                <div class="text-center">
+                                <div class="text-center" style="font-size: x-large">
+                                <br />
+                                <br />
                                 <p>CARTA DE ACEITAÇÃO DE ORIENTAÇÃO </p>	
-
-							<p style="text-align:justify">Eu, _________________________________, professor da Universidade do Estado da Bahia (UNEB), 
+								<br />
+								<br />
+								<br />
+							<p style="text-align:justify; line-height:2">Eu, _________________________________, professor da Universidade do Estado da Bahia (UNEB), 
 							e--mail: ___________  comprometo-me a orientar o Trabalho de Conclusão de Curso com título provisório: 
 							________________ que será executado pelo(a) aluno(a) _______________. Confirmo que irei estar disponível 
 							de forma regular para orientar o(a) referido(a) aluno até a conclusão deste projeto, seguindo todas as normas
 							definidas nas disciplinas Trabalho de Conclusão de Curso I e II. Desta forma, assino este documento como prova 
 							do compromisso assumido.   
 							</p>
-							 
+							 <br />
+							 <br />
 							<p>
 							Salvador, xx de xxxxx de 20xx. 
                                 </p>
@@ -66,7 +71,7 @@
                             
                             </table>
                              <br /><br />
-                            <a class= "btn btn-primary" href= "gerarTermo" role="button">Gerar termo</a>
+                            
                             </div>
                         </div>
                     </div>
@@ -125,6 +130,10 @@
 
     <!-- Page level custom scripts -->
     <script src="resources/bootstrap/js/demo/datatables-demo.js"></script>
+    
+    <script>
+    	window.print();
+    </script>
 
 </body>
 

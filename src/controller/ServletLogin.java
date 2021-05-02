@@ -1,7 +1,5 @@
 package controller;
 import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +18,7 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
-		Pessoa pessoa = LoginDAO.getInstance().pesquisaPessoa(request.getParameter("login"), request.getParameter("senha"));
+		Pessoa pessoa = LoginDAO.pesquisaPessoa(request.getParameter("login"), request.getParameter("senha"));
 		request.getSession().setAttribute("perfil", pessoa.getPerfil());
 		request.getSession().setAttribute("pessoa", pessoa);
 		

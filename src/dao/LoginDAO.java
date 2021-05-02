@@ -11,18 +11,18 @@ import util.ConnectionFactory;
 
 public class LoginDAO {
 
-	private static LoginDAO uniqueInstance = null;
+	private static LoginDAO uniqueInstance; //Singleton
 	
-	private LoginDAO() {}
+	private LoginDAO() { }
 	
 	public static synchronized LoginDAO getInstance() {
 		if (uniqueInstance == null)
 			uniqueInstance = new LoginDAO();
 		return uniqueInstance;
 	}
-	
+
 	@SuppressWarnings("finally")
-	public  Pessoa pesquisaPessoa(String login, String senha) {
+	public static Pessoa pesquisaPessoa(String login, String senha) {
 		ResultSet resultado = null;
 		String sql;
 		Pessoa pessoa = null;
@@ -56,7 +56,7 @@ public class LoginDAO {
 					case ADMINISTRADOR:
 						break;
 					case ALUNO:
-						pessoa = AlunoDAO.getInstance().pesquisarAlunoPorIdPessoa(idPessoa);
+						pessoa = AlunoDAO.pesquisarAlunoPorIdPessoa(idPessoa);
 						break;
 					case COORDENADOR:
 						break;
@@ -73,7 +73,7 @@ public class LoginDAO {
                 	}
                 }
                 else {
-                	System.out.println("Erro: perfil não encontrado para pessoa id = "+idPessoa);
+                	System.out.println("Erro: perfil nï¿½o encontrado para pessoa id = "+idPessoa);
                 }
             	
             }

@@ -9,7 +9,7 @@ import enums.Perfil;
 public abstract class PessoaFactory {
 	
 	//Cria a instância de uma pessoa a partir de seu perfil. 
-	public static Pessoa getPessoa(Perfil perfil) {
+	public static Pessoa getPessoa(Perfil  perfil) {
 		if (perfil == Perfil.ALUNO)
 			return new Aluno();
 		if (perfil == Perfil.PROFESSOR)
@@ -80,7 +80,8 @@ public abstract class PessoaFactory {
 	}
 	
 	
-	private static void popularDadosAluno(Aluno aluno, ResultSet resulato) throws SQLException {
-		/// TODO
+	private static void popularDadosAluno(Aluno aluno, ResultSet resultado) throws SQLException {
+		aluno.setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
+		aluno.setIdAluno(resultado.getInt(BancoTabela.ALUNO+".id_aluno"));
 	}
 }

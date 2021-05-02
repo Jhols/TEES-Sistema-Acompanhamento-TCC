@@ -4,6 +4,15 @@ import enums.Perfil;
 
 public class Aluno extends Pessoa {
 	private String matricula;
+	private int idAluno;
+
+	public int getIdAluno() {
+		return idAluno;
+	}
+
+	public void setIdAluno(int idAluno) {
+		this.idAluno = idAluno;
+	}
 
 	public Aluno() {
 		this.setPerfil(Perfil.ALUNO);
@@ -28,10 +37,9 @@ public class Aluno extends Pessoa {
 
 	@Override
 	public String toString() {
-		return "Aluno [matricula=" + matricula + ", Pessoa=" + super.toString() + "]";
+		return "Aluno [matricula=" + matricula + ", idAluno=" + idAluno + ", Pessoa=" + super.toString() + "]";
 	}
-	
-	
-	
+
+
 	
 }

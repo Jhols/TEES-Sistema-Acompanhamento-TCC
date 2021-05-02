@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/controller/ServletDashboardAluno.java=UTF-8
+encoding//src/controller/ServletVisualizarCandidatos.java=UTF-8
+encoding//src/dao/InscricaoProjetoDAO.java=UTF-8
+encoding//src/dao/LoginDAO.java=UTF-8
+encoding//src/dao/PessoaDAO.java=UTF-8

@@ -1,54 +1,89 @@
 package model;
-
-import dao.AlunoDAO;
 import enums.SituacaoInscricao;
+import enums.SituacaoProjeto;
 
 public class InscricaoProjeto {
-	
-	private int idInscricao;
-	private int idAluno;
-	private int idProjeto;
-	private int idSituacaoInscricao;
-	
-	//A ser discutido:
-	private Aluno aluno = null;
-	private Projeto projeto = null;
-	private SituacaoInscricao situacaoInscricao = null;
+	private int id;
+	private Aluno aluno;
+	private Projeto projeto;
+	private SituacaoInscricao situacaoInscricao;
+	int idSituacaoInscricao;
 	
 	public InscricaoProjeto() {
 		aluno = new Aluno();
 		projeto = new Projeto();
-		situacaoInscricao = SituacaoInscricao.CANDIDATO;
-	}
+	} 
 
 	public InscricaoProjeto(Aluno aluno, Projeto projeto) {
 		this();
 		this.aluno = aluno;
 		this.projeto = projeto;
-	}
-
-	//A ser discutido:
-	public Aluno getAluno() {
-		return AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
+		this.situacaoInscricao = SituacaoInscricao.CANDIDATO;
 	}
 	
+	public InscricaoProjeto(Aluno aluno, Projeto projeto, SituacaoInscricao situacaoInscricao) {
+		this();
+		this.aluno = aluno;
+		this.projeto = projeto;
+		this.situacaoInscricao = situacaoInscricao;
+		if (this.situacaoInscricao == SituacaoInscricao.ASSOCIADO) {
+			this.projeto.setSituacao(SituacaoProjeto.ATIVO);
+		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Aluno getAluno() {
+		return aluno;
+	}
+
+	public void setAluno(Aluno aluno) {
+		this.aluno = aluno;
+	}
+
+	public Projeto getProjeto() {
+		return projeto;
+	}
+
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
+	}
+	
+	public SituacaoInscricao getSituacaoInscricao() {
+		return situacaoInscricao;
+	}
+
+	public void setSituacaoInscricao(SituacaoInscricao situacaoInscricao) {
+		this.situacaoInscricao = situacaoInscricao;
+	}
+
+	/*public Aluno getAluno() {
+		return AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(this.aluno.getId());
+	}*/
+	
 	public int getIdInscricao() {
-		return idInscricao;
+		return id;
 	}
 	public void setIdInscricao(int idInscricao) {
-		this.idInscricao = idInscricao;
+		this.id = idInscricao;
 	}
 	public int getIdAluno() {
-		return idAluno;
+		return this.aluno.getId();
 	}
 	public void setIdAluno(int idAluno) {
-		this.idAluno = idAluno;
+		this.aluno.setId(idAluno);
 	}
 	public int getIdProjeto() {
-		return idProjeto;
+		return projeto.getId();
 	}
 	public void setIdProjeto(int idProjeto) {
-		this.idProjeto = idProjeto;
+		this.projeto.setId(idProjeto);
 	}
 	public int getIdSituacaoInscricao() {
 		return idSituacaoInscricao;
@@ -58,31 +93,8 @@ public class InscricaoProjeto {
 	}
 	@Override
 	public String toString() {
-		return "InscricaoProjeto [idInscricao=" + idInscricao + ", idAluno=" + idAluno + ", idProjeto=" + idProjeto
+		return "InscricaoProjeto [idInscricao=" + id + ", idAluno=" + aluno.getId() + ", idProjeto=" + projeto.getId()
 				+ ", idSituacaoInscricao=" + idSituacaoInscricao + "]";
 	}
-
-	public Projeto getProjeto() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setProjeto(Projeto projeto) {
-		this.projeto = projeto;
-	}
-
-	public void setAluno(Aluno aluno) {
-		this.aluno = aluno;
-	}
-
-	public SituacaoInscricao getSituacaoInscricao() {
-		return situacaoInscricao;
-	}
-
-	public void setSituacaoInscricao(SituacaoInscricao situacaoInscricao) {
-		this.situacaoInscricao = situacaoInscricao;
-	}
 	
-	
-
 }
