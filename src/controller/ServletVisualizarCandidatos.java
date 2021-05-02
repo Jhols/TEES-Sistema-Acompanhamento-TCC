@@ -50,7 +50,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 				System.out.println("\t"+in);
 				System.out.println("\t"+in.getAluno());
 				// Verificar se aluno esta associado a outro projeto
-				var listIncricoes=InscricaoProjetoDAO.pesquisarInscricoesPorAluno(in.getAluno().getIdAluno(), SituacaoInscricao.ASSOCIADO);
+				var listIncricoes=InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(in.getAluno().getIdAluno(), SituacaoInscricao.ASSOCIADO);
 				// So mostrar na tabela se ele nao possuir inscricao do tipo associado
 				if(listIncricoes.isEmpty()) {
 					var linha = new HashMap<String, String>();
@@ -221,7 +221,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 			System.out.println("Rejeitando inscricao ");
 			var idInscricao = Integer.parseInt(request.getParameter("inscricao"));
 			System.out.println("Id = "+idInscricao);
-			InscricaoProjeto inscricao = InscricaoProjetoDAO.pesquisarInscricaoPorId(idInscricao);
+			InscricaoProjeto inscricao = InscricaoProjetoDAO.getInstance().pesquisarInscricaoPorId(idInscricao);
 			System.out.println(""+inscricao);
 			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.DESVINCULADO);
 			response.sendRedirect("candidatos");

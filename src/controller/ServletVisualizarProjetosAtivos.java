@@ -46,7 +46,7 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 		for (Projeto p : projetos) {
 			System.out.println(p);
 			
-			var inscricoes = InscricaoProjetoDAO.pesquisarInscricoesParaProjeto(p, SituacaoInscricao.ASSOCIADO);
+			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesParaProjeto(p, SituacaoInscricao.ASSOCIADO);
 			var inscricao = inscricoes.get(0);
 			
 			var linha = new HashMap<String, String>();
@@ -210,7 +210,7 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 			System.out.println("Desvinculando inscricao ");
 			var idInscricao = Integer.parseInt(request.getParameter("inscricao"));
 			System.out.println("Id = "+idInscricao);
-			InscricaoProjeto inscricao = InscricaoProjetoDAO.pesquisarInscricaoPorId(idInscricao);
+			InscricaoProjeto inscricao = InscricaoProjetoDAO.getInstance().pesquisarInscricaoPorId(idInscricao);
 			System.out.println(""+inscricao);
 			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.DESVINCULADO);
 			

@@ -216,69 +216,8 @@ public class InscricaoProjetoDAO {
 		
 		return inscricoes;
 	}
+		
 	
-	//Nome a ser discutido
-	//Pesquisa por inscricoes de um projeto que tenha determinada situacao (Nesta funcao: 'candidato')
-	public ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(Projeto projeto) {
-		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
-		
-		try {
-			Connection con = ConnectionFactory.getConnection();
-			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
-					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_projeto = ? and id_situacao_aluno_projeto = 1";
-			
-			PreparedStatement stm =  con.prepareStatement(sql);
-			stm.setInt(1, projeto.getId());
-			ResultSet resultado = stm.executeQuery();
-			
-			while (resultado.next()) {
-				InscricaoProjeto inscricao = new InscricaoProjeto();
-				popularInscricao(inscricao, resultado);
-				inscricao.setProjeto(projeto);
-				inscricoes.add(inscricao);
-			}
-			
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return inscricoes;
-	}
-	
-	public void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
-		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
-		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
-		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
-	}
-	
-	//Nome a ser discutido
-	//Pesquisa por inscricoes de um aluno que possuam uma determinada situacao (nesta funcao: 'associado')
-	public ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno) {
-		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
-		
-		try {
-			Connection con = ConnectionFactory.getConnection();
-			String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
-					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_aluno = ? and id_situacao_aluno_projeto = 2";
-			
-			PreparedStatement stm =  con.prepareStatement(sql);
-			stm.setInt(1, idAluno);
-			ResultSet resultado = stm.executeQuery();
-			
-			while (resultado.next()) {
-				InscricaoProjeto inscricao = new InscricaoProjeto();
-				popularInscricao(inscricao, resultado);
-				inscricoes.add(inscricao);
-			}
-			
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return inscricoes;
-	}
 	
 	//Inclui uma incricao no banco de dados
 	public boolean incluir(InscricaoProjeto inscricao) {
@@ -359,7 +298,9 @@ public class InscricaoProjetoDAO {
 		return respostaDelete;
 	}
 
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(Projeto projeto) {
+	//Nome a ser discutido
+	//Pesquisa por inscricoes de um projeto que tenha determinada situacao (Nesta funcao: 'candidato')
+	public ArrayList<InscricaoProjeto> pesquisarInscricoesDeCandidatoParaProjeto(Projeto projeto) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
@@ -386,7 +327,7 @@ public class InscricaoProjetoDAO {
 		return inscricoes;
 	}
 	
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesParaProjeto(Projeto projeto, SituacaoInscricao situacaoInscricao) {
+	public ArrayList<InscricaoProjeto> pesquisarInscricoesParaProjeto(Projeto projeto, SituacaoInscricao situacaoInscricao) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
@@ -415,10 +356,9 @@ public class InscricaoProjetoDAO {
 		
 		return inscricoes;
 	}
+
 	
-	
-	
-	public static void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
+	public void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
 		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
 		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
 		inscricao.setProjeto(ProjetoDAO.pesquisarProjetoPorIdProjeto(resultado.getInt("id_projeto")));
@@ -426,8 +366,37 @@ public class InscricaoProjetoDAO {
 		
 	}
 	
+	//Nome a ser discutido
+	//Pesquisa por inscricoes de um aluno que possuam uma determinada situacao (nesta funcao: 'associado')
+	public ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno) {
+	ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 	
-	public static ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno, SituacaoInscricao situacaoInscricao) {
+	try {
+		Connection con = ConnectionFactory.getConnection();
+		String sql = "Select * from " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela()
+				+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_aluno = ? and id_situacao_aluno_projeto = 2";
+		
+		PreparedStatement stm =  con.prepareStatement(sql);
+		stm.setInt(1, idAluno);
+		ResultSet resultado = stm.executeQuery();
+		
+		while (resultado.next()) {
+			InscricaoProjeto inscricao = new InscricaoProjeto();
+			popularInscricao(inscricao, resultado);
+			inscricoes.add(inscricao);
+		}
+		
+	}
+	catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+	return inscricoes;
+	}
+	
+	//Nome a ser discutido
+	//Pesquisa por inscricoes de um aluno que possuam uma determinada situacao (nesta funcao: 'associado')
+	public ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno, SituacaoInscricao situacaoInscricao) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
 		try {
@@ -456,7 +425,8 @@ public class InscricaoProjetoDAO {
 		
 		return inscricoes;
 	}
-	public static InscricaoProjeto pesquisarInscricaoPorId(int idInscricao) {
+	
+	public InscricaoProjeto pesquisarInscricaoPorId(int idInscricao) {
 		InscricaoProjeto inscricao = null;
 		
 		

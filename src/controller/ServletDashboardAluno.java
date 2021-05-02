@@ -31,7 +31,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	System.out.println("ALUNO LOGADO "+aluno);
 	boolean imprimirTermoDeAceite = false;
 	InscricaoProjeto inscricao = null;
-	var inscricoesAssociadas = InscricaoProjetoDAO.pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
+	var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
 	System.out.println("INSCRICOES DO ALUNO: "+inscricoesAssociadas);
 	if (inscricoesAssociadas.size() > 0) {
 		inscricao = inscricoesAssociadas.get(0);

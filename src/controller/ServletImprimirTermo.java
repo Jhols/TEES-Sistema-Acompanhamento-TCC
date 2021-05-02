@@ -33,7 +33,7 @@ public class ServletImprimirTermo  extends HttpServlet {
 		}
 
 		int idInscricao = Integer.parseInt(request.getParameter("inscricao"));
-		InscricaoProjeto inscricao = InscricaoProjetoDAO.pesquisarInscricaoPorId(idInscricao);
+		InscricaoProjeto inscricao = InscricaoProjetoDAO.getInstance().pesquisarInscricaoPorId(idInscricao);
 		
 		LocalDateTime ldt = LocalDateTime.now();
 		
