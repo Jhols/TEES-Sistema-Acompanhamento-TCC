@@ -32,6 +32,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
+		boolean visualizarProjetosProfessor = professor.isOrientador();
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -103,6 +104,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Cadastrar projeto</span></a>\r\n"
 			+ "            </li>\r\n";
+		}
+		if (visualizarProjetosProfessor) {
+			html += "           <!-- Item cadastrar projetos -->\r\n"
+					+ "            <li class=\"nav-item\">\r\n"
+					+ "                <a class=\"nav-link\" href=\"projetosProfessor?opcao=listar\">\r\n"
+					+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+					+ "                    <span>Projetos do Professor</span></a>\r\n"
+					+ "            </li>\r\n";
 		}
 		if (alunosCandidatos) {
 			html += "            <!-- Item alunos candidatos -->\r\n"

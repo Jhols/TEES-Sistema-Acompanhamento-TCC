@@ -2,8 +2,7 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="java.util.ArrayList, model.Projeto, dao.ProfessorDAO"%>
 <%@page import="java.util.ArrayList, model.Projeto, dao.ProjetoDAO"%>
-<%@page language="java"
-	import="java.util.ArrayList, enums.SituacaoProjeto"%>
+<%@page import="enums.SituacaoProjeto"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -47,28 +46,16 @@
 							out.println("<tr>");
 							out.println("<td id='titulo" + x + "'>" + projeto.getTitulo() + "</td>");
 							out.println("<td>" + projeto.getDescricao() + "</td>"); //+ projeto.getSituacao()
-							out.println("<td>" + projeto.getSituacao() + "</td>");
-							
-							/*
-							String teste = "<td id='statusProjeto" + x + "'>" 
-							
-								+ "<select name='sct_statusProjeto"+ x + "'" + " id='sct_statusProjeto " + x + "'>"
-									+ "<option value='" + SituacaoProjeto.ATIVO + "' " + (situacao == SituacaoProjeto.ATIVO ? "selected" : "") +  "></option> "
-									+ "<option value='" + SituacaoProjeto.EXCLUIDO + "' " + (situacao == SituacaoProjeto.EXCLUIDO ? "selected" : "") +  "></option> "
-									+ "</select>"
-							+ "</td>";
-							out.println("<td id='statusProjeto" + x + "'>" 
-							
-								+ "<select name='sct_statusProjeto"+ x + "'" + " id='sct_statusProjeto " + x + "'>"
-									+ "<option value='" + SituacaoProjeto.ATIVO.getNomeSituacao() + "' " + (situacao.getNomeSituacao() == "ativo" ? " selected " : "") +  "></option> "
-									+ "<option value='" + SituacaoProjeto.EXCLUIDO.getNomeSituacao() + "' " + (situacao.getNomeSituacao() == "excluido" ? "selected" : "") +  "></option> "
-									+ "</select>"
-							+ "</td>");
-							out.println(
-									"<td><input type='button' class='btn btn-primary btn-icon-split, text' style='width:95%' id='btn-candidatar-"
-											+ x + "' onClick=\"enviarSolicitacao('btn-candidatar-" + x + "','titulo" + x + "', 'professor" + x
-											+ "')\" name='btn-candidatar' value='Candidatar-se'></td>");
-							out.println("</tr>");*/
+							//out.println("<td>" + projeto.getSituacao() + "</td>");
+							String combobox = "           <!-- Combobox -->\r\n"
+								+ " <select name=\"sct_statusProjeto"+ x + "\"" + " id=\"sct_statusProjeto" + x + "\">\r\n"
+								+ " 	<option value=\"" + SituacaoProjeto.ATIVO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.ATIVO ? "selected >" : ">") + SituacaoProjeto.ATIVO.getNomeSituacao() + "</option>\r\n" 
+								+ " 	<option value=\"" + SituacaoProjeto.DESATIVADO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DESATIVADO ? "selected >" : ">") + SituacaoProjeto.DESATIVADO.getNomeSituacao() +  "</option>\r\n" 
+								+ "     <option value=\"" + SituacaoProjeto.DISPONIVEL.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DISPONIVEL ? "selected >" : ">") + SituacaoProjeto.DISPONIVEL.getNomeSituacao() + "</option>\r\n"
+								+ "     <option value=\"" + SituacaoProjeto.EXCLUIDO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.EXCLUIDO ? "selected >" : ">") + SituacaoProjeto.EXCLUIDO.getNomeSituacao() + "</option>\r\n"
+								+ " </select>\r\n";
+							out.println("<td>" + combobox + "</td>");	
+							out.println("</tr>");
 							x++;
 						}
 						%>

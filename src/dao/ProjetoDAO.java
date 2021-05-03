@@ -105,7 +105,7 @@ public class ProjetoDAO {
 	 * @author Jehcky
 	 * @return listaProjetos
 	 * @throws SQLException
-	 * @comment Esta função busca os projetos por professor e SituacoesProjeto != ATIVO e retorna uma lista de projetos
+	 * @comment Esta função busca projetos por professor e situacoes projeto != ATIVO
 	 */
 	public ArrayList<Projeto> buscarProjetosPorProfessorESituacoesNaoAtivo(int idProfessor) {
 		ArrayList<Projeto> listaProjetos = new ArrayList<Projeto>();
