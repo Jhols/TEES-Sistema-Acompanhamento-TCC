@@ -1,7 +1,7 @@
 <%@page import="enums.SituacaoProjeto"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
-<%@page import="java.util.ArrayList, model.Projeto,dao.ProfessorDAO"%>
-<%@page import="java.util.ArrayList, model.Projeto,dao.ProjetoDAO"%>
+<%@page import="java.util.ArrayList, model.Projeto, dao.ProfessorDAO"%>
+<%@page import="java.util.ArrayList, model.Projeto, dao.ProjetoDAO"%>
 <%@page language="java"
 	import="java.util.ArrayList, enums.SituacaoProjeto"%>
 
@@ -43,11 +43,32 @@
 						projetos = ProjetoDAO.getInstance().buscarProjetosPorProfessorESituacoesNaoAtivo(2);
 						int x = 1;
 						for (Projeto projeto : projetos) {
+							SituacaoProjeto situacao = projeto.getSituacao();
 							out.println("<tr>");
 							out.println("<td id='titulo" + x + "'>" + projeto.getTitulo() + "</td>");
 							out.println("<td>" + projeto.getDescricao() + "</td>"); //+ projeto.getSituacao()
-							out.println("<td id='statusProjeto" + x + "'>" + "<select name='sct_statusProjeto' " + "</td>");
-							out.println("</tr>");
+							out.println("<td>" + projeto.getSituacao() + "</td>");
+							
+							/*
+							String teste = "<td id='statusProjeto" + x + "'>" 
+							
+								+ "<select name='sct_statusProjeto"+ x + "'" + " id='sct_statusProjeto " + x + "'>"
+									+ "<option value='" + SituacaoProjeto.ATIVO + "' " + (situacao == SituacaoProjeto.ATIVO ? "selected" : "") +  "></option> "
+									+ "<option value='" + SituacaoProjeto.EXCLUIDO + "' " + (situacao == SituacaoProjeto.EXCLUIDO ? "selected" : "") +  "></option> "
+									+ "</select>"
+							+ "</td>";
+							out.println("<td id='statusProjeto" + x + "'>" 
+							
+								+ "<select name='sct_statusProjeto"+ x + "'" + " id='sct_statusProjeto " + x + "'>"
+									+ "<option value='" + SituacaoProjeto.ATIVO.getNomeSituacao() + "' " + (situacao.getNomeSituacao() == "ativo" ? " selected " : "") +  "></option> "
+									+ "<option value='" + SituacaoProjeto.EXCLUIDO.getNomeSituacao() + "' " + (situacao.getNomeSituacao() == "excluido" ? "selected" : "") +  "></option> "
+									+ "</select>"
+							+ "</td>");
+							out.println(
+									"<td><input type='button' class='btn btn-primary btn-icon-split, text' style='width:95%' id='btn-candidatar-"
+											+ x + "' onClick=\"enviarSolicitacao('btn-candidatar-" + x + "','titulo" + x + "', 'professor" + x
+											+ "')\" name='btn-candidatar' value='Candidatar-se'></td>");
+							out.println("</tr>");*/
 							x++;
 						}
 						%>
@@ -71,6 +92,11 @@
 <script src="resources/bootstrap/js/demo/datatables-demo.js"></script>
 
 <script>
+	
+	/**
+	* @author Jehcky
+	* @comment Esta função envia uma solicitação ajax para o Servlet
+	*/
 	function enviarSolicitacao(idBotao, idTitulo, idProfessor) {
 		var titulo = $("#" + idTitulo).text();
 		var professor = $("#" + idProfessor).text();
