@@ -3,7 +3,6 @@ package controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
-import java.util.Calendar;
 import java.util.Locale;
 
 import javax.servlet.ServletException;
@@ -28,14 +27,18 @@ public class ServletGerarTermo extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
+		// Tentar pegar o professor que está logado atualmente
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
+		
 		if (professor == null) {
+			// Se não houver professor logado, faz login automatico para facilitar os testes
+			// Futuramente mudar essa parte para redirecionar para a pagina de login
 			System.out.println("login automatico");
 			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
 		
-		
+		// o id do aluno e do projeto cujo termo será mostrado são passados por parametro
 		int idAluno= Integer.parseInt(request.getParameter("aluno"));
 		int idProjeto= Integer.parseInt(request.getParameter("idProjeto")); 
 		

@@ -1,6 +1,6 @@
 package enums;
 
-
+//Enumeração das possíveis situações de projeto de acordo com o Banco
 public enum SituacaoProjeto {
 	EXCLUIDO ("excluido"),
 	DISPONIVEL ("disponivel"),
@@ -17,6 +17,7 @@ public enum SituacaoProjeto {
 		return nomeSituacao;
 	}
 	
+	// converte de inteiro para este enum
 	public static SituacaoProjeto fromInt(int value) {
 		switch (value) {
 			case 1: return SituacaoProjeto.EXCLUIDO;
@@ -29,6 +30,7 @@ public enum SituacaoProjeto {
 		}
 	}
 	
+	// converte deste enum para seu valor inteiro
 	public static int toInt(SituacaoProjeto value) {
 		if (value == SituacaoProjeto.EXCLUIDO)
 			return 1;

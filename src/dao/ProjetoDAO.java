@@ -9,7 +9,6 @@ import java.sql.Statement;
 
 import enums.BancoTabela;
 import enums.SituacaoProjeto;
-
 import model.Professor;
 import model.Projeto;
 import util.ConnectionFactory;
@@ -68,7 +67,8 @@ public class ProjetoDAO {
 		}
 	}
 
-	
+	// pesquisa todos projetos de um professor (especificado pelo id_professor) cuja situação do projeto seja igual ao parametro 'situacao' passado
+	// retorna um ArrayList vazio caso o professor não tenho projetos com a situção determinada
 	public static ArrayList<Projeto> pesquisarProjetosPorProfessorESituacao(int idProfessor, SituacaoProjeto situacao) {
 		ArrayList<Projeto> projetos = new ArrayList<Projeto>();
 		
@@ -98,6 +98,7 @@ public class ProjetoDAO {
 		return projetos;
 	}
 	
+	// Popula os campos de projeto a partir do resultado de uma consulta sql
 	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {
 		projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_projeto"));
 		projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
@@ -187,6 +188,7 @@ public class ProjetoDAO {
     }
 	
 	@SuppressWarnings("finally")
+	// pesquisa um projeto pelo seu id
 	public static Projeto pesquisarProjetoPorIdProjeto(int idProjeto) {
 		
 		Projeto projeto = null;
@@ -280,8 +282,9 @@ public class ProjetoDAO {
 		
 		return false;
 	}
-
-	public void atualizar(int idProjeto) {
+	
+	// atualiza para 'ativo' a situação do projeto especificado pelo id
+	public void atualizarParaAtivo(int idProjeto) {
 		
 		try {
 				var connection = ConnectionFactory.getConnection();
@@ -299,6 +302,8 @@ public class ProjetoDAO {
 			} 
 	}
 	
+	// atualiza o banco com o projeto passado
+	// usa o id do projeto para encontrar a ocorrencia no banco
 	public void atualizar(Projeto projeto) {
 		
 		try {

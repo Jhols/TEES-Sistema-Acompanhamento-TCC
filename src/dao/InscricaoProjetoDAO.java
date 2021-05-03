@@ -131,6 +131,8 @@ public class InscricaoProjetoDAO {
 		return inscricao;
 	}
 	
+	
+	// busca no banco uma inscricao cuja situação seja 'associado'
 	public InscricaoProjeto pesquisarProjetoAssociado(Aluno aluno) {
 		InscricaoProjeto inscricao = null;
 		ResultSet resultado = null;
@@ -327,6 +329,7 @@ public class InscricaoProjetoDAO {
 		return inscricoes;
 	}
 	
+	// busca no banco todas as inscrições de determinado projeto que estejam com determinada situação
 	public ArrayList<InscricaoProjeto> pesquisarInscricoesParaProjeto(Projeto projeto, SituacaoInscricao situacaoInscricao) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
@@ -358,6 +361,7 @@ public class InscricaoProjetoDAO {
 	}
 
 	
+	// preenche os dados do objeto inscricao a partir de um resultado SQL
 	public void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
 		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
 		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
@@ -395,7 +399,7 @@ public class InscricaoProjetoDAO {
 	}
 	
 	//Nome a ser discutido
-	//Pesquisa por inscricoes de um aluno que possuam uma determinada situacao (nesta funcao: 'associado')
+	//Pesquisa por inscricoes de um aluno que possuam uma determinada situacao 
 	public ArrayList<InscricaoProjeto> pesquisarInscricoesPorAluno(int idAluno, SituacaoInscricao situacaoInscricao) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
 		
@@ -426,6 +430,7 @@ public class InscricaoProjetoDAO {
 		return inscricoes;
 	}
 	
+	// busca uma inscricao a partir do seu id_inscricao
 	public InscricaoProjeto pesquisarInscricaoPorId(int idInscricao) {
 		InscricaoProjeto inscricao = null;
 		
@@ -452,6 +457,7 @@ public class InscricaoProjetoDAO {
 	
 	
 	//feito por @carol, por favor n�o modificar a func�o abaixo
+	// busca uma inscricao que contenha o aluno e o projeto especificado
 		public InscricaoProjeto pesquisarAlunoNoProjeto(Aluno aluno, Projeto projeto) {
 		InscricaoProjeto inscricao = null;
 		String sql;

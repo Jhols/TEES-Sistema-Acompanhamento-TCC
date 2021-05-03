@@ -49,6 +49,7 @@ public abstract class PessoaFactory {
 		pessoa.setNome(resultado.getString(BancoTabela.PESSOA + ".nome"));
 		pessoa.setEmail(resultado.getString(BancoTabela.PESSOA + ".email"));
 		pessoa.setTelefone(resultado.getString(BancoTabela.PESSOA + ".telefone"));
+		// de acordo com o perfil da pessoa chama a função adequada
 		switch (pessoa.getPerfil()) {
 		case ADMINISTRADOR:
 			break;
@@ -79,7 +80,7 @@ public abstract class PessoaFactory {
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
 	}
 	
-	
+	/// popula um objeto Aluno a partir do resultado de um select 
 	private static void popularDadosAluno(Aluno aluno, ResultSet resultado) throws SQLException {
 		aluno.setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
 		aluno.setIdAluno(resultado.getInt(BancoTabela.ALUNO+".id_aluno"));

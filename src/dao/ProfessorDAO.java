@@ -46,6 +46,7 @@ public class ProfessorDAO {
 		}
 	}
 
+	// busca um professor a partir do seu id_pessoa
 	@SuppressWarnings("finally")
 	public static Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
 		Professor professor = null;
@@ -54,11 +55,9 @@ public class ProfessorDAO {
 		try {
 			if (resultado.next()) {
 				professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
-				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
 				
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			return professor;			
@@ -66,6 +65,7 @@ public class ProfessorDAO {
 		
 	}
 	
+	// busca a lista de todos os professores no banco
 	@SuppressWarnings("finally")
 	public ArrayList<Professor> pesquisarTodosProfessores() {
 		ArrayList<Professor> professores = new ArrayList<>();
@@ -90,6 +90,7 @@ public class ProfessorDAO {
 		
 	}
 	
+	// busca um professor a partir de seu id_professor
 	public static Professor pesquisarPorIdProfessor(int idProfessor) {
 		Professor professor = null;
 		

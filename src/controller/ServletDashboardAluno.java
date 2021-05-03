@@ -19,29 +19,34 @@ import model.InscricaoProjeto;
 public class ServletDashboardAluno extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-	var aluno = (Aluno) request.getSession().getAttribute("pessoa");
-	if (aluno == null) {
-		System.out.println("login automatico");
-		aluno = (Aluno) LoginDAO.pesquisaPessoa("carol", "1234");
-		request.getSession().setAttribute("pessoa", aluno);
-	}
-	
-	System.out.println("ALUNO LOGADO "+aluno);
-	boolean imprimirTermoDeAceite = false;
-	InscricaoProjeto inscricao = null;
-	var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
-	System.out.println("INSCRICOES DO ALUNO: "+inscricoesAssociadas);
-	if (inscricoesAssociadas.size() > 0) {
-		inscricao = inscricoesAssociadas.get(0);
-		imprimirTermoDeAceite = true;
-	}
-	
-	response.setCharacterEncoding("UTF-8");
-	response.setContentType("text/html; charset=UTF-8");
-	var writer = response.getWriter();			
-	String html = "<!DOCTYPE html>\r\n"
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		// Tentar pegar o aluno que está logado atualmente
+		var aluno = (Aluno) request.getSession().getAttribute("pessoa");
+		if (aluno == null) {
+			// Se não houver aluno logado, faz login automatico para facilitar os testes
+			// Futuramente mudar essa parte para redirecionar para a pagina de login
+			System.out.println("login automatico");
+			aluno = (Aluno) LoginDAO.pesquisaPessoa("carol", "1234");
+			request.getSession().setAttribute("pessoa", aluno);
+		}
+		
+		System.out.println("ALUNO LOGADO "+aluno);
+		boolean imprimirTermoDeAceite = false; // Condição para mostar o botão de imprimir termo de aceite no menu do aluno
+		InscricaoProjeto inscricao = null;
+		// busca as inscrições do aluno cuja situação seja 'ASSOCIADO'
+		var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
+		System.out.println("INSCRICOES DO ALUNO: "+inscricoesAssociadas);
+		if (inscricoesAssociadas.size() > 0) {
+			// se houver inscricão 'associado' permitir que o botão de imprimir termo apareça no menu
+			inscricao = inscricoesAssociadas.get(0);
+			imprimirTermoDeAceite = true;
+		}
+		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+		var writer = response.getWriter();			
+		String html = "<!DOCTYPE html>\r\n"
 			+ "<html lang=\"pt\">\r\n"
 			+ "\r\n"
 			+ "<head>\r\n"
@@ -101,6 +106,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 			+ "                \r\n"
 			+ "\r\n";
 		
+		// só concatena html do botão de imprimir termo se houver inscricao associada (como visto acima) 
 		if (imprimirTermoDeAceite) {
 			html += "           <!-- Item - Imprimir Termo de Aceite -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"

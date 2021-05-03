@@ -1,5 +1,6 @@
 package enums;
 
+// Enumeração dos perfis de pessoa de acordo com o Banco
 public enum Perfil{
 	NENHHUM(0),
 	ADMINISTRADOR(1),
@@ -16,6 +17,8 @@ public enum Perfil{
 	{
 		return this.value;
 	}
+	
+	// converte de inteiro para este enum
 	public static Perfil fromId(int id) {
 		switch (id) {
 			case 1:
@@ -32,6 +35,8 @@ public enum Perfil{
 				return Perfil.NENHHUM;
 		}
 	}
+	
+	// retorna a tabela do banco associada ao perfil especificado
 	public static BancoTabela getTabela(Perfil perfil) {
 		switch (perfil) {
 		case ADMINISTRADOR:

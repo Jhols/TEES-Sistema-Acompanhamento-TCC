@@ -22,11 +22,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		// Tentar pegar o professor que está logado atualmente
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
+			// Se não houver professor logado, faz login automatico para facilitar os testes
+			// Futuramente mudar essa parte para redirecionar para a pagina de login
 			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.getInstance().pesquisaPessoa("alexandre", "1234");
+			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
 		
@@ -37,8 +40,10 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
 		
-		
+		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
+			// se houve alguma acao a ser executada nesse servlet
+			// e a pagina foi redirecionada, para a execução da função
 			return;
 		}
 		
@@ -98,6 +103,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "\r\n"
 		+ "                   \r\n"
 		+ "\r\n";
+		// Cada botão do menu só deve aparecer de acordo com o tipo de perfil que está visualizando a pagina
 		if (cadastroProfOrientador) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
@@ -150,7 +156,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "\r\n"
 		+ "</body>\r\n";
 		
-		
+		// mostrar alertas para ações executadas pelo servlet
 		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
 			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
 		}
@@ -164,7 +170,8 @@ public class ServletDashboardProfessor extends HttpServlet {
 		writer.write(html);
 	}
 	
-	// retorna true se a acao redireciona a pagina
+	// verifica os parametros da pagina para saber se há alguma ação a ser executada pelo servlet
+	// retorna true se a ação redireciona a pagina
 	private boolean verificarAcao(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String acao= request.getParameter("acao");
 		if(acao==null)
@@ -173,12 +180,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 		}
 		switch (acao) {
 		case "gerar":
+			// a ação de gerar associa um aluno a um projeto
+			// mudando o status da sua inscrição (de 'candidato' para 'associado')
+			// o id do aluno e do projeto são passados por parametro para o servlet
 			int idAluno = Integer.parseInt(request.getParameter("aluno"));
 			int idProjeto = Integer.parseInt(request.getParameter("projeto"));
 			System.out.println("Ação gerar detectada");
 			System.out.println("Id Aluno = " + idAluno);
 			System.out.println("Id Projeto = " + idProjeto);
-			// Associar aluno ao projeto, mudando o status da sua inscrição
 			var aluno = AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
 			System.out.println(aluno.toString());
 			
@@ -187,9 +196,11 @@ public class ServletDashboardProfessor extends HttpServlet {
 			var inscricao = InscricaoProjetoDAO.getInstance().pesquisarAlunoNoProjeto(aluno, projeto);
 			System.out.println("inscricao" +inscricao);
 			
+			// atualiza no banco os dados necessários
 			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.ASSOCIADO);
-			ProjetoDAO.getInstance().atualizar(idProjeto);
+			ProjetoDAO.getInstance().atualizarParaAtivo(idProjeto);
 			
+			// redirectiona para mostrar um alerta ao usuario
 			response.sendRedirect("professorDashboard?msg=gerar");
 			return true;
 		}

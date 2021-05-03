@@ -20,7 +20,9 @@ public class LoginDAO {
 			uniqueInstance = new LoginDAO();
 		return uniqueInstance;
 	}
-
+	
+	// pesquisa Pessoa no banco a partir de sua informacao de login (login e senha)
+	// preenche os dados dos objetos filhos (aluno, professor, etc) de acordo com o perfil encontrado
 	@SuppressWarnings("finally")
 	public static Pessoa pesquisaPessoa(String login, String senha) {
 		ResultSet resultado = null;

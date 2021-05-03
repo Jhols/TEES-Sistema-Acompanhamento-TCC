@@ -27,30 +27,38 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
+
+		// Tentar pegar o professor que está logado atualmente
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
+			// Se não houver professor logado, faz login automatico para facilitar os testes
+			// Futuramente mudar essa parte para redirecionar para a pagina de login
 			System.out.println("login automatico");
 			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
-		
+		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
+			// se houve alguma acao a ser executada nesse servlet
+			// e a pagina foi redirecionada, para a execução da função
 			return;
 		}
 		
+		// busca a lista de projetos ativos desse professor
 		var projetos = ProjetoDAO.pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.ATIVO);		
+		
+		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
 		for (Projeto p : projetos) {
 			System.out.println(p);
-			
+			// busca a inscrição do tipo 'associado' deste projeto
 			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesParaProjeto(p, SituacaoInscricao.ASSOCIADO);
 			var inscricao = inscricoes.get(0);
 			
+			// preencher os dados que serão mostrados na tabela
 			var linha = new HashMap<String, String>();
-			
 			linha.put("titulo", p.getTitulo());
 			linha.put("nomeAluno", inscricao.getAluno().getNome());
 			linha.put("idInscricao", String.valueOf(inscricao.getId()));
@@ -121,8 +129,8 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 		
 		for (var linha : linhas) {
 			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("nomeAluno");
+			// o botão desvincular passa por parametro o id da inscrição a ser desvinculada
 			html+="<td ><a class=\"btn btn-primary\" href=\"projetosAtivos?acao=desvincular&inscricao="+ linha.get("idInscricao") +"\" role=\"button\">Desvincular</a>";
-			//html+="<td ><a class=\"btn btn-primary\" href=\"candidatos?acao=rejeitar&inscricao="+linha.get("idInscricao")+"\" role=\"candidatos\">Rejeitar</a>";
 			html += "</tr>";
 		}
 		
@@ -198,7 +206,8 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 		
 	}
 
-	
+	// verifica os parametros da pagina para saber se há alguma ação a ser executada pelo servlet
+	// retorna true se a ação redireciona a pagina
 	private boolean verificarAcao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String acao = request.getParameter("acao");
 		if (acao == null) {
@@ -207,6 +216,8 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 		
 		switch (acao) {
 		case "desvincular":
+			// na ação de desvincular deve-se mudar o status da inscrição especificada para 'desvinculado'
+			// e a situação do projeto para 'disponivel'
 			System.out.println("Desvinculando inscricao ");
 			var idInscricao = Integer.parseInt(request.getParameter("inscricao"));
 			System.out.println("Id = "+idInscricao);

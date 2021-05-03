@@ -1,5 +1,7 @@
 package enums;
 
+
+// Enumeração dos nomes das tabelas de acordo com o Banco
 public enum BancoTabela {
 	NONE(""),
 	PESSOA ("pessoa"),

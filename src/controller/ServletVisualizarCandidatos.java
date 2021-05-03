@@ -27,34 +27,45 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
+		// Tentar pegar o professor que está logado atualmente
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
+			// Se não houver professor logado, faz login automatico para facilitar os testes
+			// Futuramente mudar essa parte para redirecionar para a pagina de login
 			System.out.println("login automatico");
 			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
 			request.getSession().setAttribute("pessoa", professor);
 		}
-		
+
+		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
+			// se houve alguma acao a ser executada nesse servlet
+			// e a pagina foi redirecionada, para a execução da função
 			return;
 		}
 		
+		// busca a lista de projetos do professor 
 		var projetos = ProjetoDAO.pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.DISPONIVEL);
 		
+		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
-		for (Projeto p : projetos) {
-			System.out.println(p);
-			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesDeCandidatoParaProjeto(p);
+		for (Projeto projeto : projetos) {
+			System.out.println(projeto);
+			// busca as inscrições para esse projeto
+			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesDeCandidatoParaProjeto(projeto);
 			for (InscricaoProjeto in : inscricoes) {
 				System.out.println("\t"+in);
 				System.out.println("\t"+in.getAluno());
-				// Verificar se aluno esta associado a outro projeto
+				// Verificar se aluno dessa inscricao está associado a outro projeto
 				var listIncricoes=InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(in.getAluno().getIdAluno(), SituacaoInscricao.ASSOCIADO);
 				// So mostrar na tabela se ele nao possuir inscricao do tipo associado
 				if(listIncricoes.isEmpty()) {
+					// preencher os dados que serão mostrados na tabela
+					// ou que serão usados pelos botões (aceitar e rejeitar)
 					var linha = new HashMap<String, String>();
-					linha.put("titulo", p.getTitulo());
+					linha.put("titulo", projeto.getTitulo());
 					linha.put("nome candidato", in.getAluno().getNome());
 					linha.put("idProjeto", String.valueOf(in.getIdProjeto()));
 					linha.put("aluno", String.valueOf(in.getAluno().getIdAluno()));
@@ -130,8 +141,10 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
+		// cada linha da tabela representa uma inscrição valida para um projeto desse professor
 		for (var linha : linhas) {
 			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("nome candidato");
+			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
 			html+="<td ><a class=\"btn btn-primary\" href=\"GerarTermo?idProjeto="+ linha.get("idProjeto") + "&aluno="+linha.get("aluno")+"\" role=\"button\">Aceitar</a>";
 			html+="<td ><a class=\"btn btn-primary\" href=\"candidatos?acao=rejeitar&inscricao="+linha.get("idInscricao")+"\" role=\"candidatos\">Rejeitar</a>";
 			html += "</tr>";
@@ -209,7 +222,9 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 	}
 
-	
+
+	// verifica os parametros da pagina para saber se há alguma ação a ser executada pelo servlet
+	// retorna true se a ação redireciona a pagina
 	private boolean verificarAcao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String acao = request.getParameter("acao");
 		if (acao == null) {
@@ -218,6 +233,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		
 		switch (acao) {
 		case "rejeitar":
+			// na ação de rejeitar deve-se mudar o status da inscrição especificada para 'desvinculado'
 			System.out.println("Rejeitando inscricao ");
 			var idInscricao = Integer.parseInt(request.getParameter("inscricao"));
 			System.out.println("Id = "+idInscricao);

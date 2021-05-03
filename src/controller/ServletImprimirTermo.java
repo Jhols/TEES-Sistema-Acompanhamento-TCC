@@ -25,16 +25,22 @@ public class ServletImprimirTermo  extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
-		Aluno aluno = (Aluno) request.getSession().getAttribute("pessoa");
+		// Tentar pegar o aluno que está logado atualmente
+		var aluno = (Aluno) request.getSession().getAttribute("pessoa");
 		if (aluno == null) {
+			// Se não houver aluno logado, faz login automatico para facilitar os testes
+			// Futuramente mudar essa parte para redirecionar para a pagina de login
 			System.out.println("login automatico");
-			aluno = (Aluno) LoginDAO.pesquisaPessoa("caroline", "1234");
+			aluno = (Aluno) LoginDAO.pesquisaPessoa("carol", "1234");
 			request.getSession().setAttribute("pessoa", aluno);
 		}
-
+		
+		// ao entrar nessa pagina o parametro 'inscricao' deve indicar o id da inscricao cujo termo será impresso 
 		int idInscricao = Integer.parseInt(request.getParameter("inscricao"));
+		// busca a inscricao no banco pelo id passado por parametro
 		InscricaoProjeto inscricao = InscricaoProjetoDAO.getInstance().pesquisarInscricaoPorId(idInscricao);
 		
+		// para mostrar a data de hoje no termo
 		LocalDateTime ldt = LocalDateTime.now();
 		
 		String html = "<!DOCTYPE html>\r\n"

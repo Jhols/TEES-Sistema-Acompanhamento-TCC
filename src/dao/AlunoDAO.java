@@ -90,7 +90,7 @@ public class AlunoDAO {
 		
 	}
 	
-	//Consulta todos os alunos no banco de dados e os inclui numa lista a ser retornada.
+	// Consulta todos os alunos no banco de dados e os inclui numa lista a ser retornada.
 	@SuppressWarnings("finally")
 	public ArrayList<Aluno> pesquisarTodosAlunos() {
 		ArrayList<Aluno> alunos = new ArrayList<>();
@@ -130,6 +130,7 @@ public class AlunoDAO {
 		return false;
 	}
 	
+	// busca um aluno a partir do seu id_pessoa
 	@SuppressWarnings("finally")
 	public static Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
 		Aluno aluno = null;
@@ -137,8 +138,8 @@ public class AlunoDAO {
 		
 		try {
 			if (resultado.next()) {
+				// a função getPessoa deve preencher todos os dados de aluno a partir do resultado do SQL
 				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
-				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
 				
 			}
 		} catch (SQLException e) {
@@ -150,6 +151,7 @@ public class AlunoDAO {
 	}
 	
 
+	// busca um aluno a partir do seu id_aluno
 	@SuppressWarnings("finally")
 	public static Aluno pesquisarAlunoPorIdAluno(int idAluno) {
 		
@@ -157,6 +159,8 @@ public class AlunoDAO {
 		
 		try {
 			var connection = ConnectionFactory.getConnection();
+			
+			// Primeiro busca o id_pessoa a partir desse id_aluno
 			String sql = "Select * from " + BancoTabela.ALUNO 
 					+ " where " + BancoTabela.ALUNO +".id_aluno = ? ";
 			
@@ -165,6 +169,7 @@ public class AlunoDAO {
 			var resultado = stm.executeQuery();
 			
 			if (resultado.next()) {
+				// usa o id_pessoa encontrado para retornar a pessoa
 				int idPessoa = resultado.getInt(BancoTabela.ALUNO+".id_pessoa");
 				aluno = pesquisarAlunoPorIdPessoa(idPessoa);
 				
