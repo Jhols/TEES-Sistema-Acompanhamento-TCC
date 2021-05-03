@@ -122,7 +122,7 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
-		+ "                                            <th>T�tulo do Projeto</th>\r\n"
+		+ "                                            <th>Título do Projeto</th>\r\n"
 		+ "                                            <th>Nome do Aluno</th>\r\n"
 		+ "                                            <th>Aceitar</th>\r\n"
 		+ "                                            <th>Rejeitar</th>\r\n"

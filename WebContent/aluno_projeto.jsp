@@ -13,7 +13,7 @@
 	<h1 class="h3 mb-4 text-gray-800">Meu Projeto</h1>
 	
 	<% //Instanciacao da inscricao do projeto associado
-	Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, "0715123"); //Deve capturar da sessao do login
+	Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, "0715789"); //Deve capturar da sessao do login
 	aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
 	InscricaoProjeto inscricao = new InscricaoProjeto();
 	
