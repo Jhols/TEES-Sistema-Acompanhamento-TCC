@@ -105,19 +105,17 @@ public class ProjetoDAO {
 	 * @author Jehcky
 	 * @return listaProjetos
 	 * @throws SQLException
-	 * @comment Esta função busca projetos por professor e situacoes projeto != ATIVO
+	 * Esta função busca projetos por professor
 	 */
-	public ArrayList<Projeto> buscarProjetosPorProfessorESituacoesNaoAtivo(int idProfessor) {
+	public ArrayList<Projeto> buscarProjetosPorIdProfessor(int idProfessor) {
 		ArrayList<Projeto> listaProjetos = new ArrayList<Projeto>();
-		SituacaoProjeto situacao = SituacaoProjeto.ATIVO;
 		
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = " SELECT * FROM " + BancoTabela.PROJETO 
 					+ " INNER JOIN " + BancoTabela.SITUACAO_PROJETO + " ON " + BancoTabela.PROJETO + ".id_situacao = " + BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto"
 					+ " WHERE 1=1 "
-					+ " AND " + BancoTabela.PROJETO + ".id_professor = " + idProfessor + " "
-					+ " AND " + BancoTabela.SITUACAO_PROJETO + ".descricao NOT LIKE '" + situacao + "'";
+					+ " AND " + BancoTabela.PROJETO + ".id_professor = " + idProfessor + " ";
 			PreparedStatement stm = connection.prepareStatement(sql);
 			ResultSet resultado = stm.executeQuery();
 			while (resultado.next()) {
@@ -130,6 +128,16 @@ public class ProjetoDAO {
 			e.printStackTrace();
 		}
 		return listaProjetos;
+	}
+	
+	/**
+	 * 
+	 * @param idProjeto
+	 * @param novaSituacao
+	 * @throws SQLException
+	 */
+	public void alterarSituacaoProjeto(Integer idProjeto) {
+		
 	}
 
 	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {

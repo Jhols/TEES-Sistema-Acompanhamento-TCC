@@ -13,10 +13,9 @@
 
 	<!-- Page Heading -->
 	<h1 class="h3 mb-2 text-gray-800">Projetos</h1>
-	<p class="mb-4">Aqui você pode ver todos os seus projetos que NÃO
-		SÃO ATIVOS cadastrados e para cada projeto haverá a opção de mudar o
-		status do projeto, exceto projetos que estejam com status ativo. Os
-		projetos que têm status ativo nem devem aparecer na lista.</p>
+	<p class="mb-4">Aqui você pode ver todos os seus projetos cadastrados 
+		para cada projeto haverá a opção de mudar o status do projeto, 
+		exceto projetos que estejam com status ativo.</p>
 
 	<!-- DataTales Example -->
 	<div class="card shadow mb-4">
@@ -36,10 +35,9 @@
 						</tr>
 					</thead>
 					<tbody>
-
 						<%
 						ArrayList<Projeto> projetos = new ArrayList<Projeto>();
-						projetos = ProjetoDAO.getInstance().buscarProjetosPorProfessorESituacoesNaoAtivo(2);
+						projetos = ProjetoDAO.getInstance().buscarProjetosPorIdProfessor(2);
 						int x = 1;
 						for (Projeto projeto : projetos) {
 							SituacaoProjeto situacao = projeto.getSituacao();
@@ -48,7 +46,7 @@
 							out.println("<td>" + projeto.getDescricao() + "</td>"); //+ projeto.getSituacao()
 							//out.println("<td>" + projeto.getSituacao() + "</td>");
 							String combobox = "           <!-- Combobox -->\r\n"
-								+ " <select name=\"sct_statusProjeto"+ x + "\"" + " id=\"sct_statusProjeto" + x + "\">\r\n"
+								+ " <select name=\"sct_statusProjeto"+ x + "\"" + " id=\"sct_statusProjeto" + x + "\" onchange=\"enviarSolicitacao('sct_statusProjeto"+ x + "',"+ projeto.getId() + ")\"" + (situacao == SituacaoProjeto.ATIVO ? " disabled" : "") + ">\r\n"
 								+ " 	<option value=\"" + SituacaoProjeto.ATIVO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.ATIVO ? "selected >" : ">") + SituacaoProjeto.ATIVO.getNomeSituacao() + "</option>\r\n" 
 								+ " 	<option value=\"" + SituacaoProjeto.DESATIVADO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DESATIVADO ? "selected >" : ">") + SituacaoProjeto.DESATIVADO.getNomeSituacao() +  "</option>\r\n" 
 								+ "     <option value=\"" + SituacaoProjeto.DISPONIVEL.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DISPONIVEL ? "selected >" : ">") + SituacaoProjeto.DISPONIVEL.getNomeSituacao() + "</option>\r\n"
@@ -82,50 +80,22 @@
 	
 	/**
 	* @author Jehcky
-	* @comment Esta função envia uma solicitação ajax para o Servlet
+	* Esta função envia uma solicitação ajax para alterar a Situacao do Projeto
 	*/
-	function enviarSolicitacao(idBotao, idTitulo, idProfessor) {
-		var titulo = $("#" + idTitulo).text();
-		var professor = $("#" + idProfessor).text();
-		var alunoMatricula = "0715123";
-
-		if (document.getElementById(idBotao).getAttribute("value") == "Candidatar-se") {
+	function enviarSolicitacao(idCombobox, idProjeto) {
+		var novaSituacao = $("#" + idCombobox + " option:selected").text();
 			$.ajax({
 				method : "POST",
-				url : "InscricaoProjetoServlet?opcao=incluir",
+				url : "projetosProfessor?opcao=alterar_situacao_projeto",
 				data : {
-					'titulo' : titulo,
-					'professor' : professor,
-					'alunoMatricula' : alunoMatricula
+					'novaSituacao' : novaSituacao,
+					'idProjeto' : idProjeto
 				},
 				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
-					console.log("Requisição Enviada: " + msg);
-					document.getElementById(idBotao).setAttribute("value",
-							"Aguardando");
-					document.getElementById(idBotao).setAttribute("class",
-							"btn btn-info btn-icon-split, text");
+					alert("Situacao do projeto atualizada");
 				}
 			})
-
-		} else if (document.getElementById(idBotao).getAttribute("value") == "Aguardando") {
-			$.ajax({
-				method : "POST",
-				url : "InscricaoProjetoServlet?opcao=deletar",
-				data : {
-					'titulo' : titulo,
-					'professor' : professor,
-					'alunoMatricula' : alunoMatricula
-				},
-				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
-					console.log("Requisição Enviada: " + msg);
-					document.getElementById(idBotao).setAttribute("value",
-							"Candidatar-se");
-					document.getElementById(idBotao).setAttribute("class",
-							"btn btn-primary btn-icon-split, text");
-				}
-			})
-
-		}
+		
 
 	}
 </script>

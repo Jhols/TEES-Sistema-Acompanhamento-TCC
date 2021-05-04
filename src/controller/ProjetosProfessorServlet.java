@@ -54,8 +54,10 @@ public class ProjetosProfessorServlet extends HttpServlet {
 		case "deletar":
 
 			break;
-		case "alterar_status":
-
+		case "alterar_situacao_projeto":
+			Integer idProjeto = Integer.parseInt(request.getParameter(("idProjeto")));
+			Projeto projeto = ProjetoDAO.getInstance().findById(idProjeto);
+			// Falta salvar a nova situacao no banco
 			break;
 
 		default:
