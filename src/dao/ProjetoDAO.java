@@ -131,13 +131,31 @@ public class ProjetoDAO {
 	}
 	
 	/**
-	 * 
-	 * @param idProjeto
-	 * @param novaSituacao
+	 * Funcao para alterar a Situacao do Projeto
+	 * @param projeto
 	 * @throws SQLException
 	 */
-	public void alterarSituacaoProjeto(Integer idProjeto) {
-		
+	public void alterarSituacaoProjeto(Projeto projeto) {
+		String sql;
+		Connection connection = null;
+		Statement stm = null;
+		int respostaUpdate = 0;
+		try {
+			connection = ConnectionFactory.getConnection();
+			stm = connection.createStatement();
+			sql = " UPDATE " + BancoTabela.PROJETO 
+				+ " SET id_situacao = (SELECT id_situacao_projeto FROM " + BancoTabela.SITUACAO_PROJETO 
+					+ " WHERE " + BancoTabela.SITUACAO_PROJETO + ".descricao ='"  + projeto.getSituacao() + "') "
+				+ " WHERE " + BancoTabela.PROJETO + ".id_projeto = " + projeto.getId();
+			
+			respostaUpdate = stm.executeUpdate(sql);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try { stm.close();}catch(SQLException e){e.printStackTrace();}
+			try { connection.close();}catch(SQLException e){e.printStackTrace();}
+		}
 	}
 
 	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {

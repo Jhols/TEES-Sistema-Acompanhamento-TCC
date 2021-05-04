@@ -13,6 +13,7 @@ import dao.AlunoDAO;
 import dao.InscricaoProjetoDAO;
 import dao.ProjetoDAO;
 import enums.Perfil;
+import enums.SituacaoProjeto;
 import model.Aluno;
 import model.InscricaoProjeto;
 import model.Pessoa;
@@ -55,9 +56,11 @@ public class ProjetosProfessorServlet extends HttpServlet {
 
 			break;
 		case "alterar_situacao_projeto":
-			Integer idProjeto = Integer.parseInt(request.getParameter(("idProjeto")));
+			Integer idProjeto = Integer.parseInt(request.getParameter("idProjeto"));
+			String novaSituacao = request.getParameter("novaSituacao");
 			Projeto projeto = ProjetoDAO.getInstance().findById(idProjeto);
-			// Falta salvar a nova situacao no banco
+			projeto.setSituacao(SituacaoProjeto.valueOf(novaSituacao.toUpperCase()));
+			ProjetoDAO.getInstance().alterarSituacaoProjeto(projeto);
 			break;
 
 		default:

@@ -83,6 +83,7 @@
 	* Esta função envia uma solicitação ajax para alterar a Situacao do Projeto
 	*/
 	function enviarSolicitacao(idCombobox, idProjeto) {
+		console.log('entrou');
 		var novaSituacao = $("#" + idCombobox + " option:selected").text();
 			$.ajax({
 				method : "POST",
@@ -93,6 +94,12 @@
 				},
 				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
 					alert("Situacao do projeto atualizada");
+					location.reload();
+				},
+				
+				error : function(msg) {
+					alert("Houve um erro ao tentar mudar a Situacao do Projeto.");
+					location.reload();
 				}
 			})
 		
