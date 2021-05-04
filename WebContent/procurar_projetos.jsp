@@ -21,7 +21,8 @@
 	<p class="mb-4">
 		Aqui, você pode conferir projetos criados por seus professores que
 		estejam disponíveis para sua inscrição. Você pode se candidatar a mais
-		de um projeto por vez e terá de aguardar a aprovação de um professor.
+		de um projeto por vez e terá de aguardar a aprovação de um professor. Caso deseje realizar o descadastro em algum projeto no qual 
+		tenha se candidato (status aguardando) clique novamente no botão.
 		<br /> Caso possua um projeto ativo, para se candidatar a um novo, é
 		necessário desativar o seu projeto atual. Contate seu professor
 		orientador para saber mais informações.
