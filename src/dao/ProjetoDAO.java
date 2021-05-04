@@ -107,16 +107,18 @@ public class ProjetoDAO {
 	 * @throws SQLException
 	 * Esta função busca projetos por professor
 	 */
+	@SuppressWarnings("finally")
 	public ArrayList<Projeto> buscarProjetosPorIdProfessor(int idProfessor) {
 		ArrayList<Projeto> listaProjetos = new ArrayList<Projeto>();
-		
+		Connection connection = null;
+		PreparedStatement stm = null;
 		try {
-			Connection connection = ConnectionFactory.getConnection();
+			connection = ConnectionFactory.getConnection();
 			String sql = " SELECT * FROM " + BancoTabela.PROJETO 
 					+ " INNER JOIN " + BancoTabela.SITUACAO_PROJETO + " ON " + BancoTabela.PROJETO + ".id_situacao = " + BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto"
 					+ " WHERE 1=1 "
 					+ " AND " + BancoTabela.PROJETO + ".id_professor = " + idProfessor + " ";
-			PreparedStatement stm = connection.prepareStatement(sql);
+			stm = connection.prepareStatement(sql);
 			ResultSet resultado = stm.executeQuery();
 			while (resultado.next()) {
 				Projeto projeto = new Projeto();
@@ -127,7 +129,12 @@ public class ProjetoDAO {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return listaProjetos;
+		finally {
+			try { stm.close(); } catch(SQLException e) { e.printStackTrace(); }
+			try { connection.close(); } catch(SQLException e) { e.printStackTrace(); }
+			return listaProjetos;
+		}
+		
 	}
 	
 	/**
