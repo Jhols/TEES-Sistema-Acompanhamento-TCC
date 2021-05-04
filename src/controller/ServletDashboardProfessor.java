@@ -39,6 +39,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
+		boolean meusProjetos= professor.isOrientador();
 		
 		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
@@ -134,6 +135,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"projetosAtivos\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Projetos com orientandos</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		if (meusProjetos) {
+			html += "            <!-- Item meus projetos -->\r\n"
+			+ "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"projetos_professor.jsp\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Meus projetos</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		html += "        </ul>\r\n"
