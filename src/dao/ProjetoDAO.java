@@ -335,6 +335,30 @@ public class ProjetoDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public ArrayList<Projeto> buscarProjetosPorIdProfessor(int idProfessor) {
+		ArrayList<Projeto> listaProjetos = new ArrayList<Projeto>();
 		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = " SELECT * FROM " + BancoTabela.PROJETO 
+					+ " INNER JOIN " + BancoTabela.SITUACAO_PROJETO + " ON " + BancoTabela.PROJETO + ".id_situacao = " + BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto"
+					+ " WHERE 1=1 "
+					+ " AND " + BancoTabela.PROJETO + ".id_professor = " + idProfessor + " ";
+			PreparedStatement stm = connection.prepareStatement(sql);
+			ResultSet resultado = stm.executeQuery();
+			while (resultado.next()) {
+				Projeto projeto = new Projeto();
+				popularProjeto(projeto, resultado);
+				listaProjetos.add(projeto);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listaProjetos;
+	}
+	
+			
 		
 }

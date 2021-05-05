@@ -16,7 +16,25 @@ public enum SituacaoProjeto {
 	public String getNomeSituacao() {
 		return nomeSituacao;
 	}
-	
+	public static SituacaoProjeto fromString(String value)
+	{
+		if (value.equals(SituacaoProjeto.EXCLUIDO.getNomeSituacao())) {
+			return SituacaoProjeto.EXCLUIDO;
+		}
+		if (value.equals(SituacaoProjeto.DISPONIVEL.getNomeSituacao())) {
+			return SituacaoProjeto.DISPONIVEL;
+		}
+		if (value.equals(SituacaoProjeto.ATIVO.getNomeSituacao())) {
+			return SituacaoProjeto.ATIVO;
+		}
+		if (value.equals(SituacaoProjeto.DESATIVADO.getNomeSituacao())) {
+			return SituacaoProjeto.DESATIVADO;
+		}
+		
+		// caso de erro, string invalida
+		return SituacaoProjeto.EXCLUIDO;
+		
+	}
 	// converte de inteiro para este enum
 	public static SituacaoProjeto fromInt(int value) {
 		switch (value) {
