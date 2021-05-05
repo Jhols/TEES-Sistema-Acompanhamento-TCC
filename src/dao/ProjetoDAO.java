@@ -26,6 +26,11 @@ public class ProjetoDAO {
 		return uniqueInstance;
 	}
 	
+	/**
+	 * Esta funcao busca um projeto pelo seu id 
+	 * @param id
+	 * @return Projeto
+	 */
 	@SuppressWarnings("finally")
 	public Projeto findById(int id) {
 		Projeto projeto = new Projeto();
@@ -67,8 +72,13 @@ public class ProjetoDAO {
 		}
 	}
 
-	// pesquisa todos projetos de um professor (especificado pelo id_professor) cuja situação do projeto seja igual ao parametro 'situacao' passado
-	// retorna um ArrayList vazio caso o professor não tenho projetos com a situção determinada
+	/**
+	 * Pesquisa todos os projetos de um profesor cuja situação do projeto = a situacao passada
+	 * Retorma um ArrayList vazio caso o professor não tenha projetos com a situação determinada
+	 * @param idProfessor
+	 * @param situacao
+	 * @return
+	 */
 	public static ArrayList<Projeto> pesquisarProjetosPorProfessorESituacao(int idProfessor, SituacaoProjeto situacao) {
 		ArrayList<Projeto> projetos = new ArrayList<Projeto>();
 		
@@ -98,7 +108,12 @@ public class ProjetoDAO {
 		return projetos;
 	}
 	
-	// Popula os campos de projeto a partir do resultado de uma consulta sql
+	/**
+	 * Esta funcao popula os campos de um projeto a partir do resultado de uma consulta SQL
+	 * @param projeto
+	 * @param resultado
+	 * @throws SQLException
+	 */
 	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {
 		projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_projeto"));
 		projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
@@ -110,7 +125,10 @@ public class ProjetoDAO {
 		projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt(BancoTabela.PROJETO+".id_situacao")));
 	}
 	
-	// Consulta todos os projetos que estao no banco e retorna os que estao disponiveis para o aluno escolher se candidatar
+	/**
+	 * Consulta todos os projetos onde a SituacaoProjeto = DISPONÍVEL
+	 * @return ArrayList<Projeto>
+	 */
 	@SuppressWarnings("finally")
 	public ArrayList<Projeto> pesquisarProjetosDisponiveis() {
 			
@@ -157,6 +175,7 @@ public class ProjetoDAO {
 			return projetos;			
 		}
 	}
+	
 	
 	public static void addProjeto(Projeto projeto) {
 		
@@ -215,7 +234,11 @@ public class ProjetoDAO {
 	}
 		
 
-	
+	/**
+	 * Busca um projeto pelo seu titulo
+	 * @param titulo
+	 * @return
+	 */
 	@SuppressWarnings("finally")
 	public Projeto findByTitulo(String titulo) {
 		Projeto projeto = new Projeto();
@@ -302,8 +325,10 @@ public class ProjetoDAO {
 			} 
 	}
 	
-	// atualiza o banco com o projeto passado
-	// usa o id do projeto para encontrar a ocorrencia no banco
+	/**
+	 * Atualiza o projeto no banco de dados
+	 * @param projeto
+	 */
 	public void atualizar(Projeto projeto) {
 		
 		try {
@@ -328,9 +353,6 @@ public class ProjetoDAO {
 			} 
 	}
 	
-	
-
-
 	public boolean deletar() {
 		// TODO Auto-generated method stub
 		return false;
