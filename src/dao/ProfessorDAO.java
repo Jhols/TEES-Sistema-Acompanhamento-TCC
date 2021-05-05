@@ -26,10 +26,10 @@ public class ProfessorDAO {
 	}
 	
 	@SuppressWarnings("finally")
-	public Professor findById(int id) {
+	public Professor findById(int idProfessor) {
 		Pessoa professor = PessoaFactory.getPessoa(Perfil.PROFESSOR);
 		
-		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.PROFESSOR, id);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.PROFESSOR, idProfessor);
 		
 		try {
 			resultado.next();
