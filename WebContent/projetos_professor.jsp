@@ -1,8 +1,9 @@
 <%@page import="enums.SituacaoProjeto"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
-<%@page import="java.util.ArrayList, model.Projeto, dao.ProfessorDAO"%>
+<%@page import="java.util.ArrayList, model.Projeto, dao.ProfessorDAO, model.Professor"%>
 <%@page import="java.util.ArrayList, model.Projeto, dao.ProjetoDAO"%>
 <%@page import="enums.SituacaoProjeto"%>
+<%@page import="javax.servlet.http.HttpSession" %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -36,8 +37,9 @@
 					</thead>
 					<tbody>
 						<%
+						Professor professor = (Professor) request.getSession().getAttribute("pessoa");
 						ArrayList<Projeto> projetos = new ArrayList<Projeto>();
-						projetos = ProjetoDAO.getInstance().buscarProjetosPorIdProfessor(2);
+						projetos = ProjetoDAO.getInstance().buscarProjetosPorIdProfessor(professor.getIdProfessor());
 						int x = 1;
 						for (Projeto projeto : projetos) {
 							SituacaoProjeto situacao = projeto.getSituacao();
@@ -50,15 +52,10 @@
 							//out.println("<td>" + projeto.getSituacao() + "</td>");
 							String combobox = "           <!-- Combobox -->\r\n"
 									+ " <select name=\"sct_statusProjeto"+ x + "\"" + " id=\"sct_statusProjeto" + x + "\" onchange=\"enviarSolicitacao('sct_statusProjeto"+ x + "',"+ projeto.getId() + ")\"" + (situacao == SituacaoProjeto.ATIVO ? " disabled" : "") + ">\r\n"; 
-							if(situacao==SituacaoProjeto.ATIVO){
-								combobox+= " 	<option value=\"" + SituacaoProjeto.ATIVO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.ATIVO ? "selected >" : ">") + SituacaoProjeto.ATIVO.getNomeSituacao() + "</option>\r\n" ;
-							}
-							else{
-								combobox+= " 	<option value=\"" + SituacaoProjeto.DESATIVADO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DESATIVADO ? "selected >" : ">") + SituacaoProjeto.DESATIVADO.getNomeSituacao() +  "</option>\r\n" 
+							combobox+= " 	<option value=\"" + SituacaoProjeto.ATIVO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.ATIVO ? "selected >" : ">") + SituacaoProjeto.ATIVO.getNomeSituacao() + "</option>\r\n" ;		
+							combobox+= " 	<option value=\"" + SituacaoProjeto.DESATIVADO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DESATIVADO ? "selected >" : ">") + SituacaoProjeto.DESATIVADO.getNomeSituacao() +  "</option>\r\n" 
 										+ "     <option value=\"" + SituacaoProjeto.DISPONIVEL.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.DISPONIVEL ? "selected >" : ">") + SituacaoProjeto.DISPONIVEL.getNomeSituacao() + "</option>\r\n"
 										+ "     <option value=\"" + SituacaoProjeto.EXCLUIDO.getNomeSituacao() + "\" " + (situacao == SituacaoProjeto.EXCLUIDO ? "selected >" : ">") + SituacaoProjeto.EXCLUIDO.getNomeSituacao() + "</option>\r\n";
-							}
-							
 							combobox += " </select>\r\n";
 							out.println("<td>" + combobox + "</td>");	
 							out.println("</tr>");
@@ -100,7 +97,12 @@
 					'idProjeto' : idProjeto
 				},
 				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
-					alert("Situacao do projeto atualizada");
+					alert("Situação do projeto atualizada");
+					location.reload();
+				},
+				error: function(msg) {
+					alert("Não foi possível alterar a situação do projeto.");
+					location.reload();
 				}
 			})
 		

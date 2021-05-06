@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.ProjetoDAO;
 import enums.SituacaoProjeto;
@@ -29,6 +30,7 @@ public class ProjetosProfessorServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String opcao = request.getParameter("opcao");
+		
 		if (opcao == null) {
 			// request sem opção
 			return;
@@ -50,10 +52,7 @@ public class ProjetosProfessorServlet extends HttpServlet {
 		case "alterar_situacao_projeto":
 			Integer idProjeto = Integer.parseInt(request.getParameter(("idProjeto")));
 			String situacaoString = request.getParameter("novaSituacao") ;
-			System.out.println("A situacao é " +situacaoString);
 			SituacaoProjeto novaSituacao = SituacaoProjeto.fromString(situacaoString);
-			
-			System.out.println("chegou aqui" + idProjeto);
 			Projeto projeto = ProjetoDAO.getInstance().findById(idProjeto);
 			projeto.setSituacao(novaSituacao);
 			ProjetoDAO.getInstance().atualizar(projeto);
