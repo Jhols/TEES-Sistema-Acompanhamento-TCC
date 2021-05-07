@@ -75,9 +75,9 @@ public abstract class PessoaFactory {
 	
 	/// popula um objeto Professor a partir do resultado de um select 
 	private static void popularDadosProfessor(Professor professor, ResultSet resultado) throws SQLException {
-		professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
-		var tipo_prof = resultado.getInt(BancoTabela.PROFESSOR + ".tipo_prof");
-		professor.setIdProfessor(resultado.getInt(BancoTabela.PROFESSOR + ".id_professor"));
+		professor.setMatricula(resultado.getString("matricula"));
+		var tipo_prof = resultado.getInt("tipo_prof");
+		professor.setIdProfessor(resultado.getInt("id_professor"));
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
 	}
 	

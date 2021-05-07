@@ -33,15 +33,14 @@ public class ProfessorDAO {
 		
 		try {
 			resultado.next();
-			professor.setNome(resultado.getString(BancoTabela.PESSOA+".nome"));
-			((Aluno) professor).setMatricula(resultado.getString(BancoTabela.PROFESSOR+".matricula"));
-			professor.setEmail(resultado.getString(BancoTabela.PESSOA+".email"));
-			professor.setTelefone(resultado.getString(BancoTabela.PESSOA+".telefone"));
+			professor.setNome(resultado.getString("nome"));
+			((Aluno) professor).setMatricula(resultado.getString("matricula"));
+			professor.setEmail(resultado.getString("email"));
+			professor.setTelefone(resultado.getString("telefone"));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
 			return (Professor) professor;
 		}
 	}
@@ -74,7 +73,7 @@ public class ProfessorDAO {
 		try {
 			while(resultado.next()) {
 				Professor professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
-				professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
+				professor.setMatricula(resultado.getString("matricula"));
 				
 				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
 				

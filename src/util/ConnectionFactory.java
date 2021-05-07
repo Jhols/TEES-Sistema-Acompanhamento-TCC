@@ -5,10 +5,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class ConnectionFactory {
-
+	
+	private static Connection con;
+	
 	// Cria uma conexão com o banco de dados.
 	@SuppressWarnings("finally")
 	public static Connection getConnection() throws SQLException {
+		if (con != null) {
+			return con;
+		}
 		Connection con = null;
 		
 		 String user = "postgres";

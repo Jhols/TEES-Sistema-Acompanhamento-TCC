@@ -105,9 +105,10 @@ public class PessoaDAO {
 			e1.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + perfil + " INNER JOIN " + BancoTabela.PESSOA + 
-				" WHERE " + perfil+".id_"+perfil + " = " + id + 
-				" AND " + perfil +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa;";
+		sql = "SELECT * FROM " + perfil + " INNER JOIN " + BancoTabela.PESSOA 
+				+ " ON " + perfil +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa "
+				+ " WHERE " + perfil+".id_"+perfil + " = " + id;
+				
 		
 		try {
             Statement stm = conexao.createStatement();
