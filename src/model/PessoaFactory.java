@@ -45,10 +45,11 @@ public abstract class PessoaFactory {
 	/// popula um objeto Pessoa a partir do resultado de um select 
 	/// tambem leva em consideração o perfil 
 	private static Pessoa popularDadosPessoa(Pessoa pessoa, ResultSet resultado) throws SQLException {
-		pessoa.setId(Integer.parseInt(resultado.getString(BancoTabela.PESSOA + ".id_pessoa")));
-		pessoa.setNome(resultado.getString(BancoTabela.PESSOA + ".nome"));
-		pessoa.setEmail(resultado.getString(BancoTabela.PESSOA + ".email"));
-		pessoa.setTelefone(resultado.getString(BancoTabela.PESSOA + ".telefone"));
+		System.out.println("ODISGRACA 5");
+		pessoa.setId(resultado.getInt("id_pessoa"));
+		pessoa.setNome(resultado.getString("nome"));
+		pessoa.setEmail(resultado.getString("email"));
+		pessoa.setTelefone(resultado.getString("telefone"));
 		// de acordo com o perfil da pessoa chama a função adequada
 		switch (pessoa.getPerfil()) {
 		case ADMINISTRADOR:
@@ -74,15 +75,15 @@ public abstract class PessoaFactory {
 	
 	/// popula um objeto Professor a partir do resultado de um select 
 	private static void popularDadosProfessor(Professor professor, ResultSet resultado) throws SQLException {
-		professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
-		var tipo_prof = resultado.getInt(BancoTabela.PROFESSOR + ".tipo_prof");
-		professor.setIdProfessor(resultado.getInt(BancoTabela.PROFESSOR + ".id_professor"));
+		professor.setMatricula(resultado.getString("matricula"));
+		var tipo_prof = resultado.getInt("tipo_prof");
+		professor.setIdProfessor(resultado.getInt("id_professor"));
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
 	}
 	
 	/// popula um objeto Aluno a partir do resultado de um select 
 	private static void popularDadosAluno(Aluno aluno, ResultSet resultado) throws SQLException {
-		aluno.setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
-		aluno.setIdAluno(resultado.getInt(BancoTabela.ALUNO+".id_aluno"));
+		aluno.setMatricula(resultado.getString("matricula"));
+		aluno.setIdAluno(resultado.getInt("id_aluno"));
 	}
 }

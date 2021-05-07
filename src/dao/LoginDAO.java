@@ -29,21 +29,19 @@ public class LoginDAO {
 		String sql;
 		Pessoa pessoa = null;
 		
-		//conectarBanco();
-		Connection conexao = null;
+
 		try {
-			conexao = ConnectionFactory.getConnection();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		sql = "SELECT * FROM login  where login.login = '" + login + "' and login.senha = '" + senha + "'";
-		
-		try {
+			
+			Connection conexao = ConnectionFactory.getConnection();
+			sql = "SELECT * FROM login  where login.login = '" + login + "' and login.senha = '" + senha + "'";
+			System.out.println(sql);
+			System.out.println("1");
             Statement stm = conexao.createStatement();
+            System.out.println("2");
             resultado = stm.executeQuery(sql);
+            System.out.println("3");
             if(resultado.next()) {
+            	System.out.println("4");
             	int idPessoa = resultado.getInt("pessoa_id");
             	System.out.println("id encontrado " + idPessoa);
             	sql = "SELECT * FROM perfil_pessoa where id_pessoa = " + idPessoa;
@@ -79,12 +77,20 @@ public class LoginDAO {
                 }
             	
             }
-            
+            else {
+            	System.out.println("Erro: não foi possivel encontrar o login desejado");
+            }
+			
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+		catch (Exception e) {
+			System.out.println("ERROR: "+e.getMessage());
+			e.printStackTrace();
+		}
 		finally {
+			System.out.println("return "+pessoa);
 			return pessoa;
 		}
 		
