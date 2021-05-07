@@ -1,1 +1,1 @@
-web: java -war target/Sistema_TCC-0.0.1.war
+web: java -jar target/Sistema_TCC-0.0.1.war

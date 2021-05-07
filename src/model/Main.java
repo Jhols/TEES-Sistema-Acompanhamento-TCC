@@ -24,8 +24,6 @@ public class Main {
 		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
 		
 		InscricaoProjeto inscricao = new InscricaoProjeto(((Aluno) aluno), projeto);
-
-		
 		
 	}
 }
