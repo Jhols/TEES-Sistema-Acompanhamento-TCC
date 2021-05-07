@@ -39,10 +39,12 @@ public class PessoaDAO {
 		sql = "SELECT * FROM " + Perfil.getTabela(perfil) + " inner join " + BancoTabela.PESSOA + 
 				" ON " + Perfil.getTabela(perfil) +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa" +
 				" WHERE " + Perfil.getTabela(perfil) + ".id_pessoa = " + idPessoa;
+		System.out.println(sql);
 		
 		try {
 			Statement stm = conexao.createStatement();
 			resultado = stm.executeQuery(sql);
+			
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());

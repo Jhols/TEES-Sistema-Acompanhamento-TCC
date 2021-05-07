@@ -139,8 +139,11 @@ public class AlunoDAO {
 		try {
 			if (resultado.next()) {
 				// a função getPessoa deve preencher todos os dados de aluno a partir do resultado do SQL
-				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
 				
+				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
+			}
+			else {
+				System.out.println("Não encontrou aluno com id_pessoa="+idPessoa);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
