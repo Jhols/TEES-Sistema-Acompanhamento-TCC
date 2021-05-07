@@ -231,8 +231,10 @@ public class ProjetoDAO {
 			e1.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO +
-				" WHERE " + BancoTabela.PROJETO+".titulo = '" + titulo + "' AND " + BancoTabela.PROJETO+".id_situacao = " + BancoTabela.SITUACAO_PROJETO+".id_situacao_projeto;";
+		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO
+				+ " ON " + BancoTabela.PROJETO+".id_situacao = " + BancoTabela.SITUACAO_PROJETO+".id_situacao_projeto"
+				+ " WHERE " + BancoTabela.PROJETO+".titulo = '" + titulo +"'";
+				
 		
 		try {
             Statement stm = conexao.createStatement();

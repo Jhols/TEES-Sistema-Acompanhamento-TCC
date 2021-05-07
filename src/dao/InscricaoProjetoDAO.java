@@ -100,7 +100,7 @@ public class InscricaoProjetoDAO {
 		}
 		
 		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_ALUNO_PROJETO
-				+ " ON "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto;"
+				+ " ON "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto "
 				+ " WHERE id_aluno = " + aluno.getId() + " AND id_projeto = " + projeto.getId();
 		System.out.println(sql);
 		Statement stm = null;
@@ -152,7 +152,7 @@ public class InscricaoProjetoDAO {
 		sql = "SELECT * FROM "+ BancoTabela.INSCRICAO_ALUNO_PROJETO +" INNER JOIN "+ BancoTabela.SITUACAO_ALUNO_PROJETO 
 				+ " ON "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto"
 				+ " WHERE id_aluno = "+ aluno.getId() 
-				+ " AND "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ SituacaoInscricao.ASSOCIADO +"';";
+				+ " AND "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ SituacaoInscricao.ASSOCIADO.toString().toLowerCase() +"';";
 		
 		Statement stm = null;
 		try {
@@ -273,7 +273,7 @@ public class InscricaoProjetoDAO {
 			stm = conexao.createStatement();
 			
 			sql = "UPDATE " + BancoTabela.INSCRICAO_ALUNO_PROJETO
-				+ " SET " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "
+				+ " SET id_situacao_aluno_projeto = "
 					+ "(SELECT id_situacao_aluno_projeto FROM " + BancoTabela.SITUACAO_ALUNO_PROJETO 
 						+ " WHERE " + BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ situacaoInscricao.toString().toLowerCase() +"') "
 				+ " WHERE id_aluno = " + inscricao.getAluno().getIdAluno() + " AND id_projeto = " + inscricao.getProjeto().getId() + ";";
@@ -340,7 +340,7 @@ public class InscricaoProjetoDAO {
 					+ " where " + BancoTabela.INSCRICAO_ALUNO_PROJETO.getNomeTabela() +".id_projeto = ? and id_situacao_aluno_projeto = "
 					+ "(Select id_situacao_aluno_projeto from "+ BancoTabela.SITUACAO_ALUNO_PROJETO.getNomeTabela() 
 					+ " where "+BancoTabela.SITUACAO_ALUNO_PROJETO.getNomeTabela()+".descricao = ?)";
-			
+			System.out.println(sql);
 			PreparedStatement stm =  con.prepareStatement(sql);
 			stm.setInt(1, projeto.getId());
 			stm.setString(2, situacaoInscricao.toString().toLowerCase());

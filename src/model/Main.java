@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.postgresql.util.PSQLException;
+
 import dao.AlunoDAO;
 import dao.InscricaoProjetoDAO;
 import dao.ProfessorDAO;
@@ -18,9 +20,9 @@ import util.ConnectionFactory;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		
-		desagra();
+		//desagra();
 		
 		/*
 		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, "0715123");
@@ -32,6 +34,20 @@ public class Main {
 		InscricaoProjeto inscricao = new InscricaoProjeto(((Aluno) aluno), projeto);
 		
 		*/
+		
+		Connection con = ConnectionFactory.getConnection();
+		String sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
+				+ "VALUES (3, 2, 3)";
+		for (int i = 1; i < 25; i++) {
+			try {
+				con.createStatement().execute(sql);
+			}
+			catch (PSQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		
 		
 	}
 	
