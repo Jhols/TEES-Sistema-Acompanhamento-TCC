@@ -1,3 +1,4 @@
+<%@page import="controller.InscricaoProjetoServlet"%>
 <%@page import="dao.InscricaoProjetoDAO"%>
 <%@page import="model.Projeto"%>
 <%@page import="model.InscricaoProjeto"%>
@@ -13,13 +14,9 @@
 	<h1 class="h3 mb-4 text-gray-800">Meu Projeto</h1>
 	
 	<% //Instanciacao da inscricao do projeto associado
-	Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, "0715789"); //Deve capturar da sessao do login
-	aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
 	InscricaoProjeto inscricao = new InscricaoProjeto();
-	
 	//Pesquisa no banco a inscricao com o projeto pelo qual o aluno e' associado
-	inscricao = InscricaoProjetoDAO.getInstance().pesquisarProjetoAssociado((Aluno) aluno);
-	
+	inscricao = (InscricaoProjeto) request.getAttribute("inscricao");
 	%>
 	
 	<% //Condicao da pagina. Caso haja ou não um projeto associado ao aluno logado.
@@ -37,7 +34,7 @@
 			<br>
 			<br>
 		</div>
-		<form action="" method="POST" id="" class="form-group" style="width:425px">
+		<form action="InscricaoProjetoServlet?opcao=teste" method="POST" id="" class="form-group" style="width:425px">
 			<fieldset style="border:1">
 				<legend>Relatório</legend>
 				<div><label class="col-form-label">Título Relatório: <br><input type="text" id="" class="form-control" style="width: 425px"/> </label> </div>

@@ -35,8 +35,14 @@ public class Main {
 		
 		*/
 		
-		Connection con = ConnectionFactory.getConnection();
-		String sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, "0715789");
+		
+		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
+		
+		System.out.println("oi, eu sou " + ((Professor)aluno).getMatricula());
+		
+		
+		/*String sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
 				+ "VALUES (3, 2, 3)";
 		for (int i = 1; i < 25; i++) {
 			try {
@@ -72,7 +78,7 @@ public class Main {
 				+ "  ON " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_projeto = "+ BancoTabela.PROJETO+".id_projeto"+" \n"
 				+ " WHERE " + BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno=" + aluno.getId() + ";";
 		*/
-		sql  = 
+		/*sql  = 
 				 "SELECT * FROM INSCRICAO_ALUNO_PROJETO "
 				+ " INNER JOIN SITUACAO_ALUNO_PROJETO "
 				+ "  ON INSCRICAO_ALUNO_PROJETO.id_situacao_aluno_projeto = SITUACAO_ALUNO_PROJETO.id_situacao_aluno_projeto "
@@ -111,7 +117,7 @@ public class Main {
 		System.out.println("Resultados: ");
 		for (InscricaoProjeto in : inscricoes) {
 			System.out.println(in);
-		}
+		}*/
 		
 	}
 }

@@ -6,8 +6,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.AlunoDAO;
 import dao.LoginDAO;
+import dao.ProfessorDAO;
+import enums.Perfil;
+import model.Aluno;
 import model.Pessoa;
+import model.Professor;
 
 
 
@@ -21,6 +26,19 @@ public class ServletLogin extends HttpServlet {
 		Pessoa pessoa = LoginDAO.pesquisaPessoa(request.getParameter("login"), request.getParameter("senha"));
 		request.getSession().setAttribute("perfil", pessoa.getPerfil());
 		request.getSession().setAttribute("pessoa", pessoa);
+		//int id = pessoa.getId();
+		request.getSession().setAttribute("idPessoa", pessoa.getId());
+		if (pessoa.getPerfil() == Perfil.ALUNO) {
+			//id = ((Aluno) pessoa).getIdAluno();
+			request.getSession().setAttribute("idAluno", ((Aluno) pessoa).getIdAluno());
+			request.getSession().setAttribute("matricula", ((Aluno) pessoa).getMatricula());
+		}
+		else if (pessoa.getPerfil() == Perfil.PROFESSOR) {
+			//id = ((Professor) pessoa).getIdProfessor();
+			request.getSession().setAttribute("idProfessor", ((Professor) pessoa).getIdProfessor());
+			request.getSession().setAttribute("matricula", ((Professor) pessoa).getMatricula());
+		}
+		//request.getSession().setAttribute("id", id);
 		
 		
 		switch(pessoa.getPerfil()) {

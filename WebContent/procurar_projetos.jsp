@@ -49,17 +49,15 @@
 					<tbody>
 
 						<%
+						//Obtem os projetos disponiveis atraves da servlet
 						ArrayList<Projeto> projetos = new ArrayList<Projeto>();
-						projetos = ProjetoDAO.getInstance().pesquisarProjetosDisponiveis();
+						projetos = (ArrayList<Projeto>) request.getAttribute("projetos");
 						
-						Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
-						((Aluno) aluno).setMatricula("0715789"); //Deve capturar da sessao do aluno
-						//Preenche o objeto aluno com seus dados a partir da matricula
-						aluno = AlunoDAO.getInstance().findByMatricula(((Aluno)aluno).getMatricula());
-						out.println("Aluno Logado: " + aluno.getNome()+"<br />");
+						//Obtem as inscricoes que o aluno logado ja possui atraves da servlet
 						ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
-						 //Procura por todos as inscricoes que o aluno acima possui
-						inscricoes = InscricaoProjetoDAO.getInstance().findAllByAluno((Aluno)aluno);
+						inscricoes = (ArrayList<InscricaoProjeto>) request.getAttribute("inscricoes");
+						
+						String matriculaAluno = (String) request.getSession().getAttribute("matricula");
 						
 						//Este bloco insere os dados dos projetos disponiveis em uma tabela
 						int x = 1;
@@ -77,7 +75,7 @@
 										out.println(
 												"<td><input type='button' class='btn btn-info btn-icon-split, text' style='width:95%' id='btn-candidatar-"
 														+ x + "' onClick=\"enviarSolicitacao('btn-candidatar-" + x + "','titulo" + x + "', 'professor" + x
-														+ "')\" name='btn-candidatar' value='Aguardando'></td>");
+														+ "', '"+ matriculaAluno +"')\" name='btn-candidatar' value='Aguardando'></td>");
 										eCandidato = true;
 										break;
 									}
@@ -87,7 +85,7 @@
 									out.println(
 									"<td><input type='button' class='btn btn-primary btn-icon-split, text' style='width:95%' id='btn-candidatar-"
 											+ x + "' onClick=\"enviarSolicitacao('btn-candidatar-" + x + "','titulo" + x + "', 'professor" + x
-											+ "')\" name='btn-candidatar' value='Candidatar-se'></td>");
+											+ "', '"+ matriculaAluno +"')\" name='btn-candidatar' value='Candidatar-se'></td>");
 								}
 							out.println("</tr>");
 							x++;
@@ -113,10 +111,9 @@
 <script src="resources/bootstrap/js/demo/datatables-demo.js"></script>
 
 <script>
-	function enviarSolicitacao(idBotao, idTitulo, idProfessor) {
+	function enviarSolicitacao(idBotao, idTitulo, idProfessor, alunoMatricula) {
 		var titulo = $("#" + idTitulo).text();
 		var professor = $("#" + idProfessor).text();
-		var alunoMatricula = "0715789"; //Deve capturar da sessao do aluno
 		if (document.getElementById(idBotao).getAttribute("value") == "Candidatar-se") {
 			$.ajax({
 				method : "POST",

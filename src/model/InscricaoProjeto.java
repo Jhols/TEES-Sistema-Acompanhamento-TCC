@@ -67,12 +67,6 @@ public class InscricaoProjeto {
 		return AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(this.aluno.getId());
 	}*/
 	
-	public int getIdInscricao() {
-		return id;
-	}
-	public void setIdInscricao(int idInscricao) {
-		this.id = idInscricao;
-	}
 	public int getIdAluno() {
 		return this.aluno.getId();
 	}

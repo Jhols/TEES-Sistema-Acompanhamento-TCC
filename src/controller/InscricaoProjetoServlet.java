@@ -29,6 +29,7 @@ public class InscricaoProjetoServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
+		
     public InscricaoProjetoServlet() {
         super();
         // TODO Auto-generated constructor stub
@@ -36,71 +37,100 @@ public class InscricaoProjetoServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String opcao = request.getParameter("opcao");
-    	PrintWriter out = null;
     	
     	switch(opcao) {
 	    	case "buscar":
+	    		buscarInscricaoAssociada(request, response);
 	    		break;
 	    		
 	    	case "incluir": //Insere uma inscricao no banco de dados e atualiza a situacao do aluno em relacao ao projeto
-	    		Boolean resultadoInsert = false;
-	    		Projeto projeto = new Projeto();
-	    		projeto.setTitulo(request.getParameter("titulo"));
-	    		String professor = request.getParameter("professor");
-	    		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
-	    		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
-	    		InscricaoProjeto inscricao = null;
-	    		
-	    		//Preenche os dados do projeto a partir do titulo coletado na pagina
-	    		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
-	    		
-	    		if (projeto.getProfessor().getNome().equals(professor)) { //Se este projeto e' do mesmo professor encontrado no banco...
-	    			//Insere a inscricao no banco de dados
-	    			inscricao = new InscricaoProjeto((Aluno) aluno, projeto);
-	    			resultadoInsert = InscricaoProjetoDAO.getInstance().incluir(inscricao);
-	    		}
-	    		
-	    		response.setContentType("text/Plain");
-	    		out = response.getWriter();
-	    		if (resultadoInsert) {
-	    			out.print(aluno.getNome() +" "+ inscricao.getSituacaoInscricao());	    			
-	    		}
-	    		else {
-	    			out.print("Erro: Falha no cadastro da inscricao aluno-projeto");
-	    		}
+	    		incluirInscricao(request, response);
 	    		break;
 	    		
 	    	case "listar":   		
 	    		break;
 	    		
 	    	case "deletar": //Desvincula o aluno do projeto atraves de uma atualizacao da situacao da inscricao.
-	    		Boolean resultadoDelete = false;
-	    		Projeto projeto2 = new Projeto();
-	    		projeto2.setTitulo(request.getParameter("titulo"));
-	    		professor = request.getParameter("professor");
-	    		Pessoa aluno2 = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
-	    		aluno2 = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno2).getMatricula());
-	    		InscricaoProjeto inscricao2 = null;
+	    		deletarInscricao(request, response);
+	    		break;
 	    		
-	    		projeto2 = ProjetoDAO.getInstance().findByTitulo(projeto2.getTitulo());
-	    		
-	    		if (projeto2.getProfessor().getNome().equals(professor)) {
-	    			inscricao2 = new InscricaoProjeto((Aluno) aluno2, projeto2);
-	    			//Envia a requisicao para desvinculacao do aluno ao projeto
-	    			resultadoDelete = InscricaoProjetoDAO.getInstance().deletar(inscricao2);
-	    		}
-	    		
-	    		response.setContentType("text/Plain");
-	    		out = response.getWriter();
-	    		if (resultadoDelete) {
-	    			out.print(aluno2.getNome() +" "+ inscricao2.getSituacaoInscricao());	    			
-	    		}
-	    		else {
-	    			out.print("Erro: Falha na exclusao da inscricao aluno-projeto");
-	    		}
+	    	case "teste":
+	    		teste(request, response);
 	    		break;
     	}
     }
+    
+    protected void teste(HttpServletRequest request, HttpServletResponse response) {
+    	System.out.println("id da pessoa: " + request.getSession().getAttribute("idPessoa"));
+    	System.out.println("id do aluno: " + request.getSession().getAttribute("idAluno"));
+    }
+    
+    //Pesquisa pela inscricao em que um aluno possua um projeto associado
+    protected void buscarInscricaoAssociada(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    	InscricaoProjeto inscricao = new InscricaoProjeto();
+    	int id = (int) request.getSession().getAttribute("idAluno");
+    	inscricao = InscricaoProjetoDAO.getInstance().pesquisarProjetoAssociado(id);
+    	request.setAttribute("inscricao", inscricao);
+    	request.getRequestDispatcher("aluno_projeto.jsp").forward(request, response);
+    }
+    
+	protected void incluirInscricao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		PrintWriter out;
+		Boolean resultadoInsert = false;
+		Projeto projeto = new Projeto();
+		projeto.setTitulo(request.getParameter("titulo"));
+		String professor = request.getParameter("professor");
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
+		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
+		InscricaoProjeto inscricao = null;
+		
+		//Preenche os dados do projeto a partir do titulo coletado na pagina
+		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
+		
+		if (projeto.getProfessor().getNome().equals(professor)) { //Se este projeto e' do mesmo professor encontrado no banco...
+			//Insere a inscricao no banco de dados
+			inscricao = new InscricaoProjeto((Aluno) aluno, projeto);
+			resultadoInsert = InscricaoProjetoDAO.getInstance().incluir(inscricao);
+		}
+		
+		response.setContentType("text/Plain");
+		out = response.getWriter();
+		if (resultadoInsert) {
+			out.print(aluno.getNome() +" "+ inscricao.getSituacaoInscricao());	    			
+		}
+		else {
+			out.print("Erro: Falha no cadastro da inscricao aluno-projeto");
+		}
+	}
+
+	protected void deletarInscricao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		PrintWriter out;
+		Boolean resultadoDelete = false;
+		Projeto projeto = new Projeto();
+		projeto.setTitulo(request.getParameter("titulo"));
+		String professor = request.getParameter("professor");
+		Pessoa aluno2 = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
+		aluno2 = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno2).getMatricula());
+		InscricaoProjeto inscricao2 = null;
+		
+		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
+		
+		if (projeto.getProfessor().getNome().equals(professor)) {
+			inscricao2 = new InscricaoProjeto((Aluno) aluno2, projeto);
+			//Envia a requisicao para desvinculacao do aluno ao projeto
+			resultadoDelete = InscricaoProjetoDAO.getInstance().deletar(inscricao2);
+		}
+		
+		response.setContentType("text/Plain");
+		out = response.getWriter();
+		if (resultadoDelete) {
+			out.print(aluno2.getNome() +" "+ inscricao2.getSituacaoInscricao());	    			
+		}
+		else {
+			out.print("Erro: Falha na exclusao da inscricao aluno-projeto");
+		}
+	}
+
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
