@@ -95,14 +95,14 @@ public class ServletCadProjeto extends HttpServlet {
 	  		
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"exampleFormControlInput1\">Título do projeto</label>\r\n"
-	  		+ "                     <input  class=\"form-control\" id=\"tituloProjeto\" name=\"tituloProjeto\">\r\n"
+	  		+ "                     <input  class=\"form-control\" id=\"tituloProjeto\" name=\"tituloProjeto\" required=\".$this->fields[\"comment\"]\r\n"
 	  		+ "                  </div>\r\n"
 	  		
 								
 									  		
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"descricao\">Descrição</label>\r\n"
-	  		+ "                     <textarea class=\"form-control\" value=\"<c:out value=\"${user.descricao}\" id=\"exampleFormControlTextarea1\" name=\"descricao\" rows=\"3\"></textarea>\r\n"
+	  		+ "                     <textarea class=\"form-control\" value=\"<c:out value=\"${user.descricao}\" id=\"exampleFormControlTextarea1\" name=\"descricao\" rows=\"3\" required=\".$this->fields[\"comment\"]></textarea>\r\n"
 	  			
 	  		+ "                  </div>\r\n"
 	  		+ "               </form>\r\n"
