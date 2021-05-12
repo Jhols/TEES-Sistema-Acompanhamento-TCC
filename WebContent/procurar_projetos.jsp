@@ -36,6 +36,9 @@
 		</div>
 		<div class="card-body">
 			<div class="table-responsive" style="padding: 15px;">
+			
+			<input type="hidden" id="teste" value="<%=request.getSession().getAttribute("matricula")%>" />
+			
 				<table class="table table-bordered" id="dataTable" width="100%"
 					cellspacing="0">
 					<thead>
@@ -58,7 +61,6 @@
 						inscricoes = (ArrayList<InscricaoProjeto>) request.getAttribute("inscricoes");
 						
 						String matriculaAluno = (String) request.getSession().getAttribute("matricula");
-						
 						//Este bloco insere os dados dos projetos disponiveis em uma tabela
 						int x = 1;
 						boolean eCandidato; //Flag que identifica se o aluno ja e' candidato ou nao a um projeto
@@ -112,6 +114,8 @@
 
 <script>
 	function enviarSolicitacao(idBotao, idTitulo, idProfessor, alunoMatricula) {
+		var matricula = document.getElementById("teste").getAttribute("value");
+		
 		var titulo = $("#" + idTitulo).text();
 		var professor = $("#" + idProfessor).text();
 		if (document.getElementById(idBotao).getAttribute("value") == "Candidatar-se") {
@@ -121,9 +125,9 @@
 				data : {
 					'titulo' : titulo,
 					'professor' : professor,
-					'alunoMatricula' : alunoMatricula
+					'alunoMatricula' : matricula
 				},
-				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
+				success : function(msg) { //Em caso de sucesso na requisicao, executa a seguinte funcao
 					console.log("Requisição Enviada: " + msg);
 					document.getElementById(idBotao).setAttribute("value",
 							"Aguardando");
@@ -139,9 +143,9 @@
 				data : {
 					'titulo' : titulo,
 					'professor' : professor,
-					'alunoMatricula' : alunoMatricula
+					'alunoMatricula' : matricula
 				},
-				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
+				success : function(msg) { //Em caso de sucesso na requisicao, executa a seguinte funcao
 					console.log("Requisição Enviada: " + msg);
 					document.getElementById(idBotao).setAttribute("value",
 							"Candidatar-se");
@@ -151,5 +155,6 @@
 				}
 			})
 		}
+		
 	}
 </script>

@@ -24,12 +24,20 @@ public abstract class ConnectionFactory {
 		
 		
 		//Credenciais do Heroku
+		
 		String host = "ec2-34-206-8-52.compute-1.amazonaws.com";
 		String porta = "5432";
 		String banco = "dffootpr6lpl0b";
 		String user = "ihprytmqpknust";
         String password = "25312cd238db5bd42777dbc6c4de373c4255eea1f564e643b21e6a1b18b62fde";
         
+		/*
+		String host = "localhost";
+		String porta = "5432";
+		String banco = "postgres";
+		String user = "postgres";
+        String password = "123456";
+		*/
         //Class.forName("com.mysql.jdbc.Driver"); // Para quem for usar MySql
 		
 	    try {
