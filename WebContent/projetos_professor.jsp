@@ -67,7 +67,8 @@
 			</div>
 		</div>
 	</div>
-
+<a class= "btn btn-primary"  href= "professorDashboard" role="button">Voltar</a>
+<a class= "btn btn-primary"  href= "login.html" role="button">Login</a>
 </div>
 <!-- /.container-fluid -->
 <%@include file="template_rodape.html"%>

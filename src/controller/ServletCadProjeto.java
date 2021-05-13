@@ -107,6 +107,8 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "                  </div>\r\n"
 	  		+ "               </form>\r\n"
 	  		+	"<input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\">"
+	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 	  		+ "            </div>\r\n"
 	  		+ "         </div>\r\n"
 	  		+ "      </div>\r\n"

@@ -145,7 +145,13 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                    <span>Meus projetos</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
-		html += "        </ul>\r\n"
+		html += "   <!-- botao -->\r\n"
+				+ "	<li class=\"nav-item\">\r\n"
+				+"<i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+				+ "<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Voltar</a>\r\n"
+				
+				+ "</li>\r\n"
+				+ "  </ul>\r\n"
 		+ "       \r\n"
 		+ "</div>\r\n"
 		+ "    \r\n"

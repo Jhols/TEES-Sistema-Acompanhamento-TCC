@@ -141,6 +141,8 @@ public class ServletVisualizarProjetosAtivos extends HttpServlet{
 		+ "                            </div>\r\n"
 		+ "                        </div>\r\n"
 		+ "                    </div>\r\n"
+		+"\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 		+ "\r\n"
 		+ "                </div>\r\n"
 		+ "                <!-- /.container-fluid -->\r\n"

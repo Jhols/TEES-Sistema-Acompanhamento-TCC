@@ -29,6 +29,7 @@ public class ServletLogin extends HttpServlet {
 			case COORDENADOR:
 				break;
 			case NENHHUM:
+				
 				break;
 			case PROFESSOR:
 				response.sendRedirect("professorDashboard");
@@ -39,6 +40,7 @@ public class ServletLogin extends HttpServlet {
 				response.sendRedirect("alunoDashboard");
 				break;
 			default:
+				
 				break;
 			
 		}

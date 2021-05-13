@@ -121,7 +121,13 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Meu Projeto</span></a>\r\n"
 			+ "            </li>\r\n"
-			+ "            \r\n"
+			
+			
+			+ "	<li class=\"nav-item\">\r\n"
+			+ "<i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Voltar</a>\r\n"
+			+ "	</li>\r\n"
+			
 			+ "        </ul>\r\n"
 			+ "       \r\n"
 			+ "</div>\r\n"
