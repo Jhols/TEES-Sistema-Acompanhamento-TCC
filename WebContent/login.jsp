@@ -19,6 +19,12 @@
 
     <!-- Custom styles for this template-->
     <link href="resources/bootstrap/css/sb-admin-2.css" rel="stylesheet">
+    
+    <script>
+    	window.onload = function() {
+    		alert("Erro: Conta nao encontrada!");
+    	}
+    </script>
 
 </head>
 
