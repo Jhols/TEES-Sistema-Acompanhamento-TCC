@@ -25,11 +25,11 @@ public abstract class ConnectionFactory {
 		
 		//Credenciais do Heroku
 		
-		String host = "ec2-34-206-8-52.compute-1.amazonaws.com";
+		String host = "ec2-3-234-22-132.compute-1.amazonaws.com";
 		String porta = "5432";
-		String banco = "dffootpr6lpl0b";
-		String user = "ihprytmqpknust";
-        String password = "25312cd238db5bd42777dbc6c4de373c4255eea1f564e643b21e6a1b18b62fde";
+		String banco = "d5jo329bjo4mrh";
+		String user = "omhgzdnlfuipun";
+        String password = "1900287b3d049828026a8a18fadb569a79e0f373dd8cfe0fb1c994634d3c7217";
         
 		/*
 		String host = "localhost";
