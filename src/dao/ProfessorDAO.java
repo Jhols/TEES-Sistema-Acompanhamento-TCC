@@ -47,7 +47,7 @@ public class ProfessorDAO {
 
 	// busca um professor a partir do seu id_pessoa
 	@SuppressWarnings("finally")
-	public static Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
+	public Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
 		Professor professor = null;
 		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.PROFESSOR, idPessoa);
 		

@@ -98,7 +98,7 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "            <!-- Nav Item - Pages Collapse Menu -->\r\n"
 			+ "           <!-- Nav Item - Procurar Projetos Disponiveis -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"procurar_projetos.jsp\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"ProjetoServlet?opcao=listar\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span style=\"text-align:center\">Projetos Disponíveis</span></a>\r\n"
 			+ "            </li>\r\n"
@@ -117,7 +117,7 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "            \r\n";
 		}
 			html += "			 <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"aluno_projeto.jsp\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"InscricaoProjetoServlet?opcao=buscar\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Meu Projeto</span></a>\r\n"
 			+ "            </li>\r\n"

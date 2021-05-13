@@ -56,14 +56,14 @@ public class LoginDAO {
 					case ADMINISTRADOR:
 						break;
 					case ALUNO:
-						pessoa = AlunoDAO.pesquisarAlunoPorIdPessoa(idPessoa);
+						pessoa = AlunoDAO.getInstance().pesquisarAlunoPorIdPessoa(idPessoa);
 						break;
 					case COORDENADOR:
 						break;
 					case NENHHUM:
 						break;
 					case PROFESSOR:
-						pessoa = ProfessorDAO.pesquisarProfessorPorIdPessoa(idPessoa);
+						pessoa = ProfessorDAO.getInstance().pesquisarProfessorPorIdPessoa(idPessoa);
 						break;
 					case SECRETARIO:
 						break;

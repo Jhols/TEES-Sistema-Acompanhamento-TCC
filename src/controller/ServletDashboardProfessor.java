@@ -203,7 +203,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			System.out.println("Ação gerar detectada");
 			System.out.println("Id Aluno = " + idAluno);
 			System.out.println("Id Projeto = " + idProjeto);
-			var aluno = AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+			var aluno = AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
 			System.out.println(aluno.toString());
 			
 			var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);

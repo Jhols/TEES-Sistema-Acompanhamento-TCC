@@ -31,7 +31,7 @@ public class InscricaoProjetoDAO {
 	}
 	
 	//Pesquisa por todas as inscricoes de um aluno
-	public ArrayList<InscricaoProjeto> findAllByAluno(Aluno aluno) {
+	public ArrayList<InscricaoProjeto> findAllByAluno(int idAluno) {
 		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<>();
 		InscricaoProjeto inscricao = null;
 		String sql;
@@ -50,7 +50,7 @@ public class InscricaoProjetoDAO {
 				
 				+ " INNER JOIN " + BancoTabela.PROJETO +" \n"
 				+ "  ON " + BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_projeto = "+ BancoTabela.PROJETO+".id_projeto"+" \n"
-				+ " WHERE " + BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno=" + aluno.getId() + ";";
+				+ " WHERE " + BancoTabela.INSCRICAO_ALUNO_PROJETO + ".id_aluno=" + idAluno + ";";
 		
 		
 		//System.out.println(sql);
@@ -87,7 +87,7 @@ public class InscricaoProjetoDAO {
 	}
 	
 	//Procura por uma inscricao especifica de um aluno em relacao a um projeto
-	public InscricaoProjeto findByAlunoAndProjeto(Aluno aluno, Projeto projeto) {
+	public InscricaoProjeto findByAlunoAndProjeto(int idAluno, int idProjeto) {
 		InscricaoProjeto inscricao = null;
 		String sql;
 		ResultSet resultado = null;
@@ -101,7 +101,7 @@ public class InscricaoProjetoDAO {
 		
 		sql = "SELECT * FROM " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_ALUNO_PROJETO
 				+ " ON "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto "
-				+ " WHERE id_aluno = " + aluno.getId() + " AND id_projeto = " + projeto.getId();
+				+ " WHERE id_aluno = " + idAluno + " AND id_projeto = " + idProjeto;
 		System.out.println(sql);
 		Statement stm = null;
 		try {
@@ -137,7 +137,7 @@ public class InscricaoProjetoDAO {
 	
 	
 	// busca no banco uma inscricao cuja situação seja 'associado'
-	public InscricaoProjeto pesquisarProjetoAssociado(Aluno aluno) {
+	public InscricaoProjeto pesquisarProjetoAssociado(int idAluno) {
 		InscricaoProjeto inscricao = null;
 		ResultSet resultado = null;
 		String sql;
@@ -151,7 +151,7 @@ public class InscricaoProjetoDAO {
 		
 		sql = "SELECT * FROM "+ BancoTabela.INSCRICAO_ALUNO_PROJETO +" INNER JOIN "+ BancoTabela.SITUACAO_ALUNO_PROJETO 
 				+ " ON "+ BancoTabela.INSCRICAO_ALUNO_PROJETO+".id_situacao_aluno_projeto = "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".id_situacao_aluno_projeto"
-				+ " WHERE id_aluno = "+ aluno.getId() 
+				+ " WHERE id_aluno = "+ idAluno 
 				+ " AND "+ BancoTabela.SITUACAO_ALUNO_PROJETO+".descricao = '"+ SituacaoInscricao.ASSOCIADO.toString().toLowerCase() +"';";
 		
 		Statement stm = null;
@@ -165,7 +165,7 @@ public class InscricaoProjetoDAO {
 				inscricao.setId(resultado.getInt("id_inscricao_aluno_projeto"));
 				inscricao.setSituacaoInscricao(SituacaoInscricao.valueOf(resultado.getString("descricao").toUpperCase()));
 				// PRECISA SEMPRE PREENCHER OS OBJECTOS DENTRO DO OBJETO SENAO LÀ FORA DA ERRO
-				inscricao.setAluno(AlunoDAO.getInstance().findById(inscricao.getAluno().getId()));
+				inscricao.setAluno(AlunoDAO.getInstance().findById(idAluno));
 				inscricao.setProjeto(ProjetoDAO.getInstance().findById(resultado.getInt("id_projeto")));
 			}
 			
@@ -235,7 +235,7 @@ public class InscricaoProjetoDAO {
 			stm = conexao.createStatement();
 			
 			//Se a inscricao nao existir no banco, cria uma nova
-			if (findByAlunoAndProjeto(inscricao.getAluno(), inscricao.getProjeto()) == null) {
+			if (findByAlunoAndProjeto(inscricao.getAluno().getId(), inscricao.getProjeto().getId()) == null) {
 				sql = "INSERT INTO " + BancoTabela.INSCRICAO_ALUNO_PROJETO + " (id_aluno, id_projeto, id_situacao_aluno_projeto) "
 						+ "VALUES ("
 						+ inscricao.getAluno().getId() +", "
@@ -364,8 +364,8 @@ public class InscricaoProjetoDAO {
 	
 	// preenche os dados do objeto inscricao a partir de um resultado SQL
 	public void popularInscricao(InscricaoProjeto inscricao,  ResultSet resultado) throws SQLException {
-		inscricao.setIdInscricao(resultado.getInt("id_inscricao_aluno_projeto"));
-		inscricao.setAluno(AlunoDAO.pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
+		inscricao.setId(resultado.getInt("id_inscricao_aluno_projeto"));
+		inscricao.setAluno(AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(resultado.getInt("id_aluno")));
 		inscricao.setProjeto(ProjetoDAO.pesquisarProjetoPorIdProjeto(resultado.getInt("id_projeto")));
 		inscricao.setIdSituacaoInscricao(resultado.getInt("id_situacao_aluno_projeto"));
 		

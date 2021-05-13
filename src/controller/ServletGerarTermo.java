@@ -42,7 +42,7 @@ public class ServletGerarTermo extends HttpServlet {
 		int idAluno= Integer.parseInt(request.getParameter("aluno"));
 		int idProjeto= Integer.parseInt(request.getParameter("idProjeto")); 
 		
-		Aluno aluno= AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+		Aluno aluno= AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
 		Projeto projeto=ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
 		
 		LocalDateTime ldt = LocalDateTime.now();

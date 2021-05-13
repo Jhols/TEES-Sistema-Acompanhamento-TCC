@@ -25,14 +25,14 @@ public class AlunoDAO {
 	}
 	
 	@SuppressWarnings("finally")
-	public Aluno findById(int id) {
+	public Aluno findById(int idAluno) {
 		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
 		
-		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.ALUNO, id);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.ALUNO, idAluno);
 		
 		try {
 			resultado.next();
-			aluno.setId(id);
+			aluno.setId(idAluno);
 			aluno.setNome(resultado.getString("nome"));
 			((Aluno) aluno).setMatricula(resultado.getString("matricula"));
 			aluno.setEmail(resultado.getString("email"));
@@ -131,7 +131,7 @@ public class AlunoDAO {
 	
 	// busca um aluno a partir do seu id_pessoa
 	@SuppressWarnings("finally")
-	public static Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
+	public Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
 		Aluno aluno = null;
 		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
 		
@@ -155,7 +155,7 @@ public class AlunoDAO {
 
 	// busca um aluno a partir do seu id_aluno
 	@SuppressWarnings("finally")
-	public static Aluno pesquisarAlunoPorIdAluno(int idAluno) {
+	public Aluno pesquisarAlunoPorIdAluno(int idAluno) {
 		
 		Aluno aluno = null;
 		

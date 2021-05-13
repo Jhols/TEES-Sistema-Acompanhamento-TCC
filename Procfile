@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar webapp-runner.jar ${WEBAPP_RUNNER_OPTS} --port 41622 ./target/Sistema_TCC-0.0.1.war
