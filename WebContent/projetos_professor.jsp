@@ -54,9 +54,13 @@
 							String combobox = "           <!-- Combobox -->\r\n" + " <select name=\"sct_statusProjeto" + x + "\""
 							+ " id=\"sct_statusProjeto" + x + "\" onchange=\"enviarSolicitacao('sct_statusProjeto" + x + "',"
 							+ projeto.getId() + ")\"" + (situacao == SituacaoProjeto.ATIVO ? " disabled" : "") + ">\r\n";
+							
+							if (situacao == SituacaoProjeto.ATIVO) {
 							combobox += " 	<option value=\"" + SituacaoProjeto.ATIVO.getNomeSituacao() + "\" "
 							+ (situacao == SituacaoProjeto.ATIVO ? "selected >" : ">") + SituacaoProjeto.ATIVO.getNomeSituacao()
 							+ "</option>\r\n";
+							}
+							
 							combobox += " 	<option value=\"" + SituacaoProjeto.DESATIVADO.getNomeSituacao() + "\" "
 							+ (situacao == SituacaoProjeto.DESATIVADO ? "selected >" : ">")
 							+ SituacaoProjeto.DESATIVADO.getNomeSituacao() + "</option>\r\n" + "     <option value=\""
