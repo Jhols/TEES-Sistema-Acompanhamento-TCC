@@ -312,17 +312,13 @@ public class ProjetoDAO {
 		try {
 				var connection = ConnectionFactory.getConnection();
 				String sql;
-				sql = "Update " + BancoTabela.PROJETO + " set id_situacao = ?"
-						+ ", titulo = ? "
-						+ ", descricao = ? "
-						+ " where id_projeto = ? ";
-				
-				System.out.print(sql);
+				sql = "UPDATE " + BancoTabela.PROJETO 
+						+ " SET id_situacao = " + SituacaoProjeto.toInt(projeto.getSituacao())
+						+ ", titulo = '" + projeto.getTitulo() + "'"
+						+ ", descricao = '" + projeto.getDescricao() + "'"
+						+ " WHERE id_projeto = " + projeto.getId();
 				PreparedStatement stm =  connection.prepareStatement(sql);
-				stm.setInt(1, SituacaoProjeto.toInt(projeto.getSituacao()));
-				stm.setString(2, projeto.getTitulo());
-				stm.setString(3, projeto.getDescricao());
-				stm.setInt(4, projeto.getId());
+				System.out.print(sql);
 				stm.executeUpdate();
 						
 			} catch (SQLException e) {
