@@ -1,12 +1,15 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import enums.BancoTabela;
 import enums.Perfil;
+
+import model.Pessoa;
 import util.ConnectionFactory;
 
 public class PessoaDAO {
@@ -122,6 +125,49 @@ public class PessoaDAO {
 		}
 		
 	}
+	
+	
+	//adiciona uma pessoa 
+	public static int addPessoa(Pessoa pessoa) {
+		
+		
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.PESSOA + "(nome,email,telefone) values (?,?,?)";
+						
+
+		 try {
+	        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+	        			
+	            prepareStatement.setString(1, pessoa.getNome());
+	            prepareStatement.setString(2, pessoa.getEmail());
+	            prepareStatement.setString(3, pessoa.getTelefone());
+	                        
+	            prepareStatement.executeUpdate();
+	            
+	            sql="SELECT currval(pg_get_serial_sequence('pessoa','id_pessoa'))";
+	            Statement stm = conexao.createStatement();
+	            
+	            ResultSet resultado = stm.executeQuery(sql);
+	            resultado.next();
+	            int id = resultado.getInt("currval");//pega o id da pessoa inserida
+	            
+	            return id;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+		 return 0;
+		
+	}
+	
 
 	public boolean incluir() {
 		// TODO Auto-generated method stub

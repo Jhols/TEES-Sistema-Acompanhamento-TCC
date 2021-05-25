@@ -259,32 +259,9 @@ public class ProjetoDAO {
 		}
 	}
 	
-	public Professor findProfessorById(int idProjeto) {
-		Professor professor = new Professor();
-		
-		
-		
-		return professor;
-	}
 	
-	public boolean incluir(Projeto projeto) {
-		// TODO Auto-generated method stub
-		String sql;
-		try {
-			Connection conexao = ConnectionFactory.getConnection();
-			
-			Statement stm = conexao.createStatement();
-			
-			//sql = "INSERT INTO " 
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
+	
+	
 	
 	// atualiza para 'ativo' a situação do projeto especificado pelo id
 	public void atualizarParaAtivo(int idProjeto) {

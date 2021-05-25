@@ -1,13 +1,16 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
 import enums.Perfil;
+import enums.SituacaoProjeto;
 import model.Professor;
+import model.Projeto;
 import util.ConnectionFactory;
 import model.Aluno;
 import model.Pessoa;
@@ -114,9 +117,44 @@ public class ProfessorDAO {
 		return professor;
 	}
 
-	public boolean incluir() {
-		// TODO Auto-generated method stub
-		return false;
+	public static void addProfessor(Professor professor) {
+		
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.PROFESSOR + " (id_pessoa, matricula, tipo_prof, status_orientador) values (?, ?, ?, ? )";
+		
+		
+        try {
+        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+        	
+        	int id=PessoaDAO.addPessoa(professor);
+        			
+            prepareStatement.setInt(1, id);
+            prepareStatement.setString(2, professor.getMatricula());
+            prepareStatement.setInt(3, 3);
+            prepareStatement.setInt(4, 0);
+            
+            prepareStatement.executeUpdate();
+            
+            sql = "INSERT INTO "+ BancoTabela.PERFIL_PESSOA + "(id_pessoa, id_perfil) values (?,?)";
+            prepareStatement = conexao.prepareStatement(sql);
+            
+            prepareStatement.setInt(1, id);
+            prepareStatement.setInt(2, 4);
+            
+            prepareStatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 	}
 
 	public void atualizar() {
