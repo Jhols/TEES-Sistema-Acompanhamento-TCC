@@ -2,10 +2,27 @@ package model;
 
 import enums.Perfil;
 
+
 public class Aluno extends Pessoa {
 	private String matricula;
 	private int idAluno;
 
+	enum StatusAlunoTCC{
+		E_ALUNO_TCC,
+		NAO_E_ALUNO_TCC;
+	
+		public static StatusAlunoTCC fromInt(int value) {
+			switch (value) {
+			case 0: return StatusAlunoTCC.E_ALUNO_TCC;
+			case 1: return StatusAlunoTCC.NAO_E_ALUNO_TCC;
+			
+			
+			default:
+				//throw new Exception();
+				return StatusAlunoTCC.NAO_E_ALUNO_TCC;
+			}
+		}
+	}
 	public int getIdAluno() {
 		return idAluno;
 	}
