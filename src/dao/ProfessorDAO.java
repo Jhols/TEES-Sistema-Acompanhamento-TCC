@@ -26,29 +26,28 @@ public class ProfessorDAO {
 	}
 	
 	@SuppressWarnings("finally")
-	public Professor findById(int id) {
+	public Professor findById(int idProfessor) {
 		Pessoa professor = PessoaFactory.getPessoa(Perfil.PROFESSOR);
 		
-		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.PROFESSOR, id);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.PROFESSOR, idProfessor);
 		
 		try {
 			resultado.next();
-			professor.setNome(resultado.getString(BancoTabela.PESSOA+".nome"));
-			((Aluno) professor).setMatricula(resultado.getString(BancoTabela.PROFESSOR+".matricula"));
-			professor.setEmail(resultado.getString(BancoTabela.PESSOA+".email"));
-			professor.setTelefone(resultado.getString(BancoTabela.PESSOA+".telefone"));
+			professor.setNome(resultado.getString("nome"));
+			((Aluno) professor).setMatricula(resultado.getString("matricula"));
+			professor.setEmail(resultado.getString("email"));
+			professor.setTelefone(resultado.getString("telefone"));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
 			return (Professor) professor;
 		}
 	}
 
 	// busca um professor a partir do seu id_pessoa
 	@SuppressWarnings("finally")
-	public static Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
+	public Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
 		Professor professor = null;
 		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.PROFESSOR, idPessoa);
 		
@@ -74,7 +73,7 @@ public class ProfessorDAO {
 		try {
 			while(resultado.next()) {
 				Professor professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
-				professor.setMatricula(resultado.getString(BancoTabela.PROFESSOR + ".matricula"));
+				professor.setMatricula(resultado.getString("matricula"));
 				
 				// TODO: selecionar projetos do BD para preencher a lista de projetos do professor
 				

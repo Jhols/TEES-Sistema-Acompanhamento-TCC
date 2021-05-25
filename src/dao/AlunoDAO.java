@@ -25,23 +25,22 @@ public class AlunoDAO {
 	}
 	
 	@SuppressWarnings("finally")
-	public Aluno findById(int id) {
+	public Aluno findById(int idAluno) {
 		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
 		
-		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.ALUNO, id);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfil(BancoTabela.ALUNO, idAluno);
 		
 		try {
 			resultado.next();
-			aluno.setId(id);
-			aluno.setNome(resultado.getString(BancoTabela.PESSOA+".nome"));
-			((Aluno) aluno).setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
-			aluno.setEmail(resultado.getString(BancoTabela.PESSOA+".email"));
-			aluno.setTelefone(resultado.getString(BancoTabela.PESSOA+".telefone"));
+			aluno.setId(idAluno);
+			aluno.setNome(resultado.getString("nome"));
+			((Aluno) aluno).setMatricula(resultado.getString("matricula"));
+			aluno.setEmail(resultado.getString("email"));
+			aluno.setTelefone(resultado.getString("telefone"));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
 			return (Aluno) aluno;
 		}
 		
@@ -62,21 +61,21 @@ public class AlunoDAO {
 			e1.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + BancoTabela.ALUNO + " INNER JOIN " + BancoTabela.PESSOA + 
-				" ON " + BancoTabela.ALUNO +".id_pessoa = "+ BancoTabela.PESSOA + ".id_pessoa WHERE "+BancoTabela.ALUNO+".matricula = '" + matricula + "'" + 
-				" AND "+BancoTabela.ALUNO+".id_pessoa = "+BancoTabela.PESSOA +".id_pessoa;";
+		sql = "SELECT * FROM " + BancoTabela.ALUNO + " INNER JOIN " + BancoTabela.PESSOA  
+				+ " ON " + BancoTabela.ALUNO +".id_pessoa = "+ BancoTabela.PESSOA + ".id_pessoa "
+				+ " WHERE "+BancoTabela.ALUNO+".matricula = '" + matricula + "'";
 		
 		try {
             Statement stm = conexao.createStatement();
             resultado = stm.executeQuery(sql);
             
             resultado.next();
-			aluno.setId(resultado.getInt(BancoTabela.ALUNO+".id_"+BancoTabela.ALUNO.toString().toLowerCase()));
-			((Aluno)aluno).setIdAluno(resultado.getInt(BancoTabela.ALUNO+".id_"+BancoTabela.ALUNO.toString().toLowerCase()));
-			aluno.setNome(resultado.getString(BancoTabela.PESSOA+".nome"));
-			((Aluno) aluno).setMatricula(resultado.getString(BancoTabela.ALUNO+".matricula"));
-			aluno.setEmail(resultado.getString(BancoTabela.PESSOA+".email"));
-			aluno.setTelefone(resultado.getString(BancoTabela.PESSOA+".telefone"));
+			aluno.setId(resultado.getInt("id_"+BancoTabela.ALUNO.toString().toLowerCase()));
+			((Aluno)aluno).setIdAluno(resultado.getInt("id_"+BancoTabela.ALUNO.toString().toLowerCase()));
+			aluno.setNome(resultado.getString("nome"));
+			((Aluno) aluno).setMatricula(resultado.getString("matricula"));
+			aluno.setEmail(resultado.getString("email"));
+			aluno.setTelefone(resultado.getString("telefone"));
 			
 			stm.close();
 		}
@@ -100,7 +99,7 @@ public class AlunoDAO {
 		try {
 			while(resultado.next()) { //Atribui os valores encontrados em uma lista de objetos de alunos
 				Aluno aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
-				aluno.setMatricula(resultado.getString(BancoTabela.ALUNO + ".matricula"));
+				aluno.setMatricula(resultado.getString("matricula"));
 				alunos.add(aluno);
 			}
 		} catch (SQLException e) {
@@ -132,15 +131,18 @@ public class AlunoDAO {
 	
 	// busca um aluno a partir do seu id_pessoa
 	@SuppressWarnings("finally")
-	public static Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
+	public Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
 		Aluno aluno = null;
 		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
 		
 		try {
 			if (resultado.next()) {
 				// a função getPessoa deve preencher todos os dados de aluno a partir do resultado do SQL
-				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
 				
+				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
+			}
+			else {
+				System.out.println("Não encontrou aluno com id_pessoa="+idPessoa);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -153,7 +155,7 @@ public class AlunoDAO {
 
 	// busca um aluno a partir do seu id_aluno
 	@SuppressWarnings("finally")
-	public static Aluno pesquisarAlunoPorIdAluno(int idAluno) {
+	public Aluno pesquisarAlunoPorIdAluno(int idAluno) {
 		
 		Aluno aluno = null;
 		
@@ -170,7 +172,7 @@ public class AlunoDAO {
 			
 			if (resultado.next()) {
 				// usa o id_pessoa encontrado para retornar a pessoa
-				int idPessoa = resultado.getInt(BancoTabela.ALUNO+".id_pessoa");
+				int idPessoa = resultado.getInt("id_pessoa");
 				aluno = pesquisarAlunoPorIdPessoa(idPessoa);
 				
 			}

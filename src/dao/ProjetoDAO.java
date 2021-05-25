@@ -41,8 +41,8 @@ public class ProjetoDAO {
 		}
 		
 		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO + 
-				" WHERE " + BancoTabela.PROJETO+".id_"+BancoTabela.PROJETO+ " = " + id + 
-				" AND " + BancoTabela.PROJETO +".id_situacao = " +  BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto;";
+				" ON " + BancoTabela.PROJETO+".id_"+BancoTabela.PROJETO+ " = " + id + 
+				" WHERE " + BancoTabela.PROJETO +".id_situacao = " +  BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto;";
 		
 		try {
             Statement stm = conexao.createStatement();
@@ -50,19 +50,17 @@ public class ProjetoDAO {
             
             resultado.next();
 			projeto.setId(id);
-			projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
-			projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
-			projeto.getProfessor().setId(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+			projeto.setTitulo(resultado.getString("titulo"));
+			projeto.setDescricao(resultado.getString("descricao"));
+			projeto.getProfessor().setId(resultado.getInt("id_professor"));
 			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getId()));
-			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString(BancoTabela.SITUACAO_PROJETO+".descricao").toUpperCase()));
+			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString("descricao").toUpperCase()));
             
 			stm.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
-			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 			return projeto;
 		}
 	}
@@ -100,14 +98,14 @@ public class ProjetoDAO {
 	
 	// Popula os campos de projeto a partir do resultado de uma consulta sql
 	private static void popularProjeto(Projeto projeto, ResultSet resultado) throws SQLException {
-		projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_projeto"));
-		projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
-		projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
-		projeto.setIdProfessor(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+		projeto.setId(resultado.getInt("id_projeto"));
+		projeto.setTitulo(resultado.getString("titulo"));
+		projeto.setDescricao(resultado.getString("descricao"));
+		projeto.setIdProfessor(resultado.getInt("id_professor"));
 		System.out.println("ID DO PROFESSOR DO PROJETO = " +projeto.getIdProfessor());
 		projeto.setProfessor(ProfessorDAO.pesquisarPorIdProfessor(projeto.getIdProfessor()));
 		System.out.println("PROFESSOR DO PROJETO = " +projeto.getProfessor());
-		projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt(BancoTabela.PROJETO+".id_situacao")));
+		projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt("id_situacao")));
 	}
 	
 	// Consulta todos os projetos que estao no banco e retorna os que estao disponiveis para o aluno escolher se candidatar
@@ -130,19 +128,19 @@ public class ProjetoDAO {
 		sql = "SELECT * FROM " + BancoTabela.PROJETO 
 				+ " WHERE " + BancoTabela.PROJETO+".id_situacao = "
 						+ "(SELECT id_situacao_projeto FROM " + BancoTabela.SITUACAO_PROJETO
-						+ " WHERE descricao = '"+ situacao +"')";  
+						+ " WHERE descricao = '"+ situacao.toString().toLowerCase() +"')";  
 		
-		
+		//System.out.println(sql);
 		try {
 			Statement stm = conexao.createStatement();
 			resultado = stm.executeQuery(sql);
 			
 			while(resultado.next()) {
 				Projeto projeto = new Projeto();
-				projeto.setId(resultado.getInt(BancoTabela.PROJETO + ".id_projeto"));
-				projeto.setTitulo(resultado.getString(BancoTabela.PROJETO + ".titulo"));
-				projeto.setDescricao(resultado.getString(BancoTabela.PROJETO + ".descricao"));
-				projeto.setProfessor(ProfessorDAO.getInstance().findById(resultado.getInt(BancoTabela.PROJETO+".id_professor")));
+				projeto.setId(resultado.getInt("id_projeto"));
+				projeto.setTitulo(resultado.getString("titulo"));
+				projeto.setDescricao(resultado.getString("descricao"));
+				projeto.setProfessor(ProfessorDAO.getInstance().findById(resultado.getInt("id_professor")));
 				projeto.setSituacao(situacao);
 				
 				projetos.add(projeto);
@@ -152,8 +150,11 @@ public class ProjetoDAO {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
-			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+			System.out.println("resultado de pesquisarProjetosDisponiveis()");
+			for (Projeto projeto : projetos) {
+				System.out.println(projeto);
+			}
+				
 			return projetos;			
 		}
 	}
@@ -230,20 +231,22 @@ public class ProjetoDAO {
 			e1.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO +
-				" WHERE " + BancoTabela.PROJETO+".titulo = '" + titulo + "' AND " + BancoTabela.PROJETO+".id_situacao = " + BancoTabela.SITUACAO_PROJETO+".id_situacao_projeto;";
+		sql = "SELECT * FROM " + BancoTabela.PROJETO + " INNER JOIN " + BancoTabela.SITUACAO_PROJETO
+				+ " ON " + BancoTabela.PROJETO+".id_situacao = " + BancoTabela.SITUACAO_PROJETO+".id_situacao_projeto"
+				+ " WHERE " + BancoTabela.PROJETO+".titulo = '" + titulo +"'";
+				
 		
 		try {
             Statement stm = conexao.createStatement();
             resultado = stm.executeQuery(sql);
             
             resultado.next();
-			projeto.setId(resultado.getInt(BancoTabela.PROJETO+".id_"+BancoTabela.PROJETO.toString().toLowerCase()));
-			projeto.setTitulo(resultado.getString(BancoTabela.PROJETO+".titulo"));
-			projeto.setDescricao(resultado.getString(BancoTabela.PROJETO+".descricao"));
-			projeto.getProfessor().setId(resultado.getInt(BancoTabela.PROJETO+".id_professor"));
+			projeto.setId(resultado.getInt("id_"+BancoTabela.PROJETO.toString().toLowerCase()));
+			projeto.setTitulo(resultado.getString("titulo"));
+			projeto.setDescricao(resultado.getString("descricao"));
+			projeto.getProfessor().setId(resultado.getInt("id_professor"));
 			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getId()));
-			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString(BancoTabela.SITUACAO_PROJETO+".descricao").toUpperCase()));
+			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString("descricao").toUpperCase()));
             
 			stm.close();
 		}
@@ -309,17 +312,13 @@ public class ProjetoDAO {
 		try {
 				var connection = ConnectionFactory.getConnection();
 				String sql;
-				sql = "Update " + BancoTabela.PROJETO + " set id_situacao = ?"
-						+ ", titulo = ? "
-						+ ", descricao = ? "
-						+ " where id_projeto = ? ";
-				
-				System.out.print(sql);
+				sql = "UPDATE " + BancoTabela.PROJETO 
+						+ " SET id_situacao = " + SituacaoProjeto.toInt(projeto.getSituacao())
+						+ ", titulo = '" + projeto.getTitulo() + "'"
+						+ ", descricao = '" + projeto.getDescricao() + "'"
+						+ " WHERE id_projeto = " + projeto.getId();
 				PreparedStatement stm =  connection.prepareStatement(sql);
-				stm.setInt(1, SituacaoProjeto.toInt(projeto.getSituacao()));
-				stm.setString(2, projeto.getTitulo());
-				stm.setString(3, projeto.getDescricao());
-				stm.setInt(4, projeto.getId());
+				System.out.print(sql);
 				stm.executeUpdate();
 						
 			} catch (SQLException e) {
@@ -335,6 +334,30 @@ public class ProjetoDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public ArrayList<Projeto> buscarProjetosPorIdProfessor(int idProfessor) {
+		ArrayList<Projeto> listaProjetos = new ArrayList<Projeto>();
 		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = " SELECT * FROM " + BancoTabela.PROJETO 
+					+ " INNER JOIN " + BancoTabela.SITUACAO_PROJETO + " ON " + BancoTabela.PROJETO + ".id_situacao = " + BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto"
+					+ " WHERE 1=1 "
+					+ " AND " + BancoTabela.PROJETO + ".id_professor = " + idProfessor + " ";
+			PreparedStatement stm = connection.prepareStatement(sql);
+			ResultSet resultado = stm.executeQuery();
+			while (resultado.next()) {
+				Projeto projeto = new Projeto();
+				popularProjeto(projeto, resultado);
+				listaProjetos.add(projeto);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listaProjetos;
+	}
+	
+			
 		
 }

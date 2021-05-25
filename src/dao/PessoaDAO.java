@@ -39,10 +39,12 @@ public class PessoaDAO {
 		sql = "SELECT * FROM " + Perfil.getTabela(perfil) + " inner join " + BancoTabela.PESSOA + 
 				" ON " + Perfil.getTabela(perfil) +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa" +
 				" WHERE " + Perfil.getTabela(perfil) + ".id_pessoa = " + idPessoa;
+		System.out.println(sql);
 		
 		try {
 			Statement stm = conexao.createStatement();
 			resultado = stm.executeQuery(sql);
+			
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -103,9 +105,10 @@ public class PessoaDAO {
 			e1.printStackTrace();
 		}
 		
-		sql = "SELECT * FROM " + perfil + " INNER JOIN " + BancoTabela.PESSOA + 
-				" WHERE " + perfil+".id_"+perfil + " = " + id + 
-				" AND " + perfil +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa;";
+		sql = "SELECT * FROM " + perfil + " INNER JOIN " + BancoTabela.PESSOA 
+				+ " ON " + perfil +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa "
+				+ " WHERE " + perfil+".id_"+perfil + " = " + id;
+				
 		
 		try {
             Statement stm = conexao.createStatement();

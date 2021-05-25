@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,44 +44,62 @@ public class ProjetoServlet extends HttpServlet {
 	    	case "incluir":
 	    		break;
 	    	case "ajax":
-	    		Boolean resultadoInsert = false;
-	    		Projeto projeto = new Projeto();
-	    		projeto.setTitulo(request.getParameter("titulo"));
-	    		String professor = request.getParameter("professor");
-	    		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
-	    		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
-	    		InscricaoProjeto inscricao = null;
-	    		
-	    		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
-	    		
-	    		if (projeto.getProfessor().getNome().equals(professor)) {
-	    			inscricao = new InscricaoProjeto((Aluno) aluno, projeto);
-	    			resultadoInsert = InscricaoProjetoDAO.getInstance().incluir(inscricao);
-	    		}
-	    		
-	    		response.setContentType("text/Plain");
-	    		PrintWriter out = response.getWriter();
-	    		if (resultadoInsert) {
-	    			out.print(aluno.getNome() +" "+ inscricao.getSituacaoInscricao());	    			
-	    		}
-	    		else {
-	    			out.print("Erro: Falha no cadastro da inscricao aluno-projeto");
-	    		}
+				incluirInscricao(request, response);
 	    		break;
 	    		
 	    	case "listar":
-	    		//ArrayList<model.Projeto> projetos = new ArrayList<>();
-	    		if (opcao == null) {
-	    			request.getRequestDispatcher("buttons.html").forward(request, response);
-	    		}
-	    		else {
-	    			request.getRequestDispatcher("procurar_projetos.jsp").forward(request, response);
-	    		}
-	    		
+	    		listarProjetosDisponiveis(request, response);
 	    		break;
     	}
     	
     }
+
+	protected void listarProjetosDisponiveis(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArrayList<Projeto> projetos = new ArrayList<Projeto>();
+		projetos = ProjetoDAO.getInstance().pesquisarProjetosDisponiveis();
+		
+		//Procura pelo aluno logado a partir da sessao.
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO);
+		int idAluno = (int) request.getSession().getAttribute("idAluno");
+		aluno = AlunoDAO.getInstance().findById(idAluno);
+		
+		ArrayList<InscricaoProjeto> inscricoes = new ArrayList<InscricaoProjeto>();
+		 //Procura por todos as inscricoes que o aluno acima possui
+		inscricoes = InscricaoProjetoDAO.getInstance().findAllByAluno(idAluno);
+		
+		//Empacota as listas para serem enviadas pra camada de view
+		request.setAttribute("projetos", projetos);
+		request.setAttribute("inscricoes", inscricoes);
+		
+		//Direciona o usuario para a pagina de apresentacao dos projetos disponiveis
+		request.getRequestDispatcher("procurar_projetos.jsp").forward(request, response);
+	}
+
+	protected void incluirInscricao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Boolean resultadoInsert = false;
+		Projeto projeto = new Projeto();
+		projeto.setTitulo(request.getParameter("titulo"));
+		String professor = request.getParameter("professor");
+		Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, null, request.getParameter("alunoMatricula"));
+		aluno = AlunoDAO.getInstance().findByMatricula(((Aluno) aluno).getMatricula());
+		InscricaoProjeto inscricao = null;
+		
+		projeto = ProjetoDAO.getInstance().findByTitulo(projeto.getTitulo());
+		
+		if (projeto.getProfessor().getNome().equals(professor)) {
+			inscricao = new InscricaoProjeto((Aluno) aluno, projeto);
+			resultadoInsert = InscricaoProjetoDAO.getInstance().incluir(inscricao);
+		}
+		
+		response.setContentType("text/Plain");
+		PrintWriter out = response.getWriter();
+		if (resultadoInsert) {
+			out.print(aluno.getNome() +" "+ inscricao.getSituacaoInscricao());	    			
+		}
+		else {
+			out.print("Erro: Falha no cadastro da inscricao aluno-projeto");
+		}
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

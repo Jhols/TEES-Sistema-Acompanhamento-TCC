@@ -39,6 +39,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
+		boolean meusProjetos= professor.isOrientador();
 		
 		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
@@ -136,7 +137,21 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                    <span>Projetos com orientandos</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
-		html += "        </ul>\r\n"
+		if (meusProjetos) {
+			html += "            <!-- Item meus projetos -->\r\n"
+			+ "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"projetos_professor.jsp\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Meus projetos</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		html += "   <!-- botao -->\r\n"
+				+ "	<li class=\"nav-item\">\r\n"
+				+"<i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+				+ "<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Voltar</a>\r\n"
+				
+				+ "</li>\r\n"
+				+ "  </ul>\r\n"
 		+ "       \r\n"
 		+ "</div>\r\n"
 		+ "    \r\n"
@@ -188,7 +203,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			System.out.println("Ação gerar detectada");
 			System.out.println("Id Aluno = " + idAluno);
 			System.out.println("Id Projeto = " + idProjeto);
-			var aluno = AlunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+			var aluno = AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
 			System.out.println(aluno.toString());
 			
 			var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);

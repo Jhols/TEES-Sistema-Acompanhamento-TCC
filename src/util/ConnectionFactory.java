@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class ConnectionFactory {
-
-	// Cria uma conexão com o banco de dados.
+	
+	private static Connection conexao;
+	
+	// Cria uma conexao com o banco de dados.
 	@SuppressWarnings("finally")
 	public static Connection getConnection() throws SQLException {
 		Connection con = null;
@@ -28,5 +30,6 @@ public abstract class ConnectionFactory {
 			return con;
 		}
 	}
+	}
 	
-}
+
