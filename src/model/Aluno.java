@@ -3,10 +3,12 @@ package model;
 import enums.Perfil;
 
 
+
+
 public class Aluno extends Pessoa {
 	private String matricula;
 	private int idAluno;
-
+	private StatusAlunoTCC statusAlunoTCC;
 	enum StatusAlunoTCC{
 		E_ALUNO_TCC,
 		NAO_E_ALUNO_TCC;
@@ -22,6 +24,17 @@ public class Aluno extends Pessoa {
 				return StatusAlunoTCC.NAO_E_ALUNO_TCC;
 			}
 		}
+	}
+	
+	public boolean isAluno() {
+		return statusAlunoTCC == StatusAlunoTCC.E_ALUNO_TCC;
+	}
+	public StatusAlunoTCC getStatusAlunoTCC() {
+		return statusAlunoTCC;
+	}
+
+	public void setstatusAlunoTCC(StatusAlunoTCC statusAlunoTCC) {
+		this.statusAlunoTCC = statusAlunoTCC;
 	}
 	public int getIdAluno() {
 		return idAluno;

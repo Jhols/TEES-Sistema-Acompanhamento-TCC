@@ -49,11 +49,12 @@ public class Professor extends Pessoa {
 		this.setPerfil(Perfil.PROFESSOR);
 	}
 	
-	String matricula;
-	ArrayList<Projeto> projetos = new ArrayList<>();
+	private String matricula;
+	private ArrayList<Projeto> projetos = new ArrayList<>();
 	
-	Tipo tipo;
-	int idProfessor;
+	private Tipo tipo;
+	private StatusOrientador statusOrientador;
+	private int idProfessor;
 	
 	public int getIdProfessor() {
 		return idProfessor;
@@ -90,6 +91,13 @@ public class Professor extends Pessoa {
 
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
+	}
+	public StatusOrientador getStatusOrientador() {
+		return statusOrientador;
+	}
+
+	public void setStatusOrientador(StatusOrientador statusOrientador) {
+		this.statusOrientador = statusOrientador;
 	}
 
 	public boolean isOrientador() {

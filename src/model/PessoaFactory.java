@@ -3,7 +3,6 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import enums.BancoTabela;
 import enums.Perfil;
 
 public abstract class PessoaFactory {
@@ -77,13 +76,17 @@ public abstract class PessoaFactory {
 	private static void popularDadosProfessor(Professor professor, ResultSet resultado) throws SQLException {
 		professor.setMatricula(resultado.getString("matricula"));
 		var tipo_prof = resultado.getInt("tipo_prof");
+		var status_orientador = resultado.getInt("status_orientador");
 		professor.setIdProfessor(resultado.getInt("id_professor"));
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
+		professor.setStatusOrientador(Professor.StatusOrientador.fromInt(status_orientador));
 	}
 	
 	/// popula um objeto Aluno a partir do resultado de um select 
 	private static void popularDadosAluno(Aluno aluno, ResultSet resultado) throws SQLException {
 		aluno.setMatricula(resultado.getString("matricula"));
 		aluno.setIdAluno(resultado.getInt("id_aluno"));
+		var statusAlunoTCC=resultado.getInt("status_aluno_tcc");
+		aluno.setstatusAlunoTCC(Aluno.StatusAlunoTCC.fromInt(statusAlunoTCC));
 	}
 }
