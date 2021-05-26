@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import enums.Perfil;
+import enums.SituacaoProjeto;
 
 
 public class Professor extends Pessoa {
@@ -43,6 +44,30 @@ public class Professor extends Pessoa {
 				return Tipo.PROFESSOR_TCC;
 			}
 		}
+	}
+	
+	public static int toInt(StatusOrientador value) {
+		if (value == StatusOrientador.CANDIDATO)
+			return 0;
+		if (value == StatusOrientador.REJEITADO)
+			return 1;
+		if (value == StatusOrientador.ACEITO)
+			return 2;
+		if (value == StatusOrientador.NENHUM)
+			return 3;
+		return 5;
+	}
+	
+	public static int toInt(Tipo value) {
+		if (value == Tipo.PROFESSOR_TCC)
+			return 0;
+		if (value == Tipo.PROFESSOR_ORIENTADOR)
+			return 1;
+		if (value == Tipo.PROFESSOR_TCC_E_ORIENTADOR)
+			return 2;
+		if (value == Tipo.PROFESSOR)
+			return 3;
+		return 5;
 	}
 	
 	public Professor() {

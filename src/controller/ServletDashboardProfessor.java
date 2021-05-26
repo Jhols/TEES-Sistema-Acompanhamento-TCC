@@ -35,7 +35,8 @@ public class ServletDashboardProfessor extends HttpServlet {
 		
 		System.out.println(professor);
 		// * Permissões para Funcionalidades *
-		boolean cadastroProfOrientador = ! professor.isOrientador();
+		boolean vizualizarAlunosCandidatosTCC = ! professor.isOrientador();
+		boolean candidatarOrientador = ! professor.isOrientador();
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
@@ -105,12 +106,20 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "                   \r\n"
 		+ "\r\n";
 		// Cada botão do menu só deve aparecer de acordo com o tipo de perfil que está visualizando a pagina
-		if (cadastroProfOrientador) {
+		if (vizualizarAlunosCandidatosTCC) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"charts.html\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span style=\"text-align:center\">Cadastro professor orientador</span></a>\r\n"
+			+ "                    <span style=\"text-align:center\">Alunos candidatos a TCC</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		if (candidatarOrientador) {
+			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
+			+ "            <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"cadProfessor\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span style=\"text-align:center\">Candidata-se a orientador</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (cadastroProjeto) {
@@ -171,10 +180,17 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "\r\n"
 		+ "</body>\r\n";
 		
+		
 		// mostrar alertas para ações executadas pelo servlet
+		
+		if ("OK".equals(request.getParameter("professorOrientador"))) {
+			html += "<script>alert(\"Você se condidatou com sucesso!\");</script>";
+		}
+		
 		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
 			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
 		}
+		
 		if ("gerar".equals(request.getParameter("msg"))) {
 			html += "<script>alert(\"Aluno associado ao projeto com sucesso!\");</script>";
 		}

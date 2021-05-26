@@ -116,6 +116,23 @@ public class ProfessorDAO {
 		
 		return professor;
 	}
+	
+	public static void mudarStatusOrientador(int idProfessor) {
+		
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			
+			String sql = "UPDATE " +BancoTabela.PROFESSOR+" SET status_orientador = 0"+
+					" WHERE id_professor = " + idProfessor;
+			PreparedStatement stm = connection.prepareStatement(sql);
+			stm.executeQuery();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void addProfessor(Professor professor) {
 		
@@ -157,13 +174,5 @@ public class ProfessorDAO {
         }
 	}
 
-	public void atualizar() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean deletar() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 }
