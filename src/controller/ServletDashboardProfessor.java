@@ -109,7 +109,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if (vizualizarAlunosCandidatosTCC) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"charts.html\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"candidatosTCC\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span style=\"text-align:center\">Alunos candidatos a TCC</span></a>\r\n"
 			+ "            </li>\r\n";
