@@ -79,7 +79,7 @@ public abstract class PessoaFactory {
 		var status_orientador = resultado.getInt("status_orientador");
 		professor.setIdProfessor(resultado.getInt("id_professor"));
 		professor.setTipo(Professor.Tipo.fromInt(tipo_prof));
-		professor.setStatusOrientador(Professor.StatusOrientador.fromInt(status_orientador));
+		professor.setStatusOrientador(Professor.fromInt(status_orientador));
 	}
 	
 	/// popula um objeto Aluno a partir do resultado de um select 
@@ -87,6 +87,6 @@ public abstract class PessoaFactory {
 		aluno.setMatricula(resultado.getString("matricula"));
 		aluno.setIdAluno(resultado.getInt("id_aluno"));
 		var statusAlunoTCC=resultado.getInt("status_aluno_tcc");
-		aluno.setstatusAlunoTCC(Aluno.StatusAlunoTCC.fromInt(statusAlunoTCC));
+		aluno.setstatusAlunoTCC(Aluno.fromInt(statusAlunoTCC));
 	}
 }

@@ -13,14 +13,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.InscricaoProjetoDAO;
+import dao.AlunoDAO;
+
 import dao.LoginDAO;
-import dao.ProjetoDAO;
-import enums.SituacaoInscricao;
-import enums.SituacaoProjeto;
-import model.InscricaoProjeto;
+
+
+
+import model.Aluno;
+
 import model.Professor;
-import model.Projeto;
 
 @WebServlet( urlPatterns = {"/candidatosTCC"})
 public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
@@ -47,39 +48,24 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 			// e a pagina foi redirecionada, para a execução da função
 			return;
 		}
-		
-		// busca a lista de projetos do professor 
-		var projetos = ProjetoDAO.pesquisarProjetosPorProfessorESituacao(professor.getIdProfessor(), SituacaoProjeto.DISPONIVEL);
-		
+		AlunoDAO alunoDAO= new AlunoDAO();
+		var alunos = alunoDAO.pesquisaStatusAlunoTccCandidato();
 		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
-		for (Projeto projeto : projetos) {
-			System.out.println(projeto);
-			// busca as inscrições para esse projeto
-			var inscricoes = InscricaoProjetoDAO.getInstance().pesquisarInscricoesDeCandidatoParaProjeto(projeto);
-			for (InscricaoProjeto in : inscricoes) {
-				System.out.println("\t"+in);
-				System.out.println("\t"+in.getAluno());
-				// Verificar se aluno dessa inscricao está associado a outro projeto
-				var listIncricoes=InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(in.getAluno().getIdAluno(), SituacaoInscricao.ASSOCIADO);
-				// So mostrar na tabela se ele nao possuir inscricao do tipo associado
-				if(listIncricoes.isEmpty()) {
-					// preencher os dados que serão mostrados na tabela
-					// ou que serão usados pelos botões (aceitar e rejeitar)
-					var linha = new HashMap<String, String>();
-					linha.put("titulo", projeto.getTitulo());
-					linha.put("nome candidato", in.getAluno().getNome());
-					linha.put("idProjeto", String.valueOf(in.getIdProjeto()));
-					linha.put("aluno", String.valueOf(in.getAluno().getIdAluno()));
-					linha.put("idInscricao", String.valueOf(in.getId()));
-					linhas.add(linha);
-				}
-				else {
-					System.out.println("\tAluno tem inscricao do tipo associado");
-				}
-			}
-		}
+		for (Aluno aluno : alunos) {
+			
+			//preencher os dados que serão mostrados na tabela
+			// ou que serão usados pelos botões (aceitar e rejeitar)
+			var linha = new HashMap<String, String>();
+			linha.put("nome", aluno.getNome());
+			linha.put("matricula", aluno.getMatricula());
+			linha.put("email", aluno.getEmail());
+			linha.put("telefone", aluno.getTelefone());
+			linha.put("idAluno",String.valueOf(aluno.getIdAluno()));
+			linhas.add(linha);
+		}	
+		
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -136,20 +122,22 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
-		+ "                                            <th>Título do Projeto</th>\r\n"
-		+ "                                            <th>Nome do Aluno</th>\r\n"
+		+ "                                            <th>Nome</th>\r\n"
+		+ "                                            <th>Matricula</th>\r\n"
+		+ "                                            <th>Email</th>\r\n"
+		+ "                                            <th>Telefone</th>\r\n"
 		+ "                                            <th>Aceitar</th>\r\n"
 		+ "                                            <th>Rejeitar</th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
-		// cada linha da tabela representa uma inscrição valida para um projeto desse professor
+		// cada linha da tabela representa um aluno cujo status é candidato a tcc 
 		for (var linha : linhas) {
-			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("nome candidato");
+			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("matricula")+ "<td>" + linha.get("email")+ "<td>" + linha.get("telefone");
 			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
-			html+="<td ><a class=\"btn btn-primary\" href=\"GerarTermo?idProjeto="+ linha.get("idProjeto") + "&aluno="+linha.get("aluno")+"\" role=\"button\">Aceitar</a>";
-			html+="<td ><a class=\"btn btn-primary\" href=\"candidatos?acao=rejeitar&inscricao="+linha.get("idInscricao")+"\" role=\"candidatos\">Rejeitar</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=aceitar&idAluno="+ linha.get("idAluno") +"\" role=\"button\">Aceitar</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=rejeitar&idAluno="+linha.get("idAluno")+"\" role=\"candidatosTCC\">Rejeitar</a>";
 			html += "</tr>";
 		}
 		
@@ -236,18 +224,21 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		if (acao == null) {
 			return false;
 		}
-		
+		var idAluno = Integer.parseInt(request.getParameter("idAluno"));
 		switch (acao) {
 		case "rejeitar":
-			// na ação de rejeitar deve-se mudar o status da inscrição especificada para 'desvinculado'
-			System.out.println("Rejeitando inscricao ");
-			var idInscricao = Integer.parseInt(request.getParameter("inscricao"));
-			System.out.println("Id = "+idInscricao);
-			InscricaoProjeto inscricao = InscricaoProjetoDAO.getInstance().pesquisarInscricaoPorId(idInscricao);
-			System.out.println(""+inscricao);
-			InscricaoProjetoDAO.getInstance().atualizar(inscricao, SituacaoInscricao.DESVINCULADO);
-			response.sendRedirect("candidatos");
+			// na ação de rejeitar deve-se mudar o status do status_aluno_tcc para rejeitado
+			
+			
+			AlunoDAO.atualizaStatusAlunoParaRejeitado(idAluno);
+					
+			response.sendRedirect("candidatosTCC");
 			return true;
+		case "aceitar":
+			AlunoDAO.atualizaStatusAlunoParaAceito(idAluno);
+			response.sendRedirect("candidatosTCC");
+			return true;
+			
 		}
 		return false;
 	}

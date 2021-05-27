@@ -12,7 +12,7 @@ public class Professor extends Pessoa {
 		REJEITADO,
 		ACEITO,
 		NENHUM;//USADO QUANDO O ADM FIZER O CADASTRO DO PROF TCC
-		
+	}
 		public static StatusOrientador fromInt(int value) {
 			switch (value) {
 			case 0: return StatusOrientador.CANDIDATO;
@@ -26,7 +26,7 @@ public class Professor extends Pessoa {
 			}
 		}
 		
-	}
+	
 	enum Tipo {
 		PROFESSOR_TCC,
 		PROFESSOR_ORIENTADOR,

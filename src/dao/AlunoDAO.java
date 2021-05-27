@@ -7,16 +7,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.Perfil;
+
 import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
+
 import util.ConnectionFactory;
 
 public class AlunoDAO {
 	
 	private static AlunoDAO uniqueInstance; //Singleton
 	
-	private AlunoDAO() { }
+	public AlunoDAO() { }
 	
 	public static synchronized AlunoDAO getInstance() {
 		if (uniqueInstance == null)
@@ -111,24 +113,7 @@ public class AlunoDAO {
 		}
 	}
 
-	
-	public boolean incluir() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
-	public void atualizar() {
-		// TODO Auto-generated method stub
 		
-	}
-
-	
-	public boolean deletar() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
 	// busca um aluno a partir do seu id_pessoa
 	@SuppressWarnings("finally")
 	public Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
@@ -183,6 +168,92 @@ public class AlunoDAO {
 			return aluno;			
 		}
 		
+		
+		
 	}
+	
+	public  ArrayList<Aluno> pesquisaStatusAlunoTccCandidato() {
+		ArrayList<Aluno> alunos = new ArrayList<Aluno>();
+		
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.ALUNO 
+					+ " where status_aluno_tcc=2";//candidato
+			
+			PreparedStatement stm = connection.prepareStatement(sql);
+			
+			ResultSet resultado = stm.executeQuery();
+			
+			while (resultado.next()) {
+				Aluno aluno = new Aluno();
+				popularDadosAluno(aluno,resultado);
+				
+				alunos.add(aluno);
+			}
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return alunos;
+	}
+	
+	public void popularDadosAluno(Aluno aluno, ResultSet resultado) throws SQLException {
+		aluno.setMatricula(resultado.getString("matricula"));
+		aluno.setIdAluno(resultado.getInt("id_aluno"));
+		var statusAlunoTCC=resultado.getInt("status_aluno_tcc");
+		aluno.setstatusAlunoTCC(Aluno.fromInt(statusAlunoTCC));
+		aluno.setId(resultado.getInt("id_pessoa"));
+		
+		int idPessoa = resultado.getInt("id_pessoa");
+		Aluno alunoPessoa = pesquisarAlunoPorIdPessoa(idPessoa);
+		
+		aluno.setNome(alunoPessoa.getNome());
+		aluno.setEmail(alunoPessoa.getEmail());
+		aluno.setTelefone(alunoPessoa.getTelefone());
+		aluno.setMatricula(alunoPessoa.getMatricula());
+		
+		
+	}
+	
+	public static void atualizaStatusAlunoParaRejeitado(int idAluno) {
+		
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			
+			String sql = "UPDATE " +BancoTabela.ALUNO+" SET status_aluno_tcc = 3"+
+					" WHERE id_aluno = " + idAluno;
+			PreparedStatement stm = connection.prepareStatement(sql);
+			stm.executeQuery();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void atualizaStatusAlunoParaAceito(int idAluno) {
+		
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			
+			String sql = "UPDATE " +BancoTabela.ALUNO+" SET status_aluno_tcc = 0"+
+					" WHERE id_aluno = " + idAluno;
+			PreparedStatement stm = connection.prepareStatement(sql);
+			stm.executeQuery();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
 	
 }

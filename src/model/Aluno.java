@@ -11,8 +11,9 @@ public class Aluno extends Pessoa {
 		NENHUM,
 		CANDIDATO,
 		REJEITADO;
+	}
 	
-		public static StatusAlunoTCC fromInt(int value) {
+	public static StatusAlunoTCC fromInt(int value) {
 			switch (value) {
 			case 0: return StatusAlunoTCC.ACEITO;
 			case 1: return StatusAlunoTCC.NENHUM;
@@ -24,7 +25,7 @@ public class Aluno extends Pessoa {
 				return StatusAlunoTCC.NENHUM;
 			}
 		}
-	}
+	
 	
 	public static int toInt(StatusAlunoTCC value) {
 		if (value == StatusAlunoTCC.ACEITO)
