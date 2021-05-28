@@ -41,6 +41,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
 		boolean meusProjetos= professor.isOrientador();
+		boolean editarCadastro=professor.isOrientador();
 		
 		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
@@ -154,6 +155,15 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                    <span>Meus projetos</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
+		
+		if (editarCadastro) {
+			html += "            <!-- Item meus projetos -->\r\n"
+			+ "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"editProfessorOrientador\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Editar cadastro</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
 		html += "   <!-- botao -->\r\n"
 				+ "	<li class=\"nav-item\">\r\n"
 				+"<i class=\"fas fa-fw fa-wrench\"></i>\r\n"
@@ -187,10 +197,12 @@ public class ServletDashboardProfessor extends HttpServlet {
 			html += "<script>alert(\"Você se condidatou com sucesso!\");</script>";
 		}
 		
+		if ("OK".equals(request.getParameter("editaProfessor"))) {
+			html += "<script>alert(\"Você editou seu cadastro com sucesso!\");</script>";
+		}
 		if ("OK".equals(request.getParameter("cadastroProjeto"))) {
 			html += "<script>alert(\"Você cadastrou seu projeto com sucesso!\");</script>";
 		}
-		
 		if ("gerar".equals(request.getParameter("msg"))) {
 			html += "<script>alert(\"Aluno associado ao projeto com sucesso!\");</script>";
 		}

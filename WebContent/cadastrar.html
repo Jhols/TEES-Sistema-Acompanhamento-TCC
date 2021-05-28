@@ -115,11 +115,22 @@
         function checarEmail(){
         	if( document.forms[0].email.value=="" 
         	   || document.forms[0].email.value.indexOf('@')==-1 
-        	     || document.forms[0].email.value.indexOf('.')==-1 )
-        		{
-        		  alert( "Por favor, informe um E-MAIL válido!" );
-        		  return false;
+        	     || document.forms[0].email.value.indexOf('.com')==-1 
+        	     || document.forms[0].email.value.indexOf('@')==-1 
+        	     
+        	   ){
+        		alert( "Por favor, informe um E-MAIL válido!" );
+         		  return false;
         		}
+        		
+        	
+        	 
+        	if(document.forms[0].email.value.indexOf('.') < document.forms[0].email.value.indexOf('@')){
+        		alert( "Por favor, informe um E-MAIL válido!" );
+           		  return false;
+        		}
+        		 
+        		
         	}
         </script>
         </form>

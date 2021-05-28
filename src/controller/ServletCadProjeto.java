@@ -21,7 +21,7 @@ public class ServletCadProjeto extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
+		request.setCharacterEncoding("UTF-8");
 		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
 		Projeto projeto = new Projeto();
 		
@@ -58,6 +58,7 @@ public class ServletCadProjeto extends HttpServlet {
 		if (nome_professor == null) {
 			nome_professor = "Prof Teste";
 		}
+		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		var writer = response.getWriter();
@@ -90,18 +91,18 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "               <form>\r\n"
 	  		+                  "<div class=\"form-group\">\r\n"
             +                    "<label for=\\\"exampleFormControlInput1\\\">Nome</label>\n"
-									+"<input type=\"text\" value=\"" + nome_professor +  "\" disabled>"
+									+"<input class=\"form-control\" value=\"" + nome_professor +  "\" disabled>"
 								+"</div>\r\n"
 	  		
 	  		+ "                  <div class=\"form-group\">\r\n"
-	  		+ "                     <label for=\"exampleFormControlInput1\">TÃ­tulo do projeto</label>\r\n"
+	  		+ "                     <label for=\"exampleFormControlInput1\">Título do do projeto</label>\r\n"
 	  		+ "                     <input  class=\"form-control\" id=\"tituloProjeto\" name=\"tituloProjeto\" required=\".$this->fields[\"comment\"]\r\n"
 	  		+ "                  </div>\r\n"
 	  		
 								
 									  		
 	  		+ "                  <div class=\"form-group\">\r\n"
-	  		+ "                     <label for=\"descricao\">DescriÃ§Ã£o</label>\r\n"
+	  		+ "                     <label for=\"descricao\">Descrição</label>\r\n"
 	  		+ "                     <textarea class=\"form-control\" value=\"<c:out value=\"${user.descricao}\" id=\"exampleFormControlTextarea1\" name=\"descricao\" rows=\"3\" required=\".$this->fields[\"comment\"]></textarea>\r\n"
 	  			
 	  		+ "                  </div>\r\n"
