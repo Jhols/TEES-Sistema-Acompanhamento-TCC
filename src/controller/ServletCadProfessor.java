@@ -1,45 +1,28 @@
 package controller;
-
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import dao.LoginDAO;
-import dao.ProjetoDAO;
-import enums.SituacaoProjeto;
+import dao.ProfessorDAO;
 import model.Professor;
-import model.Projeto;
 
-@WebServlet( urlPatterns = {"/cadProjeto"})
-public class ServletCadProjeto extends HttpServlet {
+
+@WebServlet(name = "Usuarios", urlPatterns = {"/cadProfessor"})
+public class ServletCadProfessor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.setCharacterEncoding("UTF-8");
+		
 		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
-		Projeto projeto = new Projeto();
 		
-		projeto.setIdProfessor(professor.getIdProfessor());
+		ProfessorDAO.mudarStatusOrientador(professor.getIdProfessor());
 		
-		projeto.setTitulo(request.getParameter("tituloProjeto"));
-		
-		projeto.setSituacao(SituacaoProjeto.DISPONIVEL);
-		//System.out.println("string:"+situacao + " int:"+situacaoIndex+" enum:"+situacaoEnum);
-		
-		projeto.setDescricao(request.getParameter("descricao"));
-		
-		System.out.println(projeto);
-		
-		ProjetoDAO.getInstance().addProjeto(projeto);
-		System.out.print("adicionou"); 
-		
-		response.sendRedirect("professorDashboard?cadastroProjeto=OK");
+			
+		response.sendRedirect("professorDashboard?professorOrientador=OK");
 	}
 	
 	
@@ -48,17 +31,17 @@ public class ServletCadProjeto extends HttpServlet {
 		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
-			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.getInstance().pesquisaPessoa("alexandre", "1234");
-			request.getSession().setAttribute("pessoa", professor);
+			response.sendRedirect("login");
 		}
 		
 		String nome_professor = professor.getNome();
-		;
+		String email= professor.getEmail();
+		String telefone= professor.getTelefone();
+		String matricula= professor.getMatricula();
+		
 		if (nome_professor == null) {
 			nome_professor = "Prof Teste";
 		}
-		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		var writer = response.getWriter();
@@ -80,34 +63,37 @@ public class ServletCadProjeto extends HttpServlet {
 	  		+ "      <link href=\"resources/bootstrap/css/sb-admin-2.css\" rel=\"stylesheet\">\r\n"
 	  		+ "   </head>\r\n"
 	  		+ "   <body class=\"bg-gradient-primary\">\r\n"
-	  		+ "     <form method=\"POST\" action= 'cadProjeto' name=\"form\">"
+	  		+ "     <form method=\"POST\" action= 'cadProfessor' name=\"form\">"
 	  		+ "      <div class=\"container\">\r\n"
 	  		+ "         <div class=\"card o-hidden border-0 shadow-lg my-5\">\r\n"
 	  		+ "            <div class=\"card-body\">\r\n"
 	  		+ "               <!-- Nested Row within Card Body -->\r\n"
 	  		+ "               <div class=\"page-header\">\r\n"
-	  		+ "                  <h1 class=\"text-center font-weight-bold\">CADASTRO DE PROJETOS</h1>\r\n"
+	  		+ "                  <h1 class=\"text-center font-weight-bold\">CANDIDATE-SE A PROFESSOR(A) ORIENTADOR(A)</h1>\r\n"
+	  		+					"<h5>Aguarde seu cadastro ser aprovado pela secretaria!</h5>"
 	  		+ "               </div>\r\n"
 	  		+ "               <form>\r\n"
 	  		+                  "<div class=\"form-group\">\r\n"
             +                    "<label for=\\\"exampleFormControlInput1\\\">Nome</label>\n"
-									+"<input class=\"form-control\" value=\"" + nome_professor +  "\" disabled>"
+									+"<input type=\"text\" value=\"" + nome_professor +  "\" disabled>"
 								+"</div>\r\n"
 	  		
-	  		+ "                  <div class=\"form-group\">\r\n"
-	  		+ "                     <label for=\"exampleFormControlInput1\">Título do do projeto</label>\r\n"
-	  		+ "                     <input  class=\"form-control\" id=\"tituloProjeto\" name=\"tituloProjeto\" required=\".$this->fields[\"comment\"]\r\n"
-	  		+ "                  </div>\r\n"
+			+                  	"<div class=\"form-group\">\r\n"
+			+                    	"<label for=\\\"exampleFormControlInput1\\\">Email</label>\n"
+									+"<input type=\"text\" value=\"" + email +  "\" disabled>"
+			+				 "</div>\r\n"
 	  		
-								
-									  		
-	  		+ "                  <div class=\"form-group\">\r\n"
-	  		+ "                     <label for=\"descricao\">Descrição</label>\r\n"
-	  		+ "                     <textarea class=\"form-control\" value=\"<c:out value=\"${user.descricao}\" id=\"exampleFormControlTextarea1\" name=\"descricao\" rows=\"3\" required=\".$this->fields[\"comment\"]></textarea>\r\n"
-	  			
-	  		+ "                  </div>\r\n"
+			+                  	"<div class=\"form-group\">\r\n"
+			+                    	"<label for=\\\"exampleFormControlInput1\\\">Telefone</label>\n"
+			+							"<input type=\"text\" value=\"" + telefone +  "\" disabled>"
+			+				 "</div>\r\n"					
+			+                  	"<div class=\"form-group\">\r\n"
+			+                    	"<label for=\\\"exampleFormControlInput1\\\">Matricula</label>\n"
+			+							"<input type=\"text\" value=\"" + matricula +  "\" disabled>"
+			+				 "</div>\r\n"						  		
+	  		
 	  		+ "               </form>\r\n"
-	  		+	"<input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\">"
+	  		+	"<input class=\"btn btn-primary href= \"professorDashboard?acao=blz\" type=\"submit\" value=\"Candidatar-se\">"
 	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
 	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 	  		+ "            </div>\r\n"

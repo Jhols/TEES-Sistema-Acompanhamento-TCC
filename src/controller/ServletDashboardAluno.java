@@ -35,14 +35,12 @@ public class ServletDashboardAluno extends HttpServlet {
 		boolean imprimirTermoDeAceite = false; // Condição para mostar o botão de imprimir termo de aceite no menu do aluno
 		InscricaoProjeto inscricao = null;
 		// busca as inscrições do aluno cuja situação seja 'ASSOCIADO'
-		boolean meuProjeto=false;
 		var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
 		System.out.println("INSCRICOES DO ALUNO: "+inscricoesAssociadas);
 		if (inscricoesAssociadas.size() > 0) {
 			// se houver inscricão 'associado' permitir que o botão de imprimir termo apareça no menu
 			inscricao = inscricoesAssociadas.get(0);
 			imprimirTermoDeAceite = true;
-			meuProjeto=true;
 		}
 		
 		response.setCharacterEncoding("UTF-8");
@@ -96,33 +94,17 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "            <hr class=\"sidebar-divider\">\r\n"
 			+ "\r\n"
 			+ "                   \r\n"
+			+ "\r\n"
+			+ "            <!-- Nav Item - Pages Collapse Menu -->\r\n"
+			+ "           <!-- Nav Item - Procurar Projetos Disponiveis -->\r\n"
+			+ "            <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"ProjetoServlet?opcao=listar\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span style=\"text-align:center\">Projetos Disponíveis</span></a>\r\n"
+			+ "            </li>\r\n"
+			+ "\r\n"
+			+ "                \r\n"
 			+ "\r\n";
-			if(aluno.isAluno()) {
-				html += "            <!-- Nav Item - Pages Collapse Menu -->\r\n"
-						+ "           <!-- Nav Item - Procurar Projetos Disponiveis -->\r\n"
-						+ "            <li class=\"nav-item\">\r\n"
-						+ "                <a class=\"nav-link\" href=\"ProjetoServlet?opcao=listar\">\r\n"
-						+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-						+ "                    <span style=\"text-align:center\">Projetos Disponíveis</span></a>\r\n"
-						+ "            </li>\r\n"
-						+ "\r\n"
-						+ "                \r\n"
-						+ "\r\n";
-			}
-			
-			if(!aluno.isAluno()) {
-				html += "            <!-- Nav Item - Pages Collapse Menu -->\r\n"
-						+ "           <!-- Nav Item - Procurar Projetos Disponiveis -->\r\n"
-						+ "            <li class=\"nav-item\">\r\n"
-						+ "                <a class=\"nav-link\" href=\"ProjetoServlet?opcao=listar\">\r\n"
-						+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-						+ "                    <span style=\"text-align:center\">Cadastrar</span></a>\r\n"
-						+ "            </li>\r\n"
-						+ "\r\n"
-						+ "                \r\n"
-						+ "\r\n";
-			}
-			
 		
 		// só concatena html do botão de imprimir termo se houver inscricao associada (como visto acima) 
 		if (imprimirTermoDeAceite) {
@@ -134,17 +116,14 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "            </li>\r\n"
 			+ "            \r\n";
 		}
-		if(meuProjeto) {
 			html += "			 <li class=\"nav-item\">\r\n"
-					+ "                <a class=\"nav-link\" href=\"InscricaoProjetoServlet?opcao=buscar\">\r\n"
-					+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-					+ "                    <span>Meu Projeto</span></a>\r\n"
-					+ "            </li>\r\n";
-		}
+			+ "                <a class=\"nav-link\" href=\"InscricaoProjetoServlet?opcao=buscar\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Meu Projeto</span></a>\r\n"
+			+ "            </li>\r\n"
 			
 			
-			
-			html +="	<li class=\"nav-item\">\r\n"
+			+ "	<li class=\"nav-item\">\r\n"
 			+ "<i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Voltar</a>\r\n"
 			+ "	</li>\r\n"

@@ -2,8 +2,7 @@ package model;
 
 import enums.Perfil;
 
-
-
+import enums.SituacaoTurma;
 
 public class Aluno extends Pessoa {
 	private String matricula;
@@ -13,21 +12,44 @@ public class Aluno extends Pessoa {
 		E_ALUNO_TCC,
 		NAO_E_ALUNO_TCC;
 	
-		public static StatusAlunoTCC fromInt(int value) {
+	/*
+	private SituacaoTurma situacao;//situacao do aluno na turma 
+	enum StatusAlunoTCC{
+		ACEITO,
+		NENHUM,
+		CANDIDATO,
+		REJEITADO;
+	}
+	*/
+	
+	public static StatusAlunoTCC fromInt(int value) {
 			switch (value) {
-			case 0: return StatusAlunoTCC.E_ALUNO_TCC;
-			case 1: return StatusAlunoTCC.NAO_E_ALUNO_TCC;
-			
+			case 0: return StatusAlunoTCC.ACEITO;
+			case 1: return StatusAlunoTCC.NENHUM;
+			case 2: return StatusAlunoTCC.CANDIDATO;
+			case 3: return StatusAlunoTCC.REJEITADO;
 			
 			default:
 				//throw new Exception();
-				return StatusAlunoTCC.NAO_E_ALUNO_TCC;
+				return StatusAlunoTCC.NENHUM;
 			}
 		}
+	
+	
+	public static int toInt(StatusAlunoTCC value) {
+		if (value == StatusAlunoTCC.ACEITO)
+			return 0;
+		if (value == StatusAlunoTCC.NENHUM)
+			return 1;
+		if (value == StatusAlunoTCC.CANDIDATO)
+			return 2;
+		if (value == StatusAlunoTCC.REJEITADO)
+			return 3;
+		return 5;
 	}
 	
 	public boolean isAluno() {
-		return statusAlunoTCC == StatusAlunoTCC.E_ALUNO_TCC;
+		return statusAlunoTCC == StatusAlunoTCC.ACEITO;
 	}
 	public StatusAlunoTCC getStatusAlunoTCC() {
 		return statusAlunoTCC;
@@ -64,6 +86,14 @@ public class Aluno extends Pessoa {
 
 	public String getMatricula() {
 		return matricula;
+	}
+	
+	public SituacaoTurma getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(SituacaoTurma situacao) {
+		this.situacao = situacao;
 	}
 
 	public void setMatricula(String matricula) {

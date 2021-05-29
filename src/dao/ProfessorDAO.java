@@ -116,6 +116,23 @@ public class ProfessorDAO {
 		
 		return professor;
 	}
+	
+	public static void mudarStatusOrientador(int idProfessor) {
+		
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			
+			String sql = "UPDATE " +BancoTabela.PROFESSOR+" SET status_orientador = 0"+
+					" WHERE id_professor = " + idProfessor;
+			PreparedStatement stm = connection.prepareStatement(sql);
+			stm.executeQuery();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void addProfessor(Professor professor) {
 		
@@ -157,13 +174,50 @@ public class ProfessorDAO {
         }
 	}
 
-	public void atualizar() {
-		// TODO Auto-generated method stub
+	public static void atualizaProfessorOrientador(Professor  professor) {
 		
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+	
+		sql = "UPDATE  " + BancoTabela.PESSOA + " SET  nome=?, email=?, telefone=? WHERE " + 
+				 BancoTabela.PESSOA + ".id_pessoa = ?";
+		
+        try {
+        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+        	
+        	int id_pessoa= professor.getId();
+        	System.out.println("PROFESSOR ATULIZADO");
+        	System.out.println(professor);
+        	
+            prepareStatement.setString(1, professor.getNome());
+            prepareStatement.setString(2, professor.getEmail());
+            prepareStatement.setString(3, professor.getTelefone());
+            prepareStatement.setInt(4, id_pessoa);
+            prepareStatement.executeUpdate();
+            
+            System.out.println(professor.getNome()+"chegou aqui!");
+            sql = "UPDATE " + BancoTabela.PROFESSOR + " SET matricula=? WHERE " +
+   				 BancoTabela.PROFESSOR + ".id_pessoa = ?";
+            
+   			prepareStatement = conexao.prepareStatement(sql);
+   			prepareStatement.setString(1, professor.getMatricula());
+   			prepareStatement.setInt(2, id_pessoa);
+            prepareStatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 	}
+	
+	
 
-	public boolean deletar() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 }
