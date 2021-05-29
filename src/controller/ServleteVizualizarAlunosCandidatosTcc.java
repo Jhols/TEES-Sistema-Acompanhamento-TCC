@@ -1,6 +1,3 @@
-
-
-
 package controller;
 
 import java.io.IOException;
@@ -16,9 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.AlunoDAO;
 
 import dao.LoginDAO;
-
-
-
+import dao.ProfessorDAO;
 import model.Aluno;
 
 import model.Professor;
@@ -63,6 +58,7 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 			linha.put("email", aluno.getEmail());
 			linha.put("telefone", aluno.getTelefone());
 			linha.put("idAluno",String.valueOf(aluno.getIdAluno()));
+			linha.put("idProfessor",String.valueOf(professor.getIdProfessor()));
 			linhas.add(linha);
 		}	
 		
@@ -136,7 +132,7 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		for (var linha : linhas) {
 			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("matricula")+ "<td>" + linha.get("email")+ "<td>" + linha.get("telefone");
 			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
-			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=aceitar&idAluno="+ linha.get("idAluno") +"\" role=\"button\">Aceitar</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=aceitar&idAluno="+ linha.get("idAluno")+"&idProfessor="+linha.get("idProfessor") +"\" role=\"button\">Aceitar</a>";
 			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=rejeitar&idAluno="+linha.get("idAluno")+"\" role=\"candidatosTCC\">Rejeitar</a>";
 			html += "</tr>";
 		}
@@ -236,6 +232,10 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 			return true;
 		case "aceitar":
 			AlunoDAO.atualizaStatusAlunoParaAceito(idAluno);
+			var idProfessor = Integer.parseInt(request.getParameter("idProfessor"));
+			AlunoDAO.adicionaAlunoNaTurmaAssociadaAProfessor(idAluno,idProfessor);
+			
+			//System.out.println("********************"+ idProfessor);
 			response.sendRedirect("candidatosTCC");
 			return true;
 			

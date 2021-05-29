@@ -2,10 +2,13 @@ package model;
 
 import enums.Perfil;
 
+import enums.SituacaoTurma;
+
 public class Aluno extends Pessoa {
 	private String matricula;
 	private int idAluno;
 	private StatusAlunoTCC statusAlunoTCC;
+	private SituacaoTurma situacao;//situacao do aluno na turma 
 	enum StatusAlunoTCC{
 		ACEITO,
 		NENHUM,
@@ -72,6 +75,14 @@ public class Aluno extends Pessoa {
 
 	public String getMatricula() {
 		return matricula;
+	}
+	
+	public SituacaoTurma getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(SituacaoTurma situacao) {
+		this.situacao = situacao;
 	}
 
 	public void setMatricula(String matricula) {

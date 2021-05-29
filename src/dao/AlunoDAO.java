@@ -7,11 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.Perfil;
-
+import enums.SituacaoProjeto;
 import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
-
+import model.Professor;
 import util.ConnectionFactory;
 
 public class AlunoDAO {
@@ -227,7 +227,7 @@ public class AlunoDAO {
 			String sql = "UPDATE " +BancoTabela.ALUNO+" SET status_aluno_tcc = 3"+
 					" WHERE id_aluno = " + idAluno;
 			PreparedStatement stm = connection.prepareStatement(sql);
-			stm.executeQuery();
+			stm.executeUpdate();
 			
 		}
 		catch (SQLException e) {
@@ -244,12 +244,55 @@ public class AlunoDAO {
 			String sql = "UPDATE " +BancoTabela.ALUNO+" SET status_aluno_tcc = 0"+
 					" WHERE id_aluno = " + idAluno;
 			PreparedStatement stm = connection.prepareStatement(sql);
-			stm.executeQuery();
+			stm.executeUpdate();
 			
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void adicionaAlunoNaTurmaAssociadaAProfessor(int  idAluno, int idprofessor) {
+		AlunoDAO alunoDAO= new AlunoDAO();
+		Aluno aluno = alunoDAO.pesquisarAlunoPorIdAluno(idAluno);
+				
+		String sql;
+		
+				
+		try {
+			var connection = ConnectionFactory.getConnection();
+			
+			
+			sql = "SELECT "+ BancoTabela.TURMA_PROFESSOR+".turma_id FROM " + BancoTabela.PROFESSOR + " INNER JOIN " + BancoTabela.TURMA_PROFESSOR  
+					+ " ON " + BancoTabela.TURMA_PROFESSOR+".professor_id = "+ BancoTabela.PROFESSOR + ".id_professor "
+					+ " AND "+BancoTabela.PROFESSOR+".id_professor=?";
+			
+			PreparedStatement stm =  connection.prepareStatement(sql);
+			stm.setInt(1, idprofessor);
+			var resultado = stm.executeQuery();
+			int turma_id=0;
+            
+            if (resultado.next()){
+            	turma_id=resultado.getInt("turma_id");
+            	System.out.println("ID DA TURMA É" +turma_id);
+			
+            }
+            sql = "INSERT INTO " + BancoTabela.TURMA_ALUNO + " (turma_id,aluno_id,pontuacao,situacao_id) values (?, ?, ?, ? )";
+            
+            
+            	stm =  connection.prepareStatement(sql);
+            			
+            	stm.setInt(1, turma_id);
+            	stm.setInt(2, aluno.getIdAluno());
+            	stm.setInt(3, 0);
+            	stm.setInt(4, 3);//em curso
+                
+            	stm.executeUpdate();
+            	
+			stm.close();
+            }catch (SQLException e) {
+            	e.printStackTrace();
+		} 
 	}
 	
 	
