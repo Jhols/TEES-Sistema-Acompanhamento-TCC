@@ -95,7 +95,7 @@ public class ServletEditaProfessor extends HttpServlet {
 	  		
 			+ "                  <div class=\"form-group\">\r\n"
 			+ "                     <label for=\"exampleFormControlInput1\">Telefone</label>\r\n"
-			+ "                     <input  class=\"form-control\" name=\"telefone\" value=\""+ telefone_professor+ "\" required=\".$this->fields[\"comment\"]\r\n"
+			+ "                     <input  class=\"form-control\" name=\"telefone\" onKeyPress=\"MascaraTelefone(form.telefone);\" placeholder=\"XX XXXXX-XXXX\" maxlength=\"15\" value=\""+ telefone_professor+ "\" required=\".$this->fields[\"comment\"]\r\n"
 			+ "                  </div>\r\n"					
 			
 			+ "                  <div class=\"form-group\">\r\n"

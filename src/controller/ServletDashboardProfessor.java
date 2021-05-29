@@ -42,6 +42,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean projetosComOrientandos = professor.isOrientador();
 		boolean meusProjetos= professor.isOrientador();
 		boolean editarCadastro=professor.isOrientador();
+		boolean visualizarAlunosDaTurma= ! professor.isOrientador();
 		
 		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
@@ -113,6 +114,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"candidatosTCC\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span style=\"text-align:center\">Alunos candidatos a TCC</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		if (visualizarAlunosDaTurma) {
+			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
+			+ "            <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"alunosTurma\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span style=\"text-align:center\">Visualizar Alunos da Turma</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (candidatarOrientador) {

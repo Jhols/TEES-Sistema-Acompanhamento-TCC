@@ -7,11 +7,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.Perfil;
-import enums.SituacaoProjeto;
+
 import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
-import model.Professor;
+
+
 import util.ConnectionFactory;
 
 public class AlunoDAO {
@@ -295,6 +296,54 @@ public class AlunoDAO {
 		} 
 	}
 	
+	public static ArrayList<Aluno> pesquisaAlunosDaTurmaDeCadaProfessor(int idprofessor) {
+		ArrayList<Integer> listaIdAluno = new ArrayList<Integer>();				
+		String sql;
+		ArrayList<Aluno> listaAlunos = new ArrayList<Aluno>();
+		AlunoDAO aluno = new AlunoDAO();
+				
+		try {
+			var connection = ConnectionFactory.getConnection();
+			
+			
+			sql = "SELECT "+ BancoTabela.TURMA_PROFESSOR+".turma_id FROM " + BancoTabela.PROFESSOR + " INNER JOIN " + BancoTabela.TURMA_PROFESSOR  
+					+ " ON " + BancoTabela.TURMA_PROFESSOR+".professor_id = "+ BancoTabela.PROFESSOR + ".id_professor "
+					+ " AND "+BancoTabela.PROFESSOR+".id_professor=?";
+			
+			PreparedStatement stm =  connection.prepareStatement(sql);
+			stm.setInt(1, idprofessor);
+			var resultado = stm.executeQuery();
+			int turma_id=0;
+            
+            if (resultado.next()){
+            	turma_id=resultado.getInt("turma_id");//pega om id da turma da professor 
+            	System.out.println("ID DA TURMA É" +turma_id);
+			
+            }
+            sql = "SELECT aluno_id 	FROM " + BancoTabela.TURMA_ALUNO + " WHERE turma_id=?";
+           
+            	stm =  connection.prepareStatement(sql);
+            			
+            	stm.setInt(1, turma_id);
+            	
+            	
+            	
+            	resultado=stm.executeQuery();
+            	while(resultado.next()) {//preeher o array com os ids de alunos encontrados
+            		listaIdAluno.add(resultado.getInt("aluno_id"));
+            	}
+            	
+            	for(int i=0; i < listaIdAluno.size(); i++) {
+            		listaAlunos.add(aluno.pesquisarAlunoPorIdAluno(listaIdAluno.get(i)));
+            	}
+            
+            	
+			
+            }catch (SQLException e) {
+            	e.printStackTrace();
+		}
+		return listaAlunos; 
+	}
 	
 	
 	
