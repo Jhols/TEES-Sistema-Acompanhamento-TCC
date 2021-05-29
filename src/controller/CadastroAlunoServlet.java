@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import enums.Perfil;
 import model.Aluno;
-import model.Aluno.StatusAlunoTCC;
 import model.Pessoa;
 import model.PessoaFactory;
 

@@ -8,11 +8,14 @@ public class Aluno extends Pessoa {
 	private String matricula;
 	private int idAluno;
 	private StatusAlunoTCC statusAlunoTCC;
+	
+	/*
 	public enum StatusAlunoTCC{
 		E_ALUNO_TCC,
 		NAO_E_ALUNO_TCC;
+	}
+	*/
 	
-	/*
 	private SituacaoTurma situacao;//situacao do aluno na turma 
 	enum StatusAlunoTCC{
 		ACEITO,
@@ -20,20 +23,20 @@ public class Aluno extends Pessoa {
 		CANDIDATO,
 		REJEITADO;
 	}
-	*/
+	
 	
 	public static StatusAlunoTCC fromInt(int value) {
-			switch (value) {
-			case 0: return StatusAlunoTCC.ACEITO;
-			case 1: return StatusAlunoTCC.NENHUM;
-			case 2: return StatusAlunoTCC.CANDIDATO;
-			case 3: return StatusAlunoTCC.REJEITADO;
-			
-			default:
-				//throw new Exception();
-				return StatusAlunoTCC.NENHUM;
-			}
+		switch (value) {
+		case 0: return StatusAlunoTCC.ACEITO;
+		case 1: return StatusAlunoTCC.NENHUM;
+		case 2: return StatusAlunoTCC.CANDIDATO;
+		case 3: return StatusAlunoTCC.REJEITADO;
+		
+		default:
+			//throw new Exception();
+			return StatusAlunoTCC.NENHUM;
 		}
+	}
 	
 	
 	public static int toInt(StatusAlunoTCC value) {
@@ -60,7 +63,7 @@ public class Aluno extends Pessoa {
 	}
 	
 	public void setstatusAlunoTCC(int statusAlunoTCC) {
-		this.statusAlunoTCC = StatusAlunoTCC.fromInt(statusAlunoTCC);
+		this.statusAlunoTCC = fromInt(statusAlunoTCC);
 	}
 	
 	public int getIdAluno() {
