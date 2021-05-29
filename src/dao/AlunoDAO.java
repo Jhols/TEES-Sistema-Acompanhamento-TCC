@@ -133,7 +133,7 @@ public class AlunoDAO {
 	@SuppressWarnings("finally")
 	public Aluno pesquisarAlunoPorIdPessoa(int idPessoa) {
 		Aluno aluno = null;
-		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfilEId(Perfil.ALUNO, idPessoa);
 		
 		try {
 			if (resultado.next()) {

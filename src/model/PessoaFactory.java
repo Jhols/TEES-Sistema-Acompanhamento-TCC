@@ -13,6 +13,9 @@ public abstract class PessoaFactory {
 			return new Aluno();
 		if (perfil == Perfil.PROFESSOR)
 			return new Professor();
+		if (perfil == Perfil.ADMINISTRADOR) {
+			return new Administrador();
+		}
 		/*if (tipo.equals("secretario"))
 			return new Aluno(nome, matricula);
 		else if (tipo.equals("coordenador"))

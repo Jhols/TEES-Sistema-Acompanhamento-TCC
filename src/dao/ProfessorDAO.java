@@ -52,7 +52,7 @@ public class ProfessorDAO {
 	@SuppressWarnings("finally")
 	public Professor pesquisarProfessorPorIdPessoa(int idPessoa) {
 		Professor professor = null;
-		ResultSet resultado = PessoaDAO.selecionarPorPerfilEId(Perfil.PROFESSOR, idPessoa);
+		ResultSet resultado = PessoaDAO.getInstance().selecionarPorPerfilEId(Perfil.PROFESSOR, idPessoa);
 		
 		try {
 			if (resultado.next()) {
@@ -135,7 +135,7 @@ public class ProfessorDAO {
         try {
         	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
         	
-        	int id=PessoaDAO.addPessoa(professor);
+        	int id=PessoaDAO.getInstance().addPessoa(professor);
         			
             prepareStatement.setInt(1, id);
             prepareStatement.setString(2, professor.getMatricula());

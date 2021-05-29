@@ -9,7 +9,7 @@ public class Aluno extends Pessoa {
 	private String matricula;
 	private int idAluno;
 	private StatusAlunoTCC statusAlunoTCC;
-	enum StatusAlunoTCC{
+	public enum StatusAlunoTCC{
 		E_ALUNO_TCC,
 		NAO_E_ALUNO_TCC;
 	
@@ -36,6 +36,11 @@ public class Aluno extends Pessoa {
 	public void setstatusAlunoTCC(StatusAlunoTCC statusAlunoTCC) {
 		this.statusAlunoTCC = statusAlunoTCC;
 	}
+	
+	public void setstatusAlunoTCC(int statusAlunoTCC) {
+		this.statusAlunoTCC = StatusAlunoTCC.fromInt(statusAlunoTCC);
+	}
+	
 	public int getIdAluno() {
 		return idAluno;
 	}

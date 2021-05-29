@@ -46,6 +46,7 @@ public class ServletLogin extends HttpServlet {
 			
 			switch(pessoa.getPerfil()) {
 				case ADMINISTRADOR:
+					response.sendRedirect("administradorDashboard");
 					break;
 				case COORDENADOR:
 					break;

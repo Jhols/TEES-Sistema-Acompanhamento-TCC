@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">PERFIL PROFESSOR</div>
+                <div class="sidebar-brand-text mx-3">PERFIL ADMINISTRADOR</div>
             </a>
 
             <!-- Divider -->
@@ -47,36 +47,35 @@
 
                    
 
-            <!-- Nav Item - Pages Collapse Menu -->
+           <!-- Nav Item - Pages Collapse Menu -->
            <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span style="text-align:center">Cadastro professor orientador</span></a>
+                    <span style="text-align:center">Cadastro Secretaria</span></a>
             </li>
 
-                
-
-           <!-- Nav Item - Charts -->
+            <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Cadastrar projeto</span></a>
+                    <span>Cadastro Coordenador</span></a>
             </li>
             
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Alunos candidatos</span></a>
-            </li>
-			
-			 <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Projetos com orientandos</span></a>
+                    <span>Cadastro Professor</span></a>
             </li>
             
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="login.html" style="background-color:#0453ba">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Sair</span></a>
+            	</div>
+            </li>
         </ul>
        
 </div>

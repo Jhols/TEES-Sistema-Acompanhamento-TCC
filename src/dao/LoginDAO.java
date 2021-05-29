@@ -54,6 +54,7 @@ public class LoginDAO {
                 	System.out.println("Perfil = "+perfil);
                 	switch (perfil) {
 					case ADMINISTRADOR:
+						pessoa = PessoaDAO.getInstance().findById(perfil, idPessoa);
 						break;
 					case ALUNO:
 						pessoa = AlunoDAO.getInstance().pesquisarAlunoPorIdPessoa(idPessoa);

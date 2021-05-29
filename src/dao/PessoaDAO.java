@@ -10,6 +10,7 @@ import enums.BancoTabela;
 import enums.Perfil;
 
 import model.Pessoa;
+import model.PessoaFactory;
 import util.ConnectionFactory;
 
 public class PessoaDAO {
@@ -23,10 +24,45 @@ public class PessoaDAO {
 			uniqueInstance = new PessoaDAO();
 		return uniqueInstance;
 	}
+	
+	@SuppressWarnings("finally")
+	public Pessoa findById(Perfil perfil, int idPessoa) {
+		ResultSet resultado = null;
+		String sql;
+		Pessoa pessoa = null;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM pessoa WHERE id_pessoa = " + idPessoa + ";";
+		System.out.println(sql);
+		
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			if (resultado.next())
+				pessoa = PessoaFactory.getPessoa(perfil,resultado);
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		return pessoa;
+	}
 
 	// Realiza e retorna uma consulta no banco de dados por uma pessoa que tenha um determinado perfil e determinado ID
 	@SuppressWarnings("finally")
-	public static ResultSet selecionarPorPerfilEId(Perfil perfil, int idPessoa) {
+	public ResultSet selecionarPorPerfilEId(Perfil perfil, int idPessoa) {
 		
 		ResultSet resultado = null;
 		String sql;
@@ -128,7 +164,7 @@ public class PessoaDAO {
 	
 	
 	//adiciona uma pessoa 
-	public static int addPessoa(Pessoa pessoa) {
+	public int addPessoa(Pessoa pessoa) {
 		
 		
 		String sql;
