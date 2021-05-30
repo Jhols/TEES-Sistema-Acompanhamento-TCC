@@ -295,7 +295,52 @@ public class AlunoDAO {
 		} 
 	}
 	
-	
+	public boolean addAluno(Aluno aluno) {
+		boolean sucesso = false;
+		String sql;
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.ALUNO + " (id_pessoa, matricula, status_aluno_tcc) values (?, ?, ? )";
+		
+		PreparedStatement prepareStatement = null;
+        try {
+        	conexao.setAutoCommit(false);
+        	prepareStatement = conexao.prepareStatement(sql);
+        	
+        	int id=PessoaDAO.getInstance().addPessoa(aluno);
+        			
+            prepareStatement.setInt(1, id);
+            prepareStatement.setString(2, aluno.getMatricula());
+            prepareStatement.setInt(3, aluno.toInt(aluno.getStatusAlunoTCC()));
+            
+            prepareStatement.executeUpdate();
+            
+            sql = "INSERT INTO "+ BancoTabela.PERFIL_PESSOA + "(id_pessoa, id_perfil) values (?,?)";
+            prepareStatement = conexao.prepareStatement(sql);
+            
+            prepareStatement.setInt(1, id);
+            prepareStatement.setInt(2, 5);
+            
+            prepareStatement.executeUpdate();
+            
+            conexao.commit();
+            sucesso = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try { conexao.rollback(); } catch (SQLException e1) { e1.printStackTrace();}
+        }
+        finally {
+        	try {prepareStatement.close();} catch (SQLException e) {e.printStackTrace();}
+        	try {conexao.close();} catch (SQLException e) {e.printStackTrace();}
+        }
+        return sucesso;
+	}
 	
 	
 	

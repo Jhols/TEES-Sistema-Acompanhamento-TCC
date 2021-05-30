@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class ServletDashboardAdministrador
@@ -26,9 +27,40 @@ public class ServletDashboardAdministrador extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.sendRedirect("dashboardAdministrador.jsp");
-		request.getRequestDispatcher("dashboardAdministrador.jsp").forward(request, response);
+		
+		String opcao = request.getParameter("opcao");
+		HttpSession session = request.getSession();
+		
+		System.out.println("Login> id: " + session.getId());
+		if (ServletLogin.getIdSessao() != session.getId())
+			response.sendRedirect("login.html");
+		else {
+		if (opcao == null) {
+			request.getRequestDispatcher("dashboardAdministrador.jsp").forward(request, response);
+			String idSessao = request.getSession().getId();
+		}
+		else {
+			switch (opcao) {
+			case "cadSecretaria":
+				request.getRequestDispatcher("cadastro_secretaria.jsp").forward(request, response);
+				break;
+			case "cadCoordenador":
+				request.getRequestDispatcher("cadastro_coordenador.jsp").forward(request, response);
+				break;
+			case "cadProfessor":
+				request.getRequestDispatcher("cadastro_professor_tcc.jsp").forward(request, response);
+				break;
+			case "sair": //Limpa o cache, destroi a sessao e redireciona pra tela de login.
+				//request.getRequestDispatcher("ServletLogout").forward(request, response);
+				response.sendRedirect("ServletLogout");
+				return;
+				//break;
+			default:
+				//request.getRequestDispatcher("dashboardAdministrador.jsp").forward(request, response);
+				break;
+			}
+		}
+		}
 	}
 
 	/**

@@ -19,6 +19,7 @@ import model.Professor;
 @WebServlet( urlPatterns = {"/login"})
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static String idSessao = null;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
@@ -41,8 +42,7 @@ public class ServletLogin extends HttpServlet {
 				request.getSession().setAttribute("idProfessor", ((Professor) pessoa).getIdProfessor());
 				request.getSession().setAttribute("matricula", ((Professor) pessoa).getMatricula());
 			}
-			//request.getSession().setAttribute("id", id);
-			
+			idSessao = request.getSession().getId();
 			
 			switch(pessoa.getPerfil()) {
 				case ADMINISTRADOR:
@@ -51,7 +51,6 @@ public class ServletLogin extends HttpServlet {
 				case COORDENADOR:
 					break;
 				case NENHHUM:
-					
 					break;
 				case PROFESSOR:
 					response.sendRedirect("professorDashboard");
@@ -67,5 +66,9 @@ public class ServletLogin extends HttpServlet {
 				
 			}
 		}
+	}
+
+	public static String getIdSessao() {
+		return idSessao;
 	}
 }

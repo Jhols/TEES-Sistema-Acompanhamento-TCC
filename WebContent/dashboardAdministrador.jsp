@@ -2,7 +2,6 @@
 <html lang="pt-br">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,7 +18,6 @@
 
     <!-- Custom styles for this template-->
     <link href="resources/bootstrap/css/sb-admin-2.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -50,38 +48,34 @@
            <!-- Nav Item - Pages Collapse Menu -->
            <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="administradorDashboard?opcao=cadSecretaria">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span style="text-align:center">Cadastro Secretaria</span></a>
             </li>
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="administradorDashboard?opcao=cadCoordenador">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Cadastro Coordenador</span></a>
             </li>
             
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="administradorDashboard?opcao=cadProfessor">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Cadastro Professor</span></a>
             </li>
             
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="login.html" style="background-color:#0453ba">
+                <a class="nav-link" href="administradorDashboard?opcao=sair" style="background-color:#0453ba">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Sair</span></a>
-            	</div>
             </li>
         </ul>
        
-</div>
-    
-
-         
+	</div>
    
 
     <!-- Bootstrap core JavaScript-->

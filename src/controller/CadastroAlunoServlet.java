@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.AlunoDAO;
 import enums.Perfil;
 import model.Aluno;
 import model.Pessoa;
@@ -47,9 +48,9 @@ public class CadastroAlunoServlet extends HttpServlet {
     	
     	((Aluno) aluno).setstatusAlunoTCC(1); //Nao e' aluno ainda. Precisara' da confirmacao do professor para ter acesso ao sistema. 
     	
-    	//AlunoDAO incluir aluno no banco.
-    	
-    	boolean confirmado = true;
+    	//Incluir aluno no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
+    	boolean confirmado = AlunoDAO.getInstance().addAluno((Aluno) aluno);
+   	
     	request.getSession().setAttribute("confirmado", confirmado);
     	request.getRequestDispatcher("confirmacao_cadastro_aluno.jsp").forward(request, response);
     }
