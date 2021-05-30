@@ -123,12 +123,12 @@ public class AlunoDAO {
 		
 		try {
 			if (resultado.next()) {
-				// a função getPessoa deve preencher todos os dados de aluno a partir do resultado do SQL
+				// a funï¿½ï¿½o getPessoa deve preencher todos os dados de aluno a partir do resultado do SQL
 				
 				aluno = ((Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, resultado));
 			}
 			else {
-				System.out.println("Não encontrou aluno com id_pessoa="+idPessoa);
+				System.out.println("NÃ£o encontrou aluno com id_pessoa="+idPessoa);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -275,7 +275,7 @@ public class AlunoDAO {
             
             if (resultado.next()){
             	turma_id=resultado.getInt("turma_id");
-            	System.out.println("ID DA TURMA É" +turma_id);
+            	System.out.println("ID DA TURMA ï¿½" +turma_id);
 			
             }
             sql = "INSERT INTO " + BancoTabela.TURMA_ALUNO + " (turma_id,aluno_id,pontuacao,situacao_id) values (?, ?, ?, ? )";
@@ -317,7 +317,7 @@ public class AlunoDAO {
             
             if (resultado.next()){
             	turma_id=resultado.getInt("turma_id");//pega om id da turma da professor 
-            	System.out.println("ID DA TURMA É" +turma_id);
+            	System.out.println("ID DA TURMA ï¿½" +turma_id);
 			
             }
             sql = "SELECT aluno_id 	FROM " + BancoTabela.TURMA_ALUNO + " WHERE turma_id=?";
@@ -345,6 +345,52 @@ public class AlunoDAO {
 		return listaAlunos; 
 	}
 	
+	public boolean addAluno(Aluno aluno) {
+		boolean sucesso = false;
+		String sql;
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.ALUNO + " (id_pessoa, matricula, status_aluno_tcc) values (?, ?, ? )";
+		
+		PreparedStatement prepareStatement = null;
+        try {
+        	conexao.setAutoCommit(false);
+        	prepareStatement = conexao.prepareStatement(sql);
+        	
+        	int id=PessoaDAO.getInstance().addPessoa(aluno);
+        			
+            prepareStatement.setInt(1, id);
+            prepareStatement.setString(2, aluno.getMatricula());
+            prepareStatement.setInt(3, aluno.toInt(aluno.getStatusAlunoTCC()));
+            
+            prepareStatement.executeUpdate();
+            
+            sql = "INSERT INTO "+ BancoTabela.PERFIL_PESSOA + "(id_pessoa, id_perfil) values (?,?)";
+            prepareStatement = conexao.prepareStatement(sql);
+            
+            prepareStatement.setInt(1, id);
+            prepareStatement.setInt(2, 5);
+            
+            prepareStatement.executeUpdate();
+            
+            conexao.commit();
+            sucesso = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try { conexao.rollback(); } catch (SQLException e1) { e1.printStackTrace();}
+        }
+        finally {
+        	try {prepareStatement.close();} catch (SQLException e) {e.printStackTrace();}
+        	try {conexao.close();} catch (SQLException e) {e.printStackTrace();}
+        }
+        return sucesso;
+	}
 	
 	
 	
