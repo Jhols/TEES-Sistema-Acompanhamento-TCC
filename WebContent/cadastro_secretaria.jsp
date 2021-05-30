@@ -9,7 +9,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    
+    <!-- Bootstrap core JavaScript-->
+    <script src="resources/bootstrap/vendor/jquery/jquery.js"></script>
+    <script src="resources/bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="resources/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="resources/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="resources/bootstrap/js/sb-admin-2.min.js"></script>
 
     <!-- Custom fonts for this template-->
     <link href="resources/bootstrap/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
@@ -95,7 +104,7 @@
                             <div class="text-center">
                                 <h1 class="h5 text-gray-900 mb-4">Insira os dados abaixo para cadastrar um(a) secretário(a):</h1>
                             </div>
-                            <form class="user" method="POST" action="CadastroAlunoServlet">
+                            <form class="user" method="POST" action="CadastroSecretariaServlet?cadastrarSecretaria">
                                 <div class="form-group row" style="display: inline;">
                                     <div class="col-sm-6 mb-3 mb-sm-0" style="float:left; padding: 0 5px 15px 0">
                                         <input type="text" class="form-control form-control-user" id="primeiroNome"
@@ -112,16 +121,28 @@
                                 </div>
                                 <div class="form-group row" style="display: inline;">
 	                                <div class="col-sm-6" style="float:left; padding: 0 5px 15px 0">
-	                                	<input type="text" class="form-control form-control-user" id="matricula"
-	                                    	name="matricula" placeholder="Nº de Matrícula" required maxlength="10" onKeyPress="mascaraMatricula(form.matricula)">
-	                                </div>
-	                                <div class="col-sm-6" style="float:right; padding: 0 0 15px 5px">
 	                                	<input type="tel" class="form-control form-control-user" id="telefone"
 	                                    	name="telefone" placeholder="Telefone (xx)xxxx-xxxx" required maxlength="15" onKeyPress="MascaraTelefone(form.telefone);">
 	                                </div>
+	                                <div class="col-sm-6" style="float:right; padding: 0 0 0 5px">
+	                                	<input type="text" class="form-control form-control-user" id="usuario"
+	                                    	name="usuario" placeholder="Nome de Usuário" required maxlength="10" onblur="consultaUsuario(form.usuario);">
+	                                    	<div id="div-check-user" style="visibility:hidden; color:green; font-size:14px"><p id=p-user>Usuário Válido</p></div>
+	                                </div>
+                                </div>
+                                <div class="form-group row" id="check_senhas" style="display: inline;">
+                                    <div class="col-sm-6 mb-3 mb-sm-0" style="float:left; padding: 0 5px 15px 0; margin-top: 18px;">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="senha" name="senha" placeholder="Senha" required onblur="conferirSenha(form.senha, form.repetirSenha)">
+                                    </div>
+                                    <div class="col-sm-6" style="float:right; padding: 0 0 15px 5px; margin-top: -5px;">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="repetirSenha" placeholder="Repetir Senha" required onblur="conferirSenha(form.senha, form.repetirSenha)">
+                                    	<div id="div-senhas" style="visibility:hidden; color:red; font-size:14px;"><p>As senhas estão diferentes!</p></div>
+                                    </div>
                                 </div>
                                 <div style="height: 20px; background-color:white"></div>
-                                <input type="submit" id="btn_enviar" class="btn btn-primary btn-user btn-block" value="Cadastrar">
+                                <input type="submit" id="btn_enviar" class="btn btn-primary btn-user btn-block" value="Cadastrar" disabled>
                             </form>
                             <hr>
                         </div>
@@ -133,15 +154,58 @@
     </div>
 
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="resources/bootstrap/vendor/jquery/jquery.min.js"></script>
-    <script src="resources/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="resources/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="resources/bootstrap/js/sb-admin-2.min.js"></script>
+    
+    
+    <script>
+    	var userValido = "Usuário Válido";
+    
+    	function consultaUsuario(usuario) {
+    		$.ajax({
+		    	method: "POST",
+		    	url: "CadastroSecretariaServlet?opcao=checarUsuario",
+		    	data: {
+		    		'nomeUsuario' : usuario.value
+		    	},
+		    	beforeSend: function() {
+		    		if (usuario.value != "") {
+	                  document.getElementById("div-check-user").style.color = "gray";
+	                  document.getElementById("div-check-user").style.visibility = "visible";
+	                  document.getElementById("div-check-user").firstChild.innerText = "Procurando Usuário. Por favor, aguarde!";		    			
+		    		}
+            	}
+		    })
+		      .done(function(msg){
+		    	  switch (msg) {
+			    	  case '0':
+			    		  document.getElementById("div-check-user").style.visibility = "hidden";
+			    		  break;
+			    	  case '1':
+			    		  document.getElementById("div-check-user").style.color = "green";
+						  document.getElementById("div-check-user").style.visibility = "visible";
+						  document.getElementById("div-check-user").firstChild.innerText = userValido;
+						  confereCampos("div-check-user", "senha", "repetirSenha", "btn_enviar");
+			    		  break;
+			    	  case '2':
+			    	  	  document.getElementById("div-check-user").style.color = "red";
+			    	  	  document.getElementById("div-check-user").style.visibility = "visible";
+						  document.getElementById("div-check-user").firstChild.innerText = "Usuário já existe! Por favor, insira outro."
+			    		  break;
+		    		  default:
+		    	  }
+		    });
+    	}
+    	
+    	
+    	function confereCampos(id_div_user, id_senha, id_repeteSenha, id_botao) {
+    		if (document.getElementById(id_div_user).firstChild.innerText == userValido) {
+    			if ($("#"+id_senha).val().length > 0 && $("#"+id_repeteSenha).val().length > 0)
+    				if ($("#"+id_senha).val() == $("#"+id_repeteSenha).val()) {
+    					$("#"+id_botao).prop("disabled", false);
+    				}
+    		}
+    	}
+    	
+    </script>
 
 </body>
 

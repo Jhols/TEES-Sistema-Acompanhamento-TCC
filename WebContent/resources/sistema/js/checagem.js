@@ -2,7 +2,7 @@ function MascaraTelefone(tel) {
 	if (mascaraInteiro(tel) == false) {
 		event.returnValue = false;
 	}
-	console.log(document.getElementById("telefone").value.length);
+
 	if (document.getElementById("telefone").value.length < 14)
 		return formataCampo(tel, '(00) 0000-0000', event);
 	return formataCampo(tel, '(00) 00000-0000', event);
@@ -73,25 +73,25 @@ function checarEmail() {
 }
 
 var aviso = false;
-function conferirSenha() {
-	var senha = document.getElementById("senha");
-	var repeteSenha = document.getElementById("repetirSenha");
-
+function conferirSenha(senha, repeteSenha) {
 	if (senha.value != repeteSenha.value && repeteSenha.value != "") {
 		if (aviso == false) {
-			var parag = document.createElement("p");
+			/*var parag = document.createElement("p");
 			parag.innerText = "As senhas estão diferentes!";
 			parag.setAttribute("id", "avisoSenha");
 			parag.style.color = "red";
 			document.getElementById("div-senhas").appendChild(parag);
+			*/
+			document.getElementById("div-senhas").style.visibility = "visible";
 			aviso = true;
 		}
 	}
 	else {
 		repeteSenha.setCustomValidity('');
 		if (aviso == true) {
-			var parag = document.getElementById("avisoSenha");
-			parag.remove()
+			/*var parag = document.getElementById("avisoSenha");
+			parag.remove()*/
+			document.getElementById("div-senhas").style.visibility = "hidden";
 			aviso = false;
 		}
 	}

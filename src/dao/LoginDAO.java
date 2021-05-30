@@ -96,4 +96,56 @@ public class LoginDAO {
 		}
 		
 	}
+	
+	//Procura no banco se o nome de usuario ja existe
+	public int existeLogin(String login) {
+		int existe = 0; //Inteiro que assume 3 valores: 0- Nenhum texto, 1- Não existe, 2- Existe usuario
+		int idLogin = 0; //ID do usuario encontrado no banco.
+
+		String sql = null;
+		ResultSet resultado = null;
+		Connection conexao = null;
+		Statement stm = null;
+		
+		try {
+			if (!login.equals("")) { //Se houver texto em login, ele fara' a consulta ao banco
+				conexao = ConnectionFactory.getConnection();
+				sql = "SELECT id_login FROM login where login.login = '" + login + "';";
+				stm = conexao.createStatement();
+				resultado = stm.executeQuery(sql);
+				if(resultado.next()) {
+					//Consulta no banco se o usuario ja existe e retorna seu id
+					idLogin = resultado.getInt("id_login");
+				}
+				else {
+					System.out.println("Erro: não foi possivel encontrar o login desejado");
+					idLogin = 0;
+				}
+				if (idLogin == 0) { //Se o nome de usuário não foi encontrado, deixa disponivel para cadastro 
+					existe = 1;
+				}
+				else { //Senao, nao sera' possivel efetuar o cadastro com o nome de usuario informado. 
+					existe = 2;
+				}
+			}
+			else { //Se nao houver texto, nao ha' o que ser feito.
+				existe = 0;
+			}
+			
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: "+e.getMessage());
+			e.printStackTrace();
+		}
+		finally {
+			if (resultado != null) {try {resultado.close();}catch(SQLException e){e.printStackTrace();}}
+			if (stm != null) {try {stm.close();}catch(SQLException e){e.printStackTrace();}}
+			if (conexao != null) {try {conexao.close();}catch(SQLException e){e.printStackTrace();}}
+		}
+		
+		return existe;
+	}
 }
