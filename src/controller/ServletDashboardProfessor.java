@@ -35,14 +35,26 @@ public class ServletDashboardProfessor extends HttpServlet {
 		
 		System.out.println(professor);
 		// * Permissões para Funcionalidades *
+		
 		boolean vizualizarAlunosCandidatosTCC = ! professor.isOrientador();
 		boolean candidatarOrientador = ! professor.isOrientador();
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
 		boolean meusProjetos= professor.isOrientador();
-		boolean editarCadastro=professor.isOrientador();
+		boolean editarCadastro=true;
 		boolean visualizarAlunosDaTurma= ! professor.isOrientador();
+		boolean visualizarProjetosDisponiveis= !professor.isOrientador();
+		
+		boolean isOrientadorETCC=false;
+		boolean naoEprorOrientador=!professor.isOrientador();
+		if(Professor.toInt(professor.getTipo())==2) {
+			isOrientadorETCC=true;
+		}
+		if( naoEprorOrientador ||isOrientadorETCC){
+			vizualizarAlunosCandidatosTCC=true;
+		
+		}
 		
 		// verificar se há alguma ação a ser executada pelo servlet
 		if (verificarAcao(request, response)) {
@@ -114,6 +126,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"candidatosTCC\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span style=\"text-align:center\">Alunos candidatos a TCC</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		if (visualizarProjetosDisponiveis) {
+			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
+			+ "            <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span style=\"text-align:center\">Visualizar projetos disponíveis</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (visualizarAlunosDaTurma) {

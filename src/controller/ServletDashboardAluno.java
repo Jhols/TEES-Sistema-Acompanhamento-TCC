@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.InscricaoProjetoDAO;
-import dao.LoginDAO;
+
 import enums.SituacaoInscricao;
 import model.Aluno;
 import model.InscricaoProjeto;
@@ -24,11 +24,7 @@ public class ServletDashboardAluno extends HttpServlet {
 		// Tentar pegar o aluno que está logado atualmente
 		var aluno = (Aluno) request.getSession().getAttribute("pessoa");
 		if (aluno == null) {
-			// Se não houver aluno logado, faz login automatico para facilitar os testes
-			// Futuramente mudar essa parte para redirecionar para a pagina de login
-			System.out.println("login automatico");
-			aluno = (Aluno) LoginDAO.pesquisaPessoa("carol", "1234");
-			request.getSession().setAttribute("pessoa", aluno);
+			response.sendRedirect("login.html");
 		}
 		
 		System.out.println("ALUNO LOGADO "+aluno);
@@ -120,6 +116,13 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"InscricaoProjetoServlet?opcao=buscar\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Meu Projeto</span></a>\r\n"
+			+ "            </li>\r\n"
+			
+			
+			+ "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Editar Cadastro</span></a>\r\n"
 			+ "            </li>\r\n"
 			
 			

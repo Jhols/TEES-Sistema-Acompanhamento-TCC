@@ -16,10 +16,12 @@ public abstract class PessoaFactory {
 		if (perfil == Perfil.ADMINISTRADOR) {
 			return new Administrador();
 		}
-		/*if (tipo.equals("secretario"))
-			return new Aluno(nome, matricula);
-		else if (tipo.equals("coordenador"))
-			return new Professor(nome, matricula);*/
+		if (perfil == Perfil.SECRETARIO) {
+			return new Secretaria();
+		}
+		if (perfil == Perfil.COORDENADOR) {
+			return new Coordenador();
+		}
 		return null;
 	}
 	
