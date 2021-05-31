@@ -126,7 +126,11 @@ public class Professor extends Pessoa {
 	}
 
 	public boolean isOrientador() {
-		return tipo == Tipo.PROFESSOR_ORIENTADOR || tipo == Tipo.PROFESSOR_TCC_E_ORIENTADOR;
+		return tipo == Tipo.PROFESSOR_ORIENTADOR;
+	}
+	
+	public boolean isOrientadorETCC() {
+		return tipo == Tipo.PROFESSOR_TCC_E_ORIENTADOR;
 	}
 	
 	@Override

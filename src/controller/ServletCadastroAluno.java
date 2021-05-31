@@ -14,17 +14,15 @@ import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
 
-/**
- * Servlet implementation class CadastroAlunoServlet
- */
+
 @WebServlet("/CadastroAlunoServlet")
-public class CadastroAlunoServlet extends HttpServlet {
+public class ServletCadastroAluno extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CadastroAlunoServlet() {
+    public ServletCadastroAluno() {
         super();
         // TODO Auto-generated constructor stub
     }

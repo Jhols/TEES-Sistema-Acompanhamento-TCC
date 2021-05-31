@@ -25,6 +25,7 @@ public class PessoaDAO {
 		return uniqueInstance;
 	}
 	
+	//pesquisa o perfil de pessoa passando um idpessoa
 	@SuppressWarnings("finally")
 	public Pessoa findById(Perfil perfil, int idPessoa) {
 		ResultSet resultado = null;
