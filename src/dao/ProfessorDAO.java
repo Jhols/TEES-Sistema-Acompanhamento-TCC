@@ -8,9 +8,7 @@ import java.util.ArrayList;
 
 import enums.BancoTabela;
 import enums.Perfil;
-import enums.SituacaoProjeto;
 import model.Professor;
-import model.Projeto;
 import util.ConnectionFactory;
 import model.Aluno;
 import model.Pessoa;
@@ -20,7 +18,7 @@ public class ProfessorDAO {
 	
 	private static ProfessorDAO uniqueInstance; //Singleton
 	
-	private ProfessorDAO() { }
+	public ProfessorDAO() { }
 	
 	public static synchronized ProfessorDAO getInstance() {
 		if (uniqueInstance == null)
@@ -215,6 +213,28 @@ public class ProfessorDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+	}
+	
+	public ArrayList<Professor> pesquisarProfessoresTCC() {
+		ArrayList<Professor> professores = new ArrayList<Professor>();
+		
+		try {
+			Connection conexao = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM " + BancoTabela.PROFESSOR + " WHERE " + 
+					 BancoTabela.PROFESSOR + ".tipo_prof IN (0, 2)";
+			var stm = conexao.createStatement();
+			ResultSet resultado = stm.executeQuery(sql);
+			while (resultado.next()) {
+				var id_pessoa = resultado.getInt("id_pessoa");
+				Professor professor = pesquisarProfessorPorIdPessoa(id_pessoa);
+				professores.add(professor);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return professores;
+		
 	}
 	
 	

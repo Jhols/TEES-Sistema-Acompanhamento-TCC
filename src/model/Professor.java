@@ -126,11 +126,15 @@ public class Professor extends Pessoa {
 	}
 
 	public boolean isOrientador() {
-		return tipo == Tipo.PROFESSOR_ORIENTADOR;
+		return tipo == Tipo.PROFESSOR_ORIENTADOR || tipo == Tipo.PROFESSOR_TCC_E_ORIENTADOR;
 	}
 	
 	public boolean isOrientadorETCC() {
 		return tipo == Tipo.PROFESSOR_TCC_E_ORIENTADOR;
+	}
+	
+	public boolean isTCC() {
+		return tipo == Tipo.PROFESSOR_TCC || tipo == Tipo.PROFESSOR_TCC_E_ORIENTADOR;
 	}
 	
 	@Override
@@ -138,8 +142,30 @@ public class Professor extends Pessoa {
 		return "Professor [matricula=" + matricula + ", projetos=" + projetos + ", tipo=" + tipo + ", Pessoa="
 				+ super.toString() + "]";
 	}
-	
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idProfessor;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Professor other = (Professor) obj;
+		if (idProfessor != other.idProfessor)
+			return false;
+		return true;
+	}
+	
+	
 
 	
 	// TODO: CalendarioDeEntregas calendarioDeEntregas

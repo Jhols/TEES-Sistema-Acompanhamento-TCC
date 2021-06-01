@@ -6,7 +6,7 @@
   <display-name>Sistema TCC</display-name>
   
   <welcome-file-list>
-    <welcome-file>blank.html</welcome-file>
+    <welcome-file>login.html</welcome-file>
     
   </welcome-file-list>
   
