@@ -75,7 +75,7 @@
                                     </div>
                                 </div> -->
                                 <div style="height: 20px; background-color:white"></div>
-                                <input type="submit" id="btn_enviar" class="btn btn-primary btn-user btn-block" value="Cadastrar">
+                                <input type="submit" id="btn_enviar" class="btn btn-primary btn-user btn-block" value="Enviar Solicitação">
                             </form>
                             <hr style="margin-top: 170px;">
                             <div>
