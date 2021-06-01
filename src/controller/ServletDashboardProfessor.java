@@ -42,18 +42,16 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean alunosCandidatos = professor.isOrientador();
 		boolean projetosComOrientandos = professor.isOrientador();
 		boolean meusProjetos= professor.isOrientador();
-		boolean editarCadastro=true;
+		boolean editarCadastro=professor.isOrientador();
 		boolean visualizarAlunosDaTurma= ! professor.isOrientador();
 		boolean visualizarProjetosDisponiveis= !professor.isOrientador();
 		
-		boolean isOrientadorETCC=false;
-		boolean naoEprorOrientador=!professor.isOrientador();
-		if(Professor.toInt(professor.getTipo())==2) {
-			isOrientadorETCC=true;
-		}
-		if( naoEprorOrientador ||isOrientadorETCC){
+		if(professor.isTCC()){
 			vizualizarAlunosCandidatosTCC=true;
-		
+			visualizarAlunosDaTurma=true;
+			candidatarOrientador=true;
+			editarCadastro=true;
+			visualizarProjetosDisponiveis=true;
 		}
 		
 		// verificar se há alguma ação a ser executada pelo servlet

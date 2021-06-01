@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>SB Admin 2 - Register</title>
+        <!-- Custom fonts for this template-->
+        <link href="resources/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Custom styles for this template-->
+        <link href="resources/bootstrap/css/sb-admin-2.css" rel="stylesheet" />
+    </head>
+    <body class="bg-gradient-primary">
+        <form method="POST" action="cadTurmasTcc" name="form" onSubmit="return ( verifica() )" name="frmEnvia">
+            <div class="container">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body">
+                        <!-- Nested Row within Card Body -->
+                        <div class="page-header">
+                            <h1 class="text-center font-weight-bold">CADASTRO DE TURMA</h1>
+                            
+                        </div>
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Nome</label>
+                                <input class="form-control" id="nome" name="nome" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Semestre</label>
+                                <input class="form-control" id="semestre" onBlur="checkSemestre()" placeholder="ano.semestre" name="semestre">
+                            </div>
+                            <div class="form-group">
+                            	<label for="exampleFormControlInput1">Professor 1</label>
+	                            <select onChange="checkProf1()" name="professor1" class="form-control" id="professor1">
+	  								<option value="volvo">Volvo</option>
+	  								<option value="saab">Saab</option>
+	  								<option value="mercedes">Mercedes</option>
+	  								<option value="audi" selected>Audi</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+							<label for="exampleFormControlInput1">Professor 2</label>
+								<select onChange="checkProf1()" name="professor2" class="form-control" id="professor2">
+	  								<option value="volvo">Volvo</option>
+	  								<option value="saab">Saab</option>
+	  								<option value="mercedes">Mercedes</option>
+	  								<option value="audi">Audi</option>
+								</select>
+							</div>
+							
+                        </form>
+                        <input class="btn btn-primary" type="submit" value="Submit" />
+                        <a class="btn btn-primary" align="center" href="login.html" role="button">Voltar</a>
+
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- Bootstrap core JavaScript-->
+            <script src="resources/bootstrap/vendor/jquery/jquery.min.js"></script>
+            <script src="resources/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="resources/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="resources/bootstrap/js/sb-admin-2.min.js"></script>
+            <script>
+        function MascaraTelefone(tel){  
+		    if(mascaraInteiro(tel)==false){
+		            event.returnValue = false;
+		    }       
+		    return formataCampo(tel, '(00) 00000-0000', event);
+		}
+        
+        function formataCampo(campo, Mascara, evento) { 
+		    var boleanoMascara; 
+		
+		    var Digitato = evento.keyCode;
+		    exp = /\-|\.|\/|\(|\)| /g
+		    campoSoNumeros = campo.value.toString().replace( exp, "" ); 
+		
+		    var posicaoCampo = 0;    
+		    var NovoValorCampo="";
+		    var TamanhoMascara = campoSoNumeros.length;; 
+		
+		    if (Digitato != 8) { // backspace 
+		            for(i=0; i<= TamanhoMascara; i++) { 
+		                    boleanoMascara  = ((Mascara.charAt(i) == "-") || (Mascara.charAt(i) == ".")
+		                                                            || (Mascara.charAt(i) == "/")) 
+		                    boleanoMascara  = boleanoMascara || ((Mascara.charAt(i) == "(") 
+		                                                            || (Mascara.charAt(i) == ")") || (Mascara.charAt(i) == " ")) 
+		                    if (boleanoMascara) { 
+		                            NovoValorCampo += Mascara.charAt(i); 
+		                              TamanhoMascara++;
+		                    }else { 
+		                            NovoValorCampo += campoSoNumeros.charAt(posicaoCampo); 
+		                            posicaoCampo++; 
+		                      }              
+		              }      
+		            campo.value = NovoValorCampo;
+		              return true; 
+		    }else { 
+		            return true; 
+		    }
+		}
+        
+        function mascaraInteiro(){
+		    if (event.keyCode < 48 || event.keyCode > 57){
+		            event.returnValue = false;
+		            return false;
+		    }
+		    return true;
+		}
+        
+        function verifica() {
+        	  if (document.forms[0].email.value.length == 0) {
+        	    alert('Por favor, informe o seu EMAIL.');
+        		document.frmEnvia.email.focus();
+        	    return false;
+        	  }
+        	  return true;
+        	}
+        
+        function checkSemestre() {
+        	var value = document.forms[0].semestre.value;
+        	var parts = value.split(".")
+        	if (parts.length != 2 || parts[0].length != 4 || parts[1].length != 1) {
+        		// erro
+        		alert("campo Semestre precisar estar no formato ano.semestre (ex: 2021.1)");
+        		return false;
+        	}
+       		var currentYear = new Date().getFullYear();
+       		if (parts[0] < currentYear) {
+       			// erro
+       			alert("campo Semestre deve conter um ano igual ou maior ao atual");
+       			return false;
+       		}
+       		
+	       	return true;
+        }
+        
+        function checkProf1() {
+        	var value1 = document.forms[0].professor1.value;
+        	var value2 = document.forms[0].professor2.value;
+        	if (value1 == 0 && value2 != 0) {
+        		document.forms[0].professor1.value = value2;
+        		document.forms[0].professor2.value = 0;
+        		return true;
+        	}
+        	if (value1 == value2 && value1 != 0) {
+        		alert("Professor 1 e Professor 2 não podem ser o mesmo");
+        		document.forms[0].professor2.value = 0;
+        		return false;
+        	}
+        	return true
+        }
+        
+        </script>
+        </form>
+        
+    </body>
+    
+</html>

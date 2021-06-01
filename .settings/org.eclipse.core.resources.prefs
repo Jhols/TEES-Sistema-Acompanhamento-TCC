@@ -4,3 +4,4 @@ encoding//src/controller/ServletVisualizarCandidatos.java=UTF-8
 encoding//src/dao/InscricaoProjetoDAO.java=UTF-8
 encoding//src/dao/LoginDAO.java=UTF-8
 encoding//src/dao/PessoaDAO.java=UTF-8
+encoding//src/util/ConnectionFactory.java=UTF-8
