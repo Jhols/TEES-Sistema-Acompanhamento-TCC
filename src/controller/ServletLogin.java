@@ -6,9 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.AlunoDAO;
 import dao.LoginDAO;
-import dao.ProfessorDAO;
+
 import enums.Perfil;
 import model.Aluno;
 import model.Pessoa;
@@ -24,6 +23,7 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//LoginDAO.pesquisaLogin(request.getParameter("login"), request.getParameter("senha"));
 		Pessoa pessoa = LoginDAO.pesquisaPessoa(request.getParameter("login"), request.getParameter("senha"));
+		System.out.println("dsadadadadadad "+ request.getParameter("login")+request.getParameter("senha"));
 		if (pessoa == null) {
 			request.getRequestDispatcher("login.jsp").include(request, response);
 		}
@@ -44,11 +44,14 @@ public class ServletLogin extends HttpServlet {
 			}
 			idSessao = request.getSession().getId();
 			
+			//request.getSession().setAttribute("id", id);
+			
 			switch(pessoa.getPerfil()) {
 				case ADMINISTRADOR:
 					response.sendRedirect("administradorDashboard");
 					break;
 				case COORDENADOR:
+					response.sendRedirect("coordenadorDashboard");
 					break;
 				case NENHHUM:
 					break;
@@ -56,6 +59,7 @@ public class ServletLogin extends HttpServlet {
 					response.sendRedirect("professorDashboard");
 					break;
 				case SECRETARIO:
+					response.sendRedirect("secretariaDashboard");
 					break;
 				case ALUNO:
 					response.sendRedirect("alunoDashboard");

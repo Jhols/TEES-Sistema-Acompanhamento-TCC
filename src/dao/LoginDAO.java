@@ -8,7 +8,9 @@ import java.sql.Statement;
 
 import enums.BancoTabela;
 import enums.Perfil;
+
 import model.Pessoa;
+
 import util.ConnectionFactory;
 
 public class LoginDAO {
@@ -62,6 +64,7 @@ public class LoginDAO {
 						pessoa = AlunoDAO.getInstance().pesquisarAlunoPorIdPessoa(idPessoa);
 						break;
 					case COORDENADOR:
+						pessoa = PessoaDAO.getInstance().findById(perfil, idPessoa);
 						break;
 					case NENHHUM:
 						break;
@@ -69,6 +72,7 @@ public class LoginDAO {
 						pessoa = ProfessorDAO.getInstance().pesquisarProfessorPorIdPessoa(idPessoa);
 						break;
 					case SECRETARIO:
+						pessoa = PessoaDAO.getInstance().findById(perfil, idPessoa);
 						break;
 					default:
 						break;

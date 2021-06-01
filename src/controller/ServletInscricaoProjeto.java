@@ -23,14 +23,14 @@ import model.Projeto;
  * Servlet implementation class InscricaoProjetoServlet
  */
 @WebServlet("/InscricaoProjetoServlet")
-public class InscricaoProjetoServlet extends HttpServlet {
+public class ServletInscricaoProjeto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
 		
-    public InscricaoProjetoServlet() {
+    public ServletInscricaoProjeto() {
         super();
         // TODO Auto-generated constructor stub
     }

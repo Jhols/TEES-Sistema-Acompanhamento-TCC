@@ -16,13 +16,13 @@ import model.Projeto;
  * Servlet implementation class CadastroProjetoServlet
  */
 @WebServlet(name = "CadastroProjeto", urlPatterns = { "/cadastroProjeto" })
-public class CadastroProjetoServlet extends HttpServlet {
+public class ServletCadastroProjeto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CadastroProjetoServlet() {
+    public ServletCadastroProjeto() {
         super();
         // TODO Auto-generated constructor stub
     }
