@@ -49,7 +49,6 @@ public abstract class PessoaFactory {
 	/// popula um objeto Pessoa a partir do resultado de um select 
 	/// tambem leva em consideração o perfil 
 	private static Pessoa popularDadosPessoa(Pessoa pessoa, ResultSet resultado) throws SQLException {
-		System.out.println("ODISGRACA 5");
 		pessoa.setId(resultado.getInt("id_pessoa"));
 		pessoa.setNome(resultado.getString("nome"));
 		pessoa.setEmail(resultado.getString("email"));
