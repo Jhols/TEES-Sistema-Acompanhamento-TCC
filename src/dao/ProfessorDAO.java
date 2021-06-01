@@ -217,6 +217,46 @@ public class ProfessorDAO {
         }
 	}
 	
+	@SuppressWarnings("finally")
+	public ArrayList<Professor> pesquisarCandidatosOrientador() {
+		ArrayList<Professor> professores = new ArrayList<>();
+		ResultSet resultado = null;
+		String sql;
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			sql = "Select * from "+BancoTabela.PROFESSOR + " INNER JOIN "
+					+BancoTabela.PESSOA + " on "+BancoTabela.PESSOA+".id_pessoa = "+BancoTabela.PROFESSOR+".id_pessoa"
+					+ " where " + BancoTabela.PROFESSOR + ".status_orientador = 0";
+			
+			var stm = con.prepareStatement(sql);
+			resultado = stm.executeQuery();
+			while (resultado.next()) {
+				Professor professor = ((Professor) PessoaFactory.getPessoa(Perfil.PROFESSOR, resultado));
+				professores.add(professor);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			return professores;			
+		}
+	}
+	
+	public static void alterarStatusCandidatoOrientador(Professor professor) {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = " UPDATE " +BancoTabela.PROFESSOR 
+					+ " SET status_orientador = "+ Professor.toInt(professor.getStatusOrientador()) + ","
+					+ " tipo_prof = " + Professor.toInt(professor.getTipo())
+					+ " WHERE id_professor = " + professor.getIdProfessor();
+			PreparedStatement stm = connection.prepareStatement(sql);
+			stm.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+	}
 	
 
 	

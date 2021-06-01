@@ -91,7 +91,7 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		+ "\r\n"
 		+ "           <!-- Item Cadastro Professor Orientador -->\r\n"
 		+ "            <li class=\"nav-item\">\r\n"
-		+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+		+ "                <a class=\"nav-link\" href=\"candidatos_orientador.jsp\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 		+ "                    <span style=\"text-align:center\">Candidatura de professor(a) orientador(a)</span></a>\r\n"
 		+ "            </li>\r\n"
