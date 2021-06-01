@@ -133,6 +133,47 @@ public class ProfessorDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public int incluirProfessor(Professor professor) {
+		int id = 0;
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.PROFESSOR + " (id_pessoa, matricula, tipo_prof, status_orientador) values (?, ?, ?, ? )";
+		
+		
+        try {
+        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+        	
+        	id=PessoaDAO.getInstance().addPessoa(professor);
+        			
+            prepareStatement.setInt(1, id);
+            prepareStatement.setString(2, professor.getMatricula());
+            prepareStatement.setInt(3, 3);
+            prepareStatement.setInt(4, 0);
+            
+            prepareStatement.executeUpdate();
+            
+            sql = "INSERT INTO "+ BancoTabela.PERFIL_PESSOA + "(id_pessoa, id_perfil) values (?,?)";
+            prepareStatement = conexao.prepareStatement(sql);
+            
+            prepareStatement.setInt(1, id);
+            prepareStatement.setInt(2, 4);
+            
+            prepareStatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+	}
 
 	public static void addProfessor(Professor professor) {
 		

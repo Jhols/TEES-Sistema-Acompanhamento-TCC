@@ -317,7 +317,7 @@ public class AlunoDAO {
             
             if (resultado.next()){
             	turma_id=resultado.getInt("turma_id");//pega om id da turma da professor 
-            	System.out.println("ID DA TURMA �" +turma_id);
+            	System.out.println("ID DA TURMA E'" +turma_id);
 			
             }
             sql = "SELECT aluno_id 	FROM " + BancoTabela.TURMA_ALUNO + " WHERE turma_id=?";

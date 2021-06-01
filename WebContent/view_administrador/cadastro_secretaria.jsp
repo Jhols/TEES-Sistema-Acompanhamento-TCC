@@ -43,11 +43,11 @@
                                 <div class="form-group row" id="check_senhas" style="display: inline;">
                                     <div class="col-sm-6 mb-3 mb-sm-0" style="float:left; padding: 0 5px 15px 0; margin-top: 18px;">
                                         <input type="password" class="form-control form-control-user"
-                                            id="senha" name="senha" placeholder="Senha" required onblur="conferirSenha(form.senha, form.repetirSenha)">
+                                            id="senha" name="senha" placeholder="Senha" required onkeyup="conferirSenha(form.senha, form.repetirSenha)">
                                     </div>
                                     <div class="col-sm-6" style="float:right; padding: 0 0 15px 5px; margin-top: -5px;">
                                         <input type="password" class="form-control form-control-user"
-                                            id="repetirSenha" placeholder="Repetir Senha" required onblur="conferirSenha(form.senha, form.repetirSenha)">
+                                            id="repetirSenha" placeholder="Repetir Senha" required onkeyup="conferirSenha(form.senha, form.repetirSenha)">
                                     	<div id="div-senhas" style="visibility:hidden; color:red; font-size:14px;"><p>As senhas estão diferentes!</p></div>
                                     </div>
                                 </div>

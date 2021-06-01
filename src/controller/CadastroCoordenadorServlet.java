@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.CoordenadorDAO;
 import dao.LoginDAO;
 import dao.SecretariaDAO;
 import enums.Perfil;
@@ -18,14 +19,14 @@ import model.PessoaFactory;
 /**
  * Servlet implementation class CadastroSecretariaServlet
  */
-@WebServlet("/CadastroSecretariaServlet")
-public class CadastroSecretariaServlet extends HttpServlet {
+@WebServlet("/CadastroCoordenadorServlet")
+public class CadastroCoordenadorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CadastroSecretariaServlet() {
+    public CadastroCoordenadorServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,7 +41,7 @@ public class CadastroSecretariaServlet extends HttpServlet {
 			case "checarUsuario":
 				checarUsuario(request, response);
 				break;
-			case "cadastrarSecretaria":
+			case "cadastrarCoordenador":
 				cadastrar(request, response);
 				break;
 		}
@@ -74,26 +75,26 @@ public class CadastroSecretariaServlet extends HttpServlet {
     	String usuario = request.getParameter("usuario");
     	String senha = request.getParameter("senha");
     	
-    	//Cria um registro de uma nova pessoa como secretario
-    	Pessoa secretario = PessoaFactory.getPessoa(Perfil.SECRETARIO, primeiroNome + " " + sobrenome);
-    	secretario.setEmail(email);
-    	secretario.setTelefone(telefone);
+    	//Cria um registro de uma nova pessoa como coordenador
+    	Pessoa coordenador = PessoaFactory.getPessoa(Perfil.COORDENADOR, primeiroNome + " " + sobrenome);
+    	coordenador.setEmail(email);
+    	coordenador.setTelefone(telefone);
     	
-    	//Incluir secretario no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
-    	int idPessoa = SecretariaDAO.getInstance().addSecretaria(secretario);
+    	//Incluir coordenador no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
+    	int idPessoa = CoordenadorDAO.getInstance().addCoordenador(coordenador);
     	boolean loginCriado = LoginDAO.getInstance().addLogin(idPessoa, usuario, senha);
     	
     	if (!loginCriado) {
-    		System.out.println("Erro ao incluir a nova conta de secretario no banco");
+    		System.out.println("Erro ao incluir a nova conta de coordenador no banco");
     		idPessoa = 0;
     	}
     	else {
-    		System.out.println("Login de secretaria " + primeiroNome + " criado com sucesso!");
+    		System.out.println("Login de coordenador " + primeiroNome + " criado com sucesso!");
     		request.getSession().setAttribute("primeiroNome", primeiroNome);
     	}
     	
     	request.getSession().setAttribute("confirmado", loginCriado);
-    	request.getRequestDispatcher("view_administrador/confirmacao_cadastro_secretaria.jsp").forward(request, response);
+    	request.getRequestDispatcher("view_administrador/confirmacao_cadastro_coordenador.jsp").forward(request, response);
    	
 	}
 

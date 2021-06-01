@@ -34,8 +34,8 @@ public abstract class PessoaFactory {
 		Pessoa pessoa = getPessoa(perfil, nome);
 		if (perfil == Perfil.ALUNO)
 			((Aluno) pessoa).setMatricula(matricula);
-		/*else if (perfil == PerfilPessoa.PROFESSOR)
-			((Professor) pessoa).setMatricula(matricula);*/
+		else if (perfil == Perfil.PROFESSOR)
+			((Professor) pessoa).setMatricula(matricula);
 		return pessoa;
 	}
 	
