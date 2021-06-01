@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.LoginDAO;
+import dao.PessoaDAO;
+import enums.Perfil;
+import model.Pessoa;
+import model.PessoaFactory;
 
 /**
  * Servlet implementation class CadastroSecretariaServlet
@@ -62,7 +66,33 @@ public class CadastroSecretariaServlet extends HttpServlet {
 	}
 	
 	protected void cadastrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().print("cadastrou " + request.getParameter("usuario"));
+		
+		String primeiroNome = request.getParameter("primeiroNome");
+    	String sobrenome = request.getParameter("sobrenome");
+    	String email = request.getParameter("email");
+    	String telefone = request.getParameter("telefone");
+    	String usuario = request.getParameter("usuario");
+    	String senha = request.getParameter("senha");
+    	
+    	//Cria um registro de uma nova pessoa como secretario
+    	Pessoa secretario = PessoaFactory.getPessoa(Perfil.SECRETARIO, primeiroNome + " " + sobrenome);
+    	secretario.setEmail(email);
+    	secretario.setTelefone(telefone);
+    	
+    	//Incluir secretario no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
+    	int idPessoa = PessoaDAO.getInstance().addPessoa(secretario);
+    	boolean loginCriado = LoginDAO.getInstance().addLogin(idPessoa, usuario, senha);
+    	
+    	if (!loginCriado) {
+    		System.out.println("Erro ao incluir a nova conta de secretario no banco");
+    		idPessoa = 0;
+    	}
+    	else
+    		request.getSession().setAttribute("primeiroNome", primeiroNome);
+    	
+    	request.getSession().setAttribute("confirmado", idPessoa);
+    	request.getRequestDispatcher("view_administrador/confirmacao_cadastro_secretaria.jsp").forward(request, response);
+   	
 	}
 
 }

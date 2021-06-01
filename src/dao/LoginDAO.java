@@ -1,10 +1,12 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import enums.BancoTabela;
 import enums.Perfil;
 import model.Pessoa;
 import util.ConnectionFactory;
@@ -148,4 +150,42 @@ public class LoginDAO {
 		
 		return existe;
 	}
+	
+	public boolean addLogin(int id, String usuario, String senha) {
+		boolean sucesso = false;
+		String sql;
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.LOGIN + " (pessoa_id, login, senha) values (?, ?, ? )";
+		
+		PreparedStatement prepareStatement = null;
+        try {
+        	conexao.setAutoCommit(false);
+        	prepareStatement = conexao.prepareStatement(sql);
+        			
+            prepareStatement.setInt(1, id);
+            prepareStatement.setString(2, usuario);
+            prepareStatement.setString(3, senha);
+            
+            prepareStatement.executeUpdate();
+            
+            conexao.commit();
+            sucesso = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try { conexao.rollback(); } catch (SQLException e1) { e1.printStackTrace();}
+        }
+        finally {
+        	try {prepareStatement.close();} catch (SQLException e) {e.printStackTrace();}
+        	try {conexao.close();} catch (SQLException e) {e.printStackTrace();}
+        }
+        return sucesso;
+	}
+	
 }
