@@ -88,7 +88,7 @@
 					'idProfessor' : idProfessor
 				},
 				success : function(msg) { //Em caso de sucesso na requisição, executa a seguinte função
-					alert("Candidato aceito!");
+					alert("Candidato recusado!");
 					location.reload();
 				},
 				error : function(msg) {

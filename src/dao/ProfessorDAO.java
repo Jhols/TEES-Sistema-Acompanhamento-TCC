@@ -243,21 +243,41 @@ public class ProfessorDAO {
 		}
 	}
 	
-	public static void alterarStatusCandidatoOrientador(Professor professor) {
+	public static void alterarStatusCandidatoOrientador(Professor professor, Professor.Tipo tipoAntigo) {
+		Connection connection = null;
+		PreparedStatement stm = null;
+		String sql = "";
 		try {
-			Connection connection = ConnectionFactory.getConnection();
-			String sql = " UPDATE " +BancoTabela.PROFESSOR 
-					+ " SET status_orientador = "+ Professor.toInt(professor.getStatusOrientador()) + ","
+			connection = ConnectionFactory.getConnection();
+			
+			// Início da Transação
+			connection.setAutoCommit(false);
+			
+			sql = " UPDATE " + BancoTabela.PROFESSOR 
+					+ " SET status_orientador = " + Professor.toInt(professor.getStatusOrientador()) + ","
 					+ " tipo_prof = " + Professor.toInt(professor.getTipo())
 					+ " WHERE id_professor = " + professor.getIdProfessor();
-			PreparedStatement stm = connection.prepareStatement(sql);
+			stm = connection.prepareStatement(sql);
 			stm.executeQuery();
+			
+			if (tipoAntigo == Professor.Tipo.PROFESSOR && professor.getTipo() == Professor.Tipo.PROFESSOR_ORIENTADOR) {
+				sql = " INSERT INTO " + BancoTabela.LOGIN 
+						+ " (pessoa_id, login, senha) VALUES (" 
+						+ professor.getId() + ","
+						+ professor.getEmail() + ","
+						+ professor.getMatricula() + ") ";
+				stm = connection.prepareStatement(sql);
+				stm.executeQuery();
+			}
+			
+			// Fim da transação
+			connection.commit();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} 		
+		}  finally {
+			try { connection.close(); } catch (SQLException e) { e.printStackTrace(); }	
+		}
 		
 	}
-	
-
-	
 }
