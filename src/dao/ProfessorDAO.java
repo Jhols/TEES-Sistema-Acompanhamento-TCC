@@ -154,8 +154,8 @@ public class ProfessorDAO {
         			
             prepareStatement.setInt(1, id);
             prepareStatement.setString(2, professor.getMatricula());
-            prepareStatement.setInt(3, 3);
-            prepareStatement.setInt(4, 0);
+            prepareStatement.setInt(3, 0);
+            prepareStatement.setInt(4, 3);
             
             prepareStatement.executeUpdate();
             
