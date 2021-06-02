@@ -38,10 +38,12 @@ public class ServletCandidatoOrientador extends HttpServlet {
 		case "aceitar_candidatura":
 			professor.setStatusOrientador(Professor.fromInt(2));
 			
-			if (Professor.toInt(professor.getTipo()) == 3) {
-				professor.setTipo(Professor.Tipo.fromInt(1));
-			} else if (Professor.toInt(professor.getTipo()) == 0) {
-				professor.setTipo(Professor.Tipo.fromInt(2));
+			if (professor.getTipo() == Professor.Tipo.PROFESSOR) {
+				professor.setTipo(Professor.Tipo.PROFESSOR_ORIENTADOR);
+				professor.setStatusOrientador(Professor.StatusOrientador.ACEITO);
+			} else if (professor.getTipo() == Professor.Tipo.PROFESSOR_TCC) {
+				professor.setTipo(Professor.Tipo.PROFESSOR_TCC_E_ORIENTADOR);
+				professor.setStatusOrientador(Professor.StatusOrientador.ACEITO);
 			}
 			
 			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, tipoAntigo);
@@ -49,7 +51,7 @@ public class ServletCandidatoOrientador extends HttpServlet {
 			break;
 
 		case "recusar_candidatura":
-			professor.setStatusOrientador(Professor.fromInt(1));
+			professor.setStatusOrientador(Professor.StatusOrientador.REJEITADO);
 			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, tipoAntigo);
 			System.out.println("Recusou");
 			break;
@@ -64,7 +66,6 @@ public class ServletCandidatoOrientador extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		processRequest(request, response);
 	}
 
@@ -72,7 +73,6 @@ public class ServletCandidatoOrientador extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		doGet(request, response);
 	}
 

@@ -6,7 +6,7 @@ import enums.Perfil;
 import enums.SituacaoProjeto;
 
 public class Professor extends Pessoa {
-	enum StatusOrientador {
+	public enum StatusOrientador {
 		CANDIDATO, REJEITADO, ACEITO, NENHUM;// USADO QUANDO O ADM FIZER O CADASTRO DO PROF TCC
 	}
 
