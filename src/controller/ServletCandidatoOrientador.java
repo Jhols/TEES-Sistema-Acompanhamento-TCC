@@ -44,6 +44,8 @@ public class ServletCandidatoOrientador extends HttpServlet {
 			} else if (professor.getTipo() == Professor.Tipo.PROFESSOR_TCC) {
 				professor.setTipo(Professor.Tipo.PROFESSOR_TCC_E_ORIENTADOR);
 				professor.setStatusOrientador(Professor.StatusOrientador.ACEITO);
+			} else {
+				professor.setStatusOrientador(Professor.StatusOrientador.ACEITO);
 			}
 			
 			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, tipoAntigo);

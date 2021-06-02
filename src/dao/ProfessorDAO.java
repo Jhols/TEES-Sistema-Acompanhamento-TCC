@@ -243,7 +243,7 @@ public class ProfessorDAO {
 		}
 	}
 	
-	public static void alterarStatusCandidatoOrientador(Professor professor, Professor.Tipo tipoAntigo) {
+	public void alterarStatusCandidatoOrientador(Professor professor, Professor.Tipo tipoAntigo) {
 		Connection connection = null;
 		PreparedStatement stm = null;
 		String sql = "";
@@ -256,7 +256,7 @@ public class ProfessorDAO {
 			sql = " UPDATE " + BancoTabela.PROFESSOR 
 					+ " SET status_orientador = " + Professor.toInt(professor.getStatusOrientador()) + ","
 					+ " tipo_prof = " + Professor.toInt(professor.getTipo())
-					+ " WHERE id_professor = " + professor.getIdProfessor();
+					+ " WHERE " + BancoTabela.PROFESSOR + ".id_professor = " + professor.getIdProfessor();
 			stm = connection.prepareStatement(sql);
 			stm.executeQuery();
 			
