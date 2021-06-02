@@ -220,7 +220,8 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		+ "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
-		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(html);
 		
 	}
