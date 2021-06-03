@@ -31,7 +31,7 @@ public class ServletDashboardCoordenador extends HttpServlet {
 			else {
 				switch (opcao) {
 				case "visualizarTurmas":
-					request.getRequestDispatcher("view_coordenador/cadastro_secretaria.jsp").forward(request, response);
+					request.getRequestDispatcher("view_coordenador/visualizar_turmas.jsp").forward(request, response);
 					break;
 				case "visualizarProjetos":
 					request.getRequestDispatcher("view_coordenador/visualizar_projetos.jsp").forward(request, response);
