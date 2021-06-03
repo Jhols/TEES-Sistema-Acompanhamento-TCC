@@ -48,13 +48,13 @@ public class ServletCandidatoOrientador extends HttpServlet {
 				professor.setStatusOrientador(Professor.StatusOrientador.ACEITO);
 			}
 			
-			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, tipoAntigo);
+			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, opcao);
 			System.out.println("Aceitou");
 			break;
 
 		case "recusar_candidatura":
 			professor.setStatusOrientador(Professor.StatusOrientador.REJEITADO);
-			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, tipoAntigo);
+			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, opcao);
 			System.out.println("Recusou");
 			break;
 

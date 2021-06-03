@@ -243,40 +243,43 @@ public class ProfessorDAO {
 		}
 	}
 	
-	public void alterarStatusCandidatoOrientador(Professor professor, Professor.Tipo tipoAntigo) {
-		Connection connection = null;
+	public void alterarStatusCandidatoOrientador(Professor professor, String acao) {
+		Connection conexao = null;
 		PreparedStatement stm = null;
 		String sql = "";
 		try {
-			connection = ConnectionFactory.getConnection();
+			conexao = ConnectionFactory.getConnection();
 			
 			// Início da Transação
-			connection.setAutoCommit(false);
+			conexao.setAutoCommit(false);
 			
 			sql = " UPDATE " + BancoTabela.PROFESSOR 
-					+ " SET status_orientador = " + Professor.toInt(professor.getStatusOrientador()) + ","
+					+ " SET "
+					+ " status_orientador = " + Professor.toInt(professor.getStatusOrientador()) + ","
 					+ " tipo_prof = " + Professor.toInt(professor.getTipo())
 					+ " WHERE " + BancoTabela.PROFESSOR + ".id_professor = " + professor.getIdProfessor();
-			stm = connection.prepareStatement(sql);
-			stm.executeQuery();
+			stm = conexao.prepareStatement(sql);
+			stm.executeUpdate();
 			
-			if (tipoAntigo == Professor.Tipo.PROFESSOR && professor.getTipo() == Professor.Tipo.PROFESSOR_ORIENTADOR) {
-				sql = " INSERT INTO " + BancoTabela.LOGIN 
-						+ " (pessoa_id, login, senha) VALUES (" 
-						+ professor.getId() + ","
-						+ professor.getEmail() + ","
-						+ professor.getMatricula() + ") ";
-				stm = connection.prepareStatement(sql);
-				stm.executeQuery();
+			if (acao == "aceitar_candidatura") {
+				sql = " UPDATE " + BancoTabela.LOGIN 
+						+ " SET " 
+						+ " login = '" + professor.getEmail() + "',"
+						+ " senha = '" + " 1234' WHERE " + BancoTabela.LOGIN + ".pessoa_id = " + professor.getId();
+						/* TODO a matrícula pode ser muito grande pra caber no campo senha */
+						
+				stm = conexao.prepareStatement(sql);
+				stm.executeUpdate();
 			}
-			
 			// Fim da transação
-			connection.commit();
+			conexao.commit();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}  finally {
-			try { connection.close(); } catch (SQLException e) { e.printStackTrace(); }	
+			try { conexao.rollback(); } catch (SQLException e1) { e1.printStackTrace(); } ;
+		}  finally {  
+			try { stm.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { conexao.close(); } catch (SQLException e) { e.printStackTrace(); }
 		}
 		
 	}
