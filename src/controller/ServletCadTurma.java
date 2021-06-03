@@ -67,6 +67,8 @@ public class ServletCadTurma extends HttpServlet {
 		System.out.println(prof1);
 		System.out.println(prof2);
 		ArrayList<Professor> novosProfessores = new ArrayList<Professor>();
+		novosProfessores.add(prof1);
+		novosProfessores.add(prof2);
 		
 		ArrayList<Professor> professoresVinculados = TurmaDAO.getInstance().pesquisarProfessoresVinculados(idTurma);
 		if (!professoresVinculados.contains(prof1)) 

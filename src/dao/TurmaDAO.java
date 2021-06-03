@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import enums.BancoTabela;
 import enums.SituacaoProjeto;
+import enums.SituacaoTurma;
+import model.Aluno;
 import model.Professor;
 import model.Projeto;
 import model.Turma;
@@ -77,7 +79,7 @@ public class TurmaDAO {
 				popularTurma(turma, resultado);
 				turmas.add(turma);
 			}
-			
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -101,6 +103,7 @@ public class TurmaDAO {
 				turma = new Turma();
 				popularTurma(turma, resultado);
 			}
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -123,7 +126,7 @@ public class TurmaDAO {
 			stm.setString(2, turma.getSemestre());
 			stm.setInt(3, turma.getId());
 			stm.executeUpdate();
-			
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -146,7 +149,7 @@ public class TurmaDAO {
 				Professor professor = ProfessorDAO.pesquisarPorIdProfessor(resultado.getInt("professor_id"));
 				professores.add(professor);
 			}
-			
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -165,6 +168,7 @@ public class TurmaDAO {
 			stm.setInt(1, idTurma);
 			stm.setInt(2, idProfessor);
 			stm.executeUpdate();
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -180,6 +184,7 @@ public class TurmaDAO {
 			stm.setInt(1, idTurma);
 			stm.setInt(2, idProfessor);
 			stm.executeUpdate();
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -191,5 +196,84 @@ public class TurmaDAO {
 		turma.setNome(resultado.getString("nome"));
 		turma.setSemestre(resultado.getString("semestre"));
 		
+	}
+	
+	public ArrayList<Turma> pesquisarTurmaDoSemestreAtualDeCadaProfessor(Professor professor ) {
+		ArrayList<Turma>turmas= new ArrayList<Turma>();
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			PreparedStatement stm;
+			String sql = "SELECT * FROM semestre ORDER by semestre.id_semestre DESC LIMIT 1";
+			stm=  con.prepareStatement(sql);
+			ResultSet resultado = stm.executeQuery();
+			
+			resultado.next();
+			String semestreAtual=resultado.getString("semestre_atual");
+			
+			 sql = "Select * from " + BancoTabela.TURMA_PROFESSOR
+					+" inner join "+ BancoTabela.TURMA + " on "+ BancoTabela.TURMA+".turma_id = " +
+					BancoTabela.TURMA_PROFESSOR+".turma_id"
+					+ " where " + BancoTabela.TURMA +".semestre = ? and "
+					+ BancoTabela.TURMA_PROFESSOR + ".professor_id = ?";
+			
+			 
+			stm=  con.prepareStatement(sql);
+			
+			stm.setString(1,semestreAtual );
+			stm.setInt(2, professor.getIdProfessor());
+			resultado = stm.executeQuery();
+			
+			while (resultado.next()) {
+				Turma turma = new Turma();
+				popularTurma(turma, resultado);
+				turmas.add(turma);
+			}
+			con.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return turmas;
+	}
+	
+	public void vincularAluno(int idTurma, int idAluno) {
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Insert into " + BancoTabela.TURMA_ALUNO + 
+					" (turma_id, aluno_id, situacao_id) values (?, ?, ?) ";
+			
+			PreparedStatement stm =  con.prepareStatement(sql);
+			stm.setInt(1, idTurma);
+			stm.setInt(2, idAluno);
+			stm.setInt(3, SituacaoTurma.toInt(SituacaoTurma.CURSO));
+			stm.executeUpdate();
+			con.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<Aluno> pesquisarAlunosPorTurma(int idTurma) {
+		ArrayList<Aluno> alunos = new ArrayList<Aluno>();
+		try {
+			String sql = "Select * from " + BancoTabela.TURMA_ALUNO +
+					" where " + BancoTabela.TURMA_ALUNO + ".turma_id = ?";
+			Connection con = ConnectionFactory.getConnection();
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, idTurma);
+			ResultSet resultado = stm.executeQuery();
+			while (resultado.next()) {
+				int idAluno = resultado.getInt("aluno_id");
+				Aluno aluno = AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
+				alunos.add(aluno);
+			}
+			con.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return alunos;
 	}
 }

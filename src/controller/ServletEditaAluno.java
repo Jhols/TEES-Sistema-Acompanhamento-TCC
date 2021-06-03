@@ -6,47 +6,50 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import dao.AlunoDAO;
 import dao.LoginDAO;
 import dao.ProfessorDAO;
+import model.Aluno;
 import model.Professor;
 
 
-@WebServlet( urlPatterns = {"/editProfessorOrientador"})
-public class ServletEditaProfessor extends HttpServlet {
+@WebServlet( urlPatterns = {"/editAluno"})
+public class ServletEditaAluno extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
-		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
+		Aluno aluno = (Aluno) request.getSession().getAttribute("pessoa");
 
-		professor.setNome(request.getParameter("nome"));
-		professor.setEmail(request.getParameter("email"));
-		professor.setMatricula(request.getParameter("matricula"));
-		professor.setTelefone(request.getParameter("telefone"));
+		aluno.setNome(request.getParameter("nome"));
+		aluno.setEmail(request.getParameter("email"));
+		aluno.setMatricula(request.getParameter("matricula"));
+		aluno.setTelefone(request.getParameter("telefone"));
 		
-		ProfessorDAO.atualizaProfessorOrientador(professor);
+		AlunoDAO.atualizaAluno(aluno);
 		
 		
 		
-		response.sendRedirect("professorDashboard?editaProfessor=OK");
+		response.sendRedirect("alunoDashboard?editaAluno=OK");
 	}
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Professor professor = (Professor) request.getSession().getAttribute("pessoa");
+		Aluno aluno = (Aluno) request.getSession().getAttribute("pessoa");
 		
-		if (professor == null) {
+		if (aluno == null) {
 			response.sendRedirect("login.html");
 		}
 		
-		String nome_professor = professor.getNome();
-		String email_professor= professor.getEmail();
-		String matricula_professor= professor.getMatricula();
-		String telefone_professor= professor.getTelefone();
-		;
+		String nome_aluno = aluno.getNome();
+		String email_aluno= aluno.getEmail();
+		String matricula_aluno= aluno.getMatricula();
+		String aluno_telefone= aluno.getTelefone();
+		
 		
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
@@ -70,7 +73,7 @@ public class ServletEditaProfessor extends HttpServlet {
 	  		+ "      <link href=\"resources/bootstrap/css/sb-admin-2.css\" rel=\"stylesheet\">\r\n"
 	  		+ "   </head>\r\n"
 	  		+ "   <body class=\"bg-gradient-primary\">\r\n"
-	  		+ "     <form method=\"POST\" action= 'editProfessorOrientador' name=\"form\">"
+	  		+ "     <form method=\"POST\" action= 'editAluno' name=\"form\">"
 	  		+ "      <div class=\"container\">\r\n"
 	  		+ "         <div class=\"card o-hidden border-0 shadow-lg my-5\">\r\n"
 	  		+ "            <div class=\"card-body\">\r\n"
@@ -81,27 +84,27 @@ public class ServletEditaProfessor extends HttpServlet {
 	  		+ "               <form>\r\n"
 	  		+                  "<div class=\"form-group\">\r\n"
             +                    "<label for=\\\"exampleFormControlInput1\\\">Nome</label>\n"
-									+"<input class=\"form-control\" name=\"nome\" value=\"" + nome_professor +  "\" required=\".$this->fields[\"comment\"]>"
+									+"<input class=\"form-control\" name=\"nome\" value=\"" + nome_aluno +  "\" required=\".$this->fields[\"comment\"]>"
 								+"</div>\r\n"
 	  		
 	  		+ "                  <div class=\"form-group\">\r\n"
 	  		+ "                     <label for=\"exampleFormControlInput1\">Email</label>\r\n"
-	  		+ "                     <input  class=\"form-control\" name=\"email\" onblur=\"checarEmail();\" value=\""+ email_professor+ "\" required=\".$this->fields[\"comment\"]\r\n"
+	  		+ "                     <input  class=\"form-control\" name=\"email\" onblur=\"checarEmail();\" value=\""+ email_aluno+ "\" required=\".$this->fields[\"comment\"]\r\n"
 	  		+ "                  </div>\r\n"
 	  		
 			+ "                  <div class=\"form-group\">\r\n"
 			+ "                     <label for=\"exampleFormControlInput1\">Telefone</label>\r\n"
-			+ "                     <input  class=\"form-control\" name=\"telefone\" onKeyPress=\"MascaraTelefone(form.telefone);\" placeholder=\"XX XXXXX-XXXX\" maxlength=\"15\" value=\""+ telefone_professor+ "\" required=\".$this->fields[\"comment\"]\r\n"
+			+ "                     <input  class=\"form-control\" name=\"telefone\" onKeyPress=\"MascaraTelefone(form.telefone);\" placeholder=\"XX XXXXX-XXXX\" maxlength=\"15\" value=\""+ aluno_telefone+ "\" required=\".$this->fields[\"comment\"]\r\n"
 			+ "                  </div>\r\n"					
 			
 			+ "                  <div class=\"form-group\">\r\n"
 			+ "                     <label for=\"exampleFormControlInput1\">Matricula</label>\r\n"
-			+ "                     <input  class=\"form-control\" name=\"matricula\" value=\""+ matricula_professor+ "\" required=\".$this->fields[\"comment\"]\r\n"
+			+ "                     <input  class=\"form-control\" name=\"matricula\" value=\""+ matricula_aluno+ "\" required=\".$this->fields[\"comment\"]\r\n"
 			+ "                  </div>\r\n"						  		
 	  		
 	  		+ "               </form>\r\n"
 	  		+	"<input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\">"
-	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"alunoDashboard\" role=\"button\">Voltar</a>\r\n"
 	  		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 	  		+ "            </div>\r\n"
 	  		+ "         </div>\r\n"

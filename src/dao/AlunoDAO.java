@@ -12,12 +12,12 @@ import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
 
-
 import util.ConnectionFactory;
 
 public class AlunoDAO {
 	
 	private static AlunoDAO uniqueInstance; //Singleton
+	private static Connection conexao;
 	
 	public AlunoDAO() { }
 	
@@ -173,6 +173,7 @@ public class AlunoDAO {
 		
 	}
 	
+	//pesquisa todos os alunos cujo status seja candidato a tcc
 	public  ArrayList<Aluno> pesquisaStatusAlunoTccCandidato() {
 		ArrayList<Aluno> alunos = new ArrayList<Aluno>();
 		
@@ -384,6 +385,43 @@ public class AlunoDAO {
 		
 		return true;
 	}
+	
+	public static void atualizaAluno(Aluno  aluno) {
+		
+		String sql;
+		
+		conexao = null;
+		try {
+	
+		sql = "UPDATE  " + BancoTabela.PESSOA + " SET  nome=?, email=?, telefone=? WHERE " + 
+				 BancoTabela.PESSOA + ".id_pessoa = ?";
+		
+			conexao = ConnectionFactory.getConnection();
+        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+        	
+        	int id_pessoa= aluno.getId();
+        	
+        	
+            prepareStatement.setString(1, aluno.getNome());
+            prepareStatement.setString(2, aluno.getEmail());
+            prepareStatement.setString(3, aluno.getTelefone());
+            prepareStatement.setInt(4, id_pessoa);
+            prepareStatement.executeUpdate();
+            
+           
+            sql = "UPDATE " + BancoTabela.ALUNO + " SET matricula=? WHERE " +
+   				 BancoTabela.ALUNO + ".id_pessoa = ?";
+            
+   			prepareStatement = conexao.prepareStatement(sql);
+   			prepareStatement.setString(1, aluno.getMatricula());
+   			prepareStatement.setInt(2, id_pessoa);
+            prepareStatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	
 	
 	
