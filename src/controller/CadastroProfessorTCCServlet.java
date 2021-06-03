@@ -10,22 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.LoginDAO;
+import dao.ProfessorDAO;
 import dao.SecretariaDAO;
 import enums.Perfil;
 import model.Pessoa;
 import model.PessoaFactory;
+import model.Professor;
 
 /**
  * Servlet implementation class CadastroSecretariaServlet
  */
-@WebServlet("/CadastroSecretariaServlet")
-public class CadastroSecretariaServlet extends HttpServlet {
+@WebServlet("/CadastroProfessorTCCServlet")
+public class CadastroProfessorTCCServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CadastroSecretariaServlet() {
+    public CadastroProfessorTCCServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,7 +42,7 @@ public class CadastroSecretariaServlet extends HttpServlet {
 			case "checarUsuario":
 				checarUsuario(request, response);
 				break;
-			case "cadastrarSecretaria":
+			case "cadastrarProfessor":
 				cadastrar(request, response);
 				break;
 		}
@@ -70,31 +72,35 @@ public class CadastroSecretariaServlet extends HttpServlet {
 		String primeiroNome = request.getParameter("primeiroNome");
     	String sobrenome = request.getParameter("sobrenome");
     	String email = request.getParameter("email");
+    	String matricula = request.getParameter("matricula");
     	String telefone = request.getParameter("telefone");
     	String usuario = request.getParameter("usuario");
     	String senha = request.getParameter("senha");
     	
-    	//Cria um registro de uma nova pessoa como secretario
-    	Pessoa secretario = PessoaFactory.getPessoa(Perfil.SECRETARIO, primeiroNome + " " + sobrenome);
-    	secretario.setEmail(email);
-    	secretario.setTelefone(telefone);
+    	//Cria um registro de uma nova pessoa como professor
+    	Pessoa professor = PessoaFactory.getPessoa(Perfil.PROFESSOR, primeiroNome + " " + sobrenome, matricula);
+    	professor.setEmail(email);
+    	professor.setTelefone(telefone);
     	
-    	//Incluir secretario no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
-    	int idPessoa = SecretariaDAO.getInstance().addSecretaria(secretario);
+    	//Incluir professor no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
+    	int idPessoa = ProfessorDAO.getInstance().incluirProfessor((Professor)professor);
     	boolean loginCriado = LoginDAO.getInstance().addLogin(idPessoa, usuario, senha);
     	
     	if (!loginCriado) {
-    		System.out.println("Erro ao incluir a nova conta de secretario no banco");
+    		System.out.println("Erro ao incluir a nova conta de professor no banco");
     		idPessoa = 0;
     	}
     	else {
-    		System.out.println("Login de secretaria " + primeiroNome + " criado com sucesso!");
+    		System.out.println("Login de professor " + primeiroNome + " criado com sucesso!");
     		request.getSession().setAttribute("primeiroNome", primeiroNome);
     	}
     	
     	request.getSession().setAttribute("confirmado", loginCriado);
-    	request.getRequestDispatcher("view_administrador/confirmacao_cadastro_secretaria.jsp").forward(request, response);
+    	request.getRequestDispatcher("view_administrador/confirmacao_cadastro_professor.jsp").forward(request, response);
    	
 	}
 
 }
+
+
+

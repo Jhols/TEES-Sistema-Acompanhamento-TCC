@@ -44,7 +44,7 @@ public class ServletCadastroAluno extends HttpServlet {
     	aluno.setEmail(email);
     	aluno.setTelefone(telefone);
     	
-    	((Aluno) aluno).setstatusAlunoTCC(1); //Nao e' aluno ainda. Precisara' da confirmacao do professor para ter acesso ao sistema. 
+    	((Aluno) aluno).setstatusAlunoTCC(2); //TIPO CANDIDATO
     	
     	//Incluir aluno no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
     	boolean confirmado = AlunoDAO.getInstance().addAluno((Aluno) aluno);

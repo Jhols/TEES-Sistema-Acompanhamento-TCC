@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
 
@@ -59,8 +59,12 @@
                                                 id="senha" placeholder="Senha"
                                                 name="senha">
                                         </div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block">
-                                         
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Fazer Login">
+                                        <div style="margin-top:130px; text-align: center">
+	                                        <h5 class="h5 text-gray-700 mb-1" >  Nao possui cadastro? Crie um abaixo: </h5>
+	                                        <a class="p-3" href= "cadastrar.html" role="button" style="padding:5px;">Professor(a)</a> 
+	                                        <a class="p-3" href= "cadastro_aluno.jsp" role="button" style="padding:5px;">Aluno(a)</a>
+                                        </div>
                                     </form>
                                     
                                 </div>

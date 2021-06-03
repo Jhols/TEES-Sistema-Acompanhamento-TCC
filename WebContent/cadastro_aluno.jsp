@@ -38,6 +38,7 @@
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h5 text-gray-900 mb-4">Insira os dados abaixo para se cadastrar, estudante!</h1>
+                                <h6 class="h6 text-gray-900 mb-4">Se o seu cadastro for aprovado seu login será o <b>email informado</b> e a senha a <b>matricula informada!</b></h6>
                             </div>
                             <form class="user" method="POST" action="CadastroAlunoServlet">
                                 <div class="form-group row">
@@ -75,13 +76,11 @@
                                     </div>
                                 </div> -->
                                 <div style="height: 20px; background-color:white"></div>
-                                <input type="submit" id="btn_enviar" class="btn btn-primary btn-user btn-block" value="Cadastrar">
+                                <input type="submit" id="btn_enviar" class="btn btn-primary btn-user btn-block" value="Enviar Solicitação">
                             </form>
                             <hr style="margin-top: 170px;">
                             <div>
-	                            <div class="text-center">
-	                                <a class="small" href="forgot-password.html">Esqueceu a senha?</a>
-	                            </div>
+	                            
 	                            <div class="text-center">
 	                                <a class="small" href="login.html">Já possui uma conta? Faça o Login!</a>
 	                            </div>

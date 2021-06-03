@@ -85,7 +85,6 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		+ "\r\n"
 		+ "            \r\n"
 		+ "            <!-- Divider -->\r\n"
-		+ "            <hr class=\"sidebar-divider\">\r\n"
 		+ "\r\n"
 		+ "                   \r\n"
 		+ "\r\n"
@@ -98,16 +97,16 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		
 		+ "           <!-- Item Cadastro Professor Orientador -->\r\n"
 		+ "            <li class=\"nav-item\">\r\n"
-		+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+		+ "                <a class=\"nav-link\" href=\"cadTurmasTcc\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 		+ "                    <span style=\"text-align:center\">Cadastrar turma de TCC</span></a>\r\n"
 		+ "            </li>\r\n"
 		
 		+ "           <!-- Item Cadastro Professor Orientador -->\r\n"
 		+ "            <li class=\"nav-item\">\r\n"
-		+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+		+ "                <a class=\"nav-link\" href=\"exibirTurma\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-		+ "                    <span style=\"text-align:center\">Vincular professor(a) de TCC em turma</span></a>\r\n"
+		+ "                    <span style=\"text-align:center\">Vizualizar turmas de TCC</span></a>\r\n"
 		+ "            </li>\r\n"
 	
 		+ "           <!-- Item Cadastro Professor Orientador -->\r\n"
@@ -154,15 +153,15 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		+ "\r\n"
 		+ "    <!-- Custom scripts for all pages-->\r\n"
 		+ "    <script src=\"resources/bootstrap/js/sb-admin-2.min.js\"></script>\r\n"
-		+ "\r\n"
-		+ "</body>\r\n";
-		
+		+ "\r\n";
 		
 		// mostrar alertas para ações executadas pelo servlet
+		if ("ok".equals(request.getParameter("turma"))) {
+			html += "<script>alert(\"Cadastro de turma efetuado com sucesso!\");</script>";
+		}
 		
-		
-		
-		html += "\r\n"
+		html += "</body>\r\n"
+		+ "\r\n"
 		+ "</html>";
 		
 		writer.write(html);

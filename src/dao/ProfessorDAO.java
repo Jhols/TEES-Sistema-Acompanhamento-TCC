@@ -8,9 +8,7 @@ import java.util.ArrayList;
 
 import enums.BancoTabela;
 import enums.Perfil;
-import enums.SituacaoProjeto;
 import model.Professor;
-import model.Projeto;
 import util.ConnectionFactory;
 import model.Aluno;
 import model.Pessoa;
@@ -20,7 +18,7 @@ public class ProfessorDAO {
 	
 	private static ProfessorDAO uniqueInstance; //Singleton
 	
-	private ProfessorDAO() { }
+	public ProfessorDAO() { }
 	
 	public static synchronized ProfessorDAO getInstance() {
 		if (uniqueInstance == null)
@@ -133,6 +131,47 @@ public class ProfessorDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public int incluirProfessor(Professor professor) {
+		int id = 0;
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.PROFESSOR + " (id_pessoa, matricula, tipo_prof, status_orientador) values (?, ?, ?, ? )";
+		
+		
+        try {
+        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+        	
+        	id=PessoaDAO.getInstance().addPessoa(professor);
+        			
+            prepareStatement.setInt(1, id);
+            prepareStatement.setString(2, professor.getMatricula());
+            prepareStatement.setInt(3, 0);
+            prepareStatement.setInt(4, 3);
+            
+            prepareStatement.executeUpdate();
+            
+            sql = "INSERT INTO "+ BancoTabela.PERFIL_PESSOA + "(id_pessoa, id_perfil) values (?,?)";
+            prepareStatement = conexao.prepareStatement(sql);
+            
+            prepareStatement.setInt(1, id);
+            prepareStatement.setInt(2, 4);
+            
+            prepareStatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+	}
 
 	public static void addProfessor(Professor professor) {
 		
@@ -242,6 +281,28 @@ public class ProfessorDAO {
 			return professores;			
 		}
 	}
+	public ArrayList<Professor> pesquisarProfessoresTCC() {
+		ArrayList<Professor> professores = new ArrayList<Professor>();
+		
+		try {
+			Connection conexao = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM " + BancoTabela.PROFESSOR + " WHERE " + 
+					 BancoTabela.PROFESSOR + ".tipo_prof IN (0, 2)";
+			var stm = conexao.createStatement();
+			ResultSet resultado = stm.executeQuery(sql);
+			while (resultado.next()) {
+				var id_pessoa = resultado.getInt("id_pessoa");
+				Professor professor = pesquisarProfessorPorIdPessoa(id_pessoa);
+				professores.add(professor);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return professores;
+		
+	}
+	
 	
 	public void alterarStatusCandidatoOrientador(Professor professor, String acao) {
 		Connection conexao = null;
@@ -250,7 +311,7 @@ public class ProfessorDAO {
 		try {
 			conexao = ConnectionFactory.getConnection();
 			
-			// Início da Transação
+			// Inicio da Transacao
 			conexao.setAutoCommit(false);
 			
 			sql = " UPDATE " + BancoTabela.PROFESSOR 
@@ -266,12 +327,12 @@ public class ProfessorDAO {
 						+ " SET " 
 						+ " login = '" + professor.getEmail() + "',"
 						+ " senha = '" + " 1234' WHERE " + BancoTabela.LOGIN + ".pessoa_id = " + professor.getId();
-						/* TODO a matrícula pode ser muito grande pra caber no campo senha */
+						/* TODO a matricula pode ser muito grande pra caber no campo senha */
 						
 				stm = conexao.prepareStatement(sql);
 				stm.executeUpdate();
 			}
-			// Fim da transação
+			// Fim da transacao
 			conexao.commit();
 			
 		} catch (SQLException e) {

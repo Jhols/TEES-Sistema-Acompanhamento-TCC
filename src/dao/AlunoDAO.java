@@ -317,7 +317,7 @@ public class AlunoDAO {
             
             if (resultado.next()){
             	turma_id=resultado.getInt("turma_id");//pega om id da turma da professor 
-            	System.out.println("ID DA TURMA �" +turma_id);
+            	System.out.println("ID DA TURMA E'" +turma_id);
 			
             }
             sql = "SELECT aluno_id 	FROM " + BancoTabela.TURMA_ALUNO + " WHERE turma_id=?";
@@ -346,50 +346,43 @@ public class AlunoDAO {
 	}
 	
 	public boolean addAluno(Aluno aluno) {
-		boolean sucesso = false;
-		String sql;
-		Connection conexao = null;
+		
 		try {
-			conexao = ConnectionFactory.getConnection();
-		} catch (SQLException e) {
-			// TODO: handle exception
+			
+			int idPessoa = PessoaDAO.getInstance().addPessoa(aluno);
+			
+			Connection con = ConnectionFactory.getConnection();
+			
+			String sql = "Insert into " +BancoTabela.ALUNO +
+					" (id_pessoa, matricula, status_aluno_tcc) values (?, ?, ?)";
+			
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, idPessoa);
+			stm.setString(2, aluno.getMatricula());
+			stm.setInt(3, Aluno.toInt(aluno.getStatusAlunoTCC()));
+			int rowsAffected = stm.executeUpdate(); 
+			// retorna qtde de linhas que foi alterada pelo sql
+			// idealmente 1, pois foi inserido 01 linha
+			if (rowsAffected == 0) {
+				return false;
+			}
+			
+			sql = "Insert into " + BancoTabela.PERFIL_PESSOA +
+					"(id_pessoa, id_perfil) values (?, ?)";
+			
+			stm = con.prepareStatement(sql);
+			stm.setInt(1, idPessoa);
+			stm.setInt(2, Perfil.ALUNO.getValue());
+			rowsAffected = stm.executeUpdate();
+			if (rowsAffected == 0) {
+				return false;
+			}
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		sql = "INSERT INTO " + BancoTabela.ALUNO + " (id_pessoa, matricula, status_aluno_tcc) values (?, ?, ? )";
-		
-		PreparedStatement prepareStatement = null;
-        try {
-        	conexao.setAutoCommit(false);
-        	prepareStatement = conexao.prepareStatement(sql);
-        	
-        	int id=PessoaDAO.getInstance().addPessoa(aluno);
-        			
-            prepareStatement.setInt(1, id);
-            prepareStatement.setString(2, aluno.getMatricula());
-            prepareStatement.setInt(3, aluno.toInt(aluno.getStatusAlunoTCC()));
-            
-            prepareStatement.executeUpdate();
-            
-            sql = "INSERT INTO "+ BancoTabela.PERFIL_PESSOA + "(id_pessoa, id_perfil) values (?,?)";
-            prepareStatement = conexao.prepareStatement(sql);
-            
-            prepareStatement.setInt(1, id);
-            prepareStatement.setInt(2, 5);
-            
-            prepareStatement.executeUpdate();
-            
-            conexao.commit();
-            sucesso = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try { conexao.rollback(); } catch (SQLException e1) { e1.printStackTrace();}
-        }
-        finally {
-        	try {prepareStatement.close();} catch (SQLException e) {e.printStackTrace();}
-        	try {conexao.close();} catch (SQLException e) {e.printStackTrace();}
-        }
-        return sucesso;
+		return true;
 	}
 	
 	
