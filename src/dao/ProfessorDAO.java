@@ -263,9 +263,10 @@ public class ProfessorDAO {
 		String sql;
 		try {
 			Connection con = ConnectionFactory.getConnection();
-			sql = "Select * from "+BancoTabela.PROFESSOR + " INNER JOIN "
-					+BancoTabela.PESSOA + " on "+BancoTabela.PESSOA+".id_pessoa = "+BancoTabela.PROFESSOR+".id_pessoa"
-					+ " where " + BancoTabela.PROFESSOR + ".status_orientador = 0";
+			sql = " SELECT * FROM "+BancoTabela.PROFESSOR 
+					+ " INNER JOIN "
+					+ BancoTabela.PESSOA + " ON " + BancoTabela.PESSOA+".id_pessoa = " + BancoTabela.PROFESSOR + ".id_pessoa"
+					+ " WHERE " + BancoTabela.PROFESSOR + ".status_orientador = 0";
 			
 			var stm = con.prepareStatement(sql);
 			resultado = stm.executeQuery();
@@ -277,7 +278,7 @@ public class ProfessorDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {resultado.close(); }catch(SQLException e){e.printStackTrace();}
 			return professores;			
 		}
 	}
@@ -304,7 +305,7 @@ public class ProfessorDAO {
 	}
 	
 	
-	public void alterarStatusCandidatoOrientador(Professor professor, String acao) {
+	public void alterarStatusCandidatoOrientador(Professor professor, String acao, String tipoAntigo) {
 		Connection conexao = null;
 		PreparedStatement stm = null;
 		String sql = "";
@@ -322,16 +323,10 @@ public class ProfessorDAO {
 			stm = conexao.prepareStatement(sql);
 			stm.executeUpdate();
 			
-			if (acao == "aceitar_candidatura") {
-				sql = " UPDATE " + BancoTabela.LOGIN 
-						+ " SET " 
-						+ " login = '" + professor.getEmail() + "',"
-						+ " senha = '" + " 1234' WHERE " + BancoTabela.LOGIN + ".pessoa_id = " + professor.getId();
-						/* TODO a matricula pode ser muito grande pra caber no campo senha */
-						
-				stm = conexao.prepareStatement(sql);
-				stm.executeUpdate();
+			if (acao.equals("aceitar_candidatura") && tipoAntigo.equals("PROFESSOR")) {
+				LoginDAO.getInstance().addLogin(professor.getId(), professor.getEmail() , "1234");	
 			}
+			
 			// Fim da transacao
 			conexao.commit();
 			

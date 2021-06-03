@@ -32,7 +32,7 @@ public class ServletCandidatoOrientador extends HttpServlet {
 		}
 		
 		Professor professor = ProfessorDAO.pesquisarPorIdProfessor(Integer.parseInt(request.getParameter("idProfessor")));
-		Professor.Tipo tipoAntigo = professor.getTipo();
+		String tipoAntigo = professor.getTipo().toString();
 		switch (opcao) {
 
 		case "aceitar_candidatura":
@@ -48,13 +48,13 @@ public class ServletCandidatoOrientador extends HttpServlet {
 				professor.setStatusOrientador(Professor.StatusOrientador.ACEITO);
 			}
 			
-			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, opcao);
+			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, opcao, tipoAntigo);
 			System.out.println("Aceitou");
 			break;
 
 		case "recusar_candidatura":
 			professor.setStatusOrientador(Professor.StatusOrientador.REJEITADO);
-			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, opcao);
+			ProfessorDAO.getInstance().alterarStatusCandidatoOrientador(professor, opcao, tipoAntigo);
 			System.out.println("Recusou");
 			break;
 
