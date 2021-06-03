@@ -21,7 +21,7 @@ public class ServletCadProfessorOrientador extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-	
+		request.setCharacterEncoding("UTF-8");
 		Professor professor = new Professor();
 		professor.setNome(request.getParameter("nome"));
 		professor.setEmail(request.getParameter("email"));
@@ -33,4 +33,6 @@ public class ServletCadProfessorOrientador extends HttpServlet {
 		
 		response.sendRedirect("login.html");
 	}
+	
+	
 }

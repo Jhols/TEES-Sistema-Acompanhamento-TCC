@@ -91,7 +91,7 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Suas turmas de TCC nesse semestre</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Alunos da turma</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -102,8 +102,7 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
 		+ "                                            <th>Nome</th>\r\n"
-		+ "                                            <th>Semestre</th>\r\n"
-		+ "                                            <th></th>\r\n"
+		+ "                                            <th>Matrícula</th>\r\n"
 		
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
@@ -116,24 +115,7 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 			
 			html += "</tr>";
 			
-			/*
-			int idTurma = Integer.parseInt(linha.get("idTurma"));
-			ArrayList<Aluno> alunosVinculados = TurmaDAO.getInstance().pesquisarAlunosPorTurma(idTurma);
 			
-			html += "<tr><td colspan=3><table><tr><th>";
-			
-			if (alunosVinculados.size() == 0) {
-				html += "Sem alunos vinculados</table>";
-			}
-			else {
-				html += "Alunos Vinculados";
-				
-				for (Aluno aluno : alunosVinculados) {
-					html += "<tr><td>"+aluno.getNome()+"<td>"+aluno.getMatricula()+"</tr>";
-				}
-			}
-			html += "</table></td></tr>";
-			*/
 			
 		}
 		

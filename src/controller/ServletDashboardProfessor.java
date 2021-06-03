@@ -120,7 +120,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "            <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"visualizarTurmas\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span style=\"text-align:center\">Vincular alunos a sua turma de TCC</span></a>\r\n"
+			+ "                    <span style=\"text-align:center\">Vincular e visualizar alunos por turmas</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (visualizarProjetosDisponiveis) {
@@ -136,7 +136,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "            <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"alunosTurma\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span style=\"text-align:center\">Visualizar Alunos da Turma</span></a>\r\n"
+			+ "                    <span style=\"text-align:center\">Visualizar seus alunos de TCC</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (candidatarOrientador) {

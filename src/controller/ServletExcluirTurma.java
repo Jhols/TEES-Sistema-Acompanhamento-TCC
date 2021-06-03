@@ -10,18 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.AlunoDAO;
-
+import dao.InscricaoProjetoDAO;
 import dao.LoginDAO;
-
-import model.Aluno;
-
+import dao.ProjetoDAO;
+import dao.TurmaDAO;
+import enums.SituacaoInscricao;
+import enums.SituacaoProjeto;
+import model.InscricaoProjeto;
 import model.Professor;
+import model.Projeto;
+import model.Secretaria;
+import model.Turma;
 
-
-//tela de professor de tcc para ver alunos das suas turmas 
-@WebServlet( urlPatterns = {"/alunosTurma"})
-public class ServletAlunosDaTurma extends HttpServlet{
+@WebServlet( urlPatterns = {"/excluirTurma"})
+public class ServletExcluirTurma extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -29,30 +31,46 @@ public class ServletAlunosDaTurma extends HttpServlet{
 		
 		
 		// Tentar pegar o professor que está logado atualmente
-		var professor = (Professor) request.getSession().getAttribute("pessoa");
+		var secretaria = (Secretaria) request.getSession().getAttribute("pessoa");
 		
-		if (professor == null) {
+		if (secretaria == null) {
 			response.sendRedirect("login.html");
 			return;
 		}
 
+		// verificar se há alguma ação a ser executada pelo servlet
+		if (verificarAcao(request, response)) {
+			// se houve alguma acao a ser executada nesse servlet
+			// e a pagina foi redirecionada, para a execução da função
+			return;
+		}
 		
 		
-		ArrayList<Aluno> alunos = AlunoDAO.pesquisaAlunosDaTurmaDeCadaProfessor(professor.getIdProfessor());
+		// busca a lista de projetos do professor 
+		var turmas = TurmaDAO.getInstance().pesquisarTurmas();
+		
 		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
-		for (Aluno aluno : alunos) {
+		for (Turma turma : turmas) {
+			var resultado=TurmaDAO.getInstance().pesquisarAlunosPorTurma(turma.getId());
+			if(resultado.size()==0)
+			{
+				
+					
+				var linha = new HashMap<String, String>();
+				linha.put("nome", turma.getNome());
+				linha.put("semestre", turma.getSemestre());
+				linha.put("idTurma", String.valueOf(turma.getId()));
+				linhas.add(linha);
+				
+			}
 			
-			//preencher os dados que serão mostrados na tabela
-			// ou que serão usados pelos botões (aceitar e rejeitar)
-			var linha = new HashMap<String, String>();
-			linha.put("nome", aluno.getNome());
-			linha.put("matricula", aluno.getMatricula());
-			linha.put("email", aluno.getEmail());
-			linha.put("telefone", aluno.getTelefone());
-			linhas.add(linha);
-		}	
+			
+			else {
+				System.out.println("\tAluno tem inscricao do tipo associado");
+			}
+		}
 		
 		
 		response.setCharacterEncoding("UTF-8");
@@ -69,7 +87,7 @@ public class ServletAlunosDaTurma extends HttpServlet{
 		+ "    <meta name=\"description\" content=\"\">\r\n"
 		+ "    <meta name=\"author\" content=\"\">\r\n"
 		+ "\r\n"
-		+ "    <title>Alunos Candidatos</title>\r\n"
+		+ "    <title>excluir</title>\r\n"
 		+ "\r\n"
 		+ "    <!-- Custom fonts for this template -->\r\n"
 		+ "    <link href=\"resources/bootstrap/vendor/fontawesome-free/css/all.min.css\" rel=\"stylesheet\" type=\"text/css\">\r\n"
@@ -100,7 +118,7 @@ public class ServletAlunosDaTurma extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Todos seus alunos de TCC</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Excluir turmas</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -111,19 +129,17 @@ public class ServletAlunosDaTurma extends HttpServlet{
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
 		+ "                                            <th>Nome</th>\r\n"
-		+ "                                            <th>Matricula</th>\r\n"
-		+ "                                            <th>Email</th>\r\n"
-		+ "                                            <th>Telefone</th>\r\n"
+		+ "                                            <th>Semestre</th>\r\n"
+		+ "                                            <th>Excluir</th>\r\n"
 		
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
-		// cada linha da tabela representa um aluno cujo status é candidato a tcc 
+		// cada linha da tabela representa uma inscrição valida para um projeto desse professor
 		for (var linha : linhas) {
-			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("matricula")+ "<td>" + linha.get("email")+ "<td>" + linha.get("telefone");
-			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
-			
+			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("semestre");
+			html+="<td ><a class=\"btn btn-primary\" href=\"excluirTurma?acao=excluir&idTurma="+linha.get("idTurma")+"\" role=\"excluirTurma\">Excluir</a>";
 			html += "</tr>";
 		}
 		
@@ -136,7 +152,7 @@ public class ServletAlunosDaTurma extends HttpServlet{
 		+ "                        </div>\r\n"
 		
 		+ "                    </div>\r\n"
-		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"secretariaDashboard\" role=\"button\">Voltar</a>\r\n"
 		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 		+ "\r\n"
 		+ "                </div>\r\n"
@@ -197,11 +213,33 @@ public class ServletAlunosDaTurma extends HttpServlet{
 		+ "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
-		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(html);
 		
 	}
 
 
-	
+	// verifica os parametros da pagina para saber se há alguma ação a ser executada pelo servlet
+	// retorna true se a ação redireciona a pagina
+	private boolean verificarAcao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String acao = request.getParameter("acao");
+		
+		if (acao == null) {
+			return false;
+		}
+		
+		switch (acao) {
+		case "excluir":
+			int idTurma=Integer.parseInt(request.getParameter("idTurma"));
+			ArrayList<Professor>professores=TurmaDAO.getInstance().pesquisarProfessoresVinculados(idTurma);
+			for(Professor professor: professores) {
+				TurmaDAO.getInstance().desvincularProfessor(idTurma,professor.getIdProfessor());
+			}
+			TurmaDAO.getInstance().excluirTurma(idTurma);
+			response.sendRedirect("excluirTurma");
+			return true;
+		}
+		return false;
+	}
 }

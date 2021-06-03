@@ -8,11 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
-import enums.SituacaoProjeto;
 import enums.SituacaoTurma;
 import model.Aluno;
 import model.Professor;
-import model.Projeto;
+import model.Semestre;
 import model.Turma;
 import util.ConnectionFactory;
 
@@ -199,29 +198,25 @@ public class TurmaDAO {
 	}
 	
 	public ArrayList<Turma> pesquisarTurmaDoSemestreAtualDeCadaProfessor(Professor professor ) {
-		ArrayList<Turma>turmas= new ArrayList<Turma>();
+		ArrayList<Turma> turmas = new ArrayList<Turma>();
+		Semestre semestreAtual = SemestreDAO.getInstance().getSemestreAtual();
+		if (semestreAtual == null) {
+			return turmas;
+		}
 		try {
 			Connection con = ConnectionFactory.getConnection();
-			PreparedStatement stm;
-			String sql = "SELECT * FROM semestre ORDER by semestre.id_semestre DESC LIMIT 1";
-			stm=  con.prepareStatement(sql);
-			ResultSet resultado = stm.executeQuery();
 			
-			resultado.next();
-			String semestreAtual=resultado.getString("semestre_atual");
-			
-			 sql = "Select * from " + BancoTabela.TURMA_PROFESSOR
+			String sql = "Select * from " + BancoTabela.TURMA_PROFESSOR
 					+" inner join "+ BancoTabela.TURMA + " on "+ BancoTabela.TURMA+".turma_id = " +
 					BancoTabela.TURMA_PROFESSOR+".turma_id"
 					+ " where " + BancoTabela.TURMA +".semestre = ? and "
 					+ BancoTabela.TURMA_PROFESSOR + ".professor_id = ?";
 			
-			 
-			stm=  con.prepareStatement(sql);
+			PreparedStatement stm =  con.prepareStatement(sql);
 			
-			stm.setString(1,semestreAtual );
+			stm.setString(1, semestreAtual.getSemestreAtual());
 			stm.setInt(2, professor.getIdProfessor());
-			resultado = stm.executeQuery();
+			ResultSet resultado = stm.executeQuery();
 			
 			while (resultado.next()) {
 				Turma turma = new Turma();
@@ -276,4 +271,22 @@ public class TurmaDAO {
 		}
 		return alunos;
 	}
+	
+	public void excluirTurma(int idTurma) {
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Delete  from " + BancoTabela.TURMA + " where " + BancoTabela.TURMA +".turma_id = ?";
+			
+			PreparedStatement stm =  con.prepareStatement(sql);
+			stm.setInt(1, idTurma);
+			stm.executeUpdate();
+			
+			con.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
+
+

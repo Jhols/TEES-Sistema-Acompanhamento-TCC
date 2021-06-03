@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.ProfessorDAO;
+import dao.SemestreDAO;
 import dao.TurmaDAO;
 import model.Professor;
 import model.Secretaria;
+import model.Semestre;
 import model.Turma;
 
 
@@ -124,6 +126,11 @@ public class ServletCadTurma extends HttpServlet {
 			options1 += "<option value=\""+professor.getIdProfessor()+"\" " + sel1 + " >"+professor.getNome()+"</option>\r\n";
 			options2 += "<option value=\""+professor.getIdProfessor()+"\" " + sel2 + " >"+professor.getNome()+"</option>\r\n";
 		}
+		Semestre semestre = SemestreDAO.getInstance().getSemestreAtual();
+		String semestreAtual = "Semestre atual ainda não cadastrado!";
+		if (semestre != null) {
+			semestreAtual = semestre.getSemestreAtual();
+		}
 		
 		String html = "<!DOCTYPE html>\r\n"
 			+ "<html lang=\"pt-br\">\r\n"
@@ -163,13 +170,17 @@ public class ServletCadTurma extends HttpServlet {
 			+ "                            </div>\r\n"
 			+ "                            <div class=\"form-group\">\r\n"
 			+ "                                <label for=\"exampleFormControlInput1\">Semestre</label>\r\n"
-			+ "                                <input class=\"form-control\" id=\"semestre\" onBlur=\"checkSemestre()\" placeholder=\"ano.semestre\" name=\"semestre\" required ";
+			+ "                                <input class=\"form-control\" id=\"semestre\" disabled ";
 			
 			if (turmaEditada != null) {
 				html += "value=\""+turmaEditada.getSemestre()+"\"";
 			}
+			else {
+				html += "value=\""+semestreAtual+"\"";
+			}
 			
 			html += ">\r\n"
+			+ "<input type=\"hidden\" name=\"semestre\" value=\""+semestreAtual+"\" >"
 			+ "                            </div>\r\n"
 			+ "                            <div class=\"form-group\">\r\n"
 			+ "                            	<label for=\"exampleFormControlInput1\">Professor 1</label>\r\n"
@@ -193,8 +204,24 @@ public class ServletCadTurma extends HttpServlet {
 			
 			
 			html += "                        </form>\r\n"
-			+ "                        <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" />\r\n"
-			+ "                        <a class=\"btn btn-primary\" align=\"center\" href=\"exibirTurma\" role=\"button\">Voltar</a>\r\n"
+			+ "                        <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" ";
+			
+			// desabilitar submit se não houver semestre atual
+			if (semestre == null) {
+				html += "disabled";
+			}
+			
+			html += "/>\r\n"
+			+ "                        <a class=\"btn btn-primary\" align=\"center\" href=\"";
+			
+			if (turmaEditada == null) {
+				html += "secretariaDashboard";
+			}
+			else {
+				html += "exibirTurma";
+			}
+			
+			html += "\" role=\"button\">Voltar</a>\r\n"
 			+ "\r\n"
 			+ "                        \r\n"
 			+ "                    </div>\r\n"
