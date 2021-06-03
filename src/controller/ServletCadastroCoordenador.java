@@ -20,13 +20,13 @@ import model.PessoaFactory;
  * Servlet implementation class CadastroSecretariaServlet
  */
 @WebServlet("/CadastroCoordenadorServlet")
-public class CadastroCoordenadorServlet extends HttpServlet {
+public class ServletCadastroCoordenador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CadastroCoordenadorServlet() {
+    public ServletCadastroCoordenador() {
         super();
         // TODO Auto-generated constructor stub
     }

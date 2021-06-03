@@ -1,43 +1,36 @@
 package controller;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import dao.AlunoDAO;
-
-import dao.LoginDAO;
-import dao.ProfessorDAO;
 import dao.TurmaDAO;
 import model.Aluno;
-
 import model.Professor;
-import model.Secretaria;
 import model.Turma;
 
-@WebServlet( urlPatterns = {"/exibirTurma"})
-public class ServletExibirTurma extends HttpServlet{
+//TELA DE PROFESSOR TCC QUE VISUALIZA AS SUAS TURMAS DO SEMESTRE ATUAL
+@WebServlet( urlPatterns = {"/visualizarTurmas"})
+public class ServletVisualizarTurmasTcc extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		var secretaria = (Secretaria) request.getSession().getAttribute("pessoa");
+		// Tentar pegar o professor que está logado atualmente
+		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
-		if (secretaria == null) {
+		if (professor == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 
-		
-		
-		var turmas = TurmaDAO.getInstance().pesquisarTurmas();
+		TurmaDAO turmaDAO= new TurmaDAO();
+		var turmas = turmaDAO.pesquisarTurmaDoSemestreAtualDeCadaProfessor(professor);
 		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
@@ -48,8 +41,7 @@ public class ServletExibirTurma extends HttpServlet{
 			var linha = new HashMap<String, String>();
 			linha.put("nome", turma.getNome());
 			linha.put("semestre", turma.getSemestre());
-			linha.put("id_turma",String.valueOf(turma.getId()));
-			
+			linha.put("idTurma",String.valueOf(turma.getId()));
 			linhas.add(linha);
 		}	
 		
@@ -99,7 +91,7 @@ public class ServletExibirTurma extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Turmas de TCC</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Suas turmas de TCC nesse semestre</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -111,8 +103,7 @@ public class ServletExibirTurma extends HttpServlet{
 		+ "                                        <tr>\r\n"
 		+ "                                            <th>Nome</th>\r\n"
 		+ "                                            <th>Semestre</th>\r\n"
-		
-		
+		+ "                                            <th></th>\r\n"
 		+ "                                            <th></th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
@@ -122,9 +113,31 @@ public class ServletExibirTurma extends HttpServlet{
 		for (var linha : linhas) {
 			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("semestre");
 			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
-			html+="<td ><a class=\"btn btn-primary\" href=\"cadTurmasTcc?turma="+ linha.get("id_turma") +"\" role=\"button\">Editar</a>";
-			
+			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarAlunosCandidatosTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Vincular Alunos</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarTurmasTccProfessor?turma="+ linha.get("idTurma")+"\" role=\"button\">Exibir turma</a>";
 			html += "</tr>";
+			
+			
+			
+			/*
+			int idTurma = Integer.parseInt(linha.get("idTurma"));
+			ArrayList<Aluno> alunosVinculados = TurmaDAO.getInstance().pesquisarAlunosPorTurma(idTurma);
+			
+			html += "<tr><td colspan=3><table><tr><th>";
+			
+			if (alunosVinculados.size() == 0) {
+				html += "Sem alunos vinculados</table>";
+			}
+			else {
+				html += "Alunos Vinculados";
+				
+				for (Aluno aluno : alunosVinculados) {
+					html += "<tr><td>"+aluno.getNome()+"<td>"+aluno.getMatricula()+"</tr>";
+				}
+			}
+			html += "</table></td></tr>";
+			*/
+			
 		}
 		
 		
@@ -136,7 +149,7 @@ public class ServletExibirTurma extends HttpServlet{
 		+ "                        </div>\r\n"
 		
 		+ "                    </div>\r\n"
-		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"secretariaDashboard\" role=\"button\">Voltar</a>\r\n"
+		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
 		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 		+ "\r\n"
 		+ "                </div>\r\n"
@@ -193,14 +206,8 @@ public class ServletExibirTurma extends HttpServlet{
 		+ "\r\n"
 		+ "    <!-- Page level custom scripts -->\r\n"
 		+ "    <script src=\"resources/bootstrap/js/demo/datatables-demo.js\"></script>\r\n"
-		+ "\r\n";
-		
-		if ("edited".equals(request.getParameter("turma"))) {
-			html += "<script>alert(\"Turma editada com sucesso!\");</script>";
-		}
-		
-		
-		html += "</body>\r\n"
+		+ "\r\n"
+		+ "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
 		

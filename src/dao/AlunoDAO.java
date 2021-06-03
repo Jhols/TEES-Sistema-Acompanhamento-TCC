@@ -173,6 +173,7 @@ public class AlunoDAO {
 		
 	}
 	
+	//pesquisa todos os alunos cujo status seja candidato a tcc
 	public  ArrayList<Aluno> pesquisaStatusAlunoTccCandidato() {
 		ArrayList<Aluno> alunos = new ArrayList<Aluno>();
 		

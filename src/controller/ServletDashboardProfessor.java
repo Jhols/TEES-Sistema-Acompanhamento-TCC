@@ -27,6 +27,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		
 		if (professor == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 		
 		System.out.println(professor);
@@ -117,9 +118,9 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if (vizualizarAlunosCandidatosTCC) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"candidatosTCC\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"visualizarTurmas\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span style=\"text-align:center\">Alunos candidatos a TCC</span></a>\r\n"
+			+ "                    <span style=\"text-align:center\">Vincular alunos a sua turma de TCC</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (visualizarProjetosDisponiveis) {
