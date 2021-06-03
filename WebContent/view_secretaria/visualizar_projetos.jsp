@@ -10,7 +10,7 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="java.util.ArrayList, model.Projeto,dao.ProjetoDAO"%>
 
-<%@include file="topo_coordenador.html" %>
+<%@include file="topo_secretaria.html" %>
 	
 	<!-- DataTales Example -->
 	<div class="card shadow mb-4" style="margin:0 0 0 200px">
@@ -48,7 +48,7 @@
 								out.println("<td>" + projeto.getDescricao() + "</td>");
 								out.println("<td id='professor" + x + "'>" + projeto.getProfessor().getNome() + "</td>");
 								out.println("<td id='situacao" + x + "'>" + projeto.getSituacao().getNomeSituacao() + "</td>");
-								out.println("<td id='visualizarProjeto" + x + "'> <a href='coordenadorDashboard?opcao=consultarProjeto&id="+projeto.getId()+"'> Visualizar + </a> </td>");
+								out.println("<td id='visualizarProjeto" + x + "'> <a href='VisualizarTodosProjetos?opcao=consultarProjeto&prf=1&id="+projeto.getId()+"'> Visualizar + </a> </td>");
 								/*out.print("<td id='aluno" + x + "'>");
 								if (projeto.getSituacao() == SituacaoProjeto.ATIVO) {
 									for (InscricaoProjeto inscricao : inscricoes) {
@@ -89,4 +89,4 @@
 		</div>
 	</div>
 	
-<%@include file="rodape_coordenador.html" %>
+<%@include file="rodape_secretaria.html" %>

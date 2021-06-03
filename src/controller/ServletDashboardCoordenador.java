@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.Coordenador;
+import dao.AlunoDAO;
+import dao.InscricaoProjetoDAO;
+import dao.ProjetoDAO;
+import enums.Perfil;
+import enums.SituacaoProjeto;
+import model.InscricaoProjeto;
+import model.Pessoa;
+import model.PessoaFactory;
+import model.Projeto;
 
 
 
@@ -34,7 +44,13 @@ public class ServletDashboardCoordenador extends HttpServlet {
 					request.getRequestDispatcher("view_coordenador/visualizar_turmas.jsp").forward(request, response);
 					break;
 				case "visualizarProjetos":
+					ServletVisualizarTodosProjetos.pesquisarProjetos(request, response);
 					request.getRequestDispatcher("view_coordenador/visualizar_projetos.jsp").forward(request, response);
+					break;
+				case "consultarProjeto":
+					int idProjeto = Integer.parseInt(request.getParameter("id"));
+					ServletVisualizarTodosProjetos.consultarProjeto(idProjeto, request, response);
+					request.getRequestDispatcher("view_coordenador/visualizar_projeto_individual.jsp").forward(request, response);
 					break;
 				case "sair": //Limpa o cache, destroi a sessao e redireciona pra tela de login.
 					//request.getRequestDispatcher("ServletLogout").forward(request, response);
@@ -195,5 +211,8 @@ public class ServletDashboardCoordenador extends HttpServlet {
 		}
 		return false;
 	}
+	
+	
+	
 
 }

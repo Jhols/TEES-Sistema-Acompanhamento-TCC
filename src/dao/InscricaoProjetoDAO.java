@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.SituacaoInscricao;
+import enums.SituacaoProjeto;
 import model.Aluno;
 import model.InscricaoProjeto;
 import model.Projeto;
@@ -129,7 +130,9 @@ public class InscricaoProjetoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
 			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 		}
 		
 		return inscricao;
@@ -177,6 +180,50 @@ public class InscricaoProjetoDAO {
 		return inscricao;
 	}
 	
+	// Procura no banco uma inscricao de um projeto que haja um aluno associado
+	public InscricaoProjeto pesquisarAlunoAssociadoAoProjeto(int idProjeto) {
+		InscricaoProjeto inscricao = null;
+		
+		ResultSet resultado = null;
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM "+ BancoTabela.INSCRICAO_ALUNO_PROJETO
+			+ " WHERE id_projeto = "+ idProjeto
+			+ " AND id_situacao_aluno_projeto = " + SituacaoInscricao.toInt(SituacaoInscricao.ASSOCIADO) +";";
+		
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			if (resultado.next()) {
+				inscricao = new InscricaoProjeto();
+				
+				inscricao.setId(resultado.getInt("id_inscricao_aluno_projeto"));
+				inscricao.setSituacaoInscricao(SituacaoInscricao.fromInt(resultado.getInt("id_situacao_aluno_projeto")));
+				// PRECISA SEMPRE PREENCHER OS OBJECTOS DENTRO DO OBJETO SENAO LÀ FORA DA ERRO
+				inscricao.setAluno(AlunoDAO.getInstance().findById(resultado.getInt("id_aluno")));
+				inscricao.setProjeto(ProjetoDAO.getInstance().findById(resultado.getInt("id_projeto")));
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		
+		return inscricao;
+	}
+	
 	//Pesquisa por todas as inscricoes cadastradas
 	public ArrayList<InscricaoProjeto> pesquisarTodasInscricoes() {
 		
@@ -219,9 +266,7 @@ public class InscricaoProjetoDAO {
 		
 		return inscricoes;
 	}
-		
-	
-	
+
 	//Inclui uma incricao no banco de dados
 	public boolean incluir(InscricaoProjeto inscricao) {
 		String sql = null;
