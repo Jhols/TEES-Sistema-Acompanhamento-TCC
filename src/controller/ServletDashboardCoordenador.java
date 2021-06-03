@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.Coordenador;
 
@@ -15,6 +16,40 @@ import model.Coordenador;
 public class ServletDashboardCoordenador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String opcao = request.getParameter("opcao");
+		HttpSession session = request.getSession();
+		
+		System.out.println("Login> id: " + session.getId());
+		if (ServletLogin.getIdSessao() != session.getId())
+			response.sendRedirect("login.html");
+		else {
+			if (opcao == null) {
+				request.getRequestDispatcher("view_coordenador/dashboardCoordenador.jsp").forward(request, response);
+				String idSessao = request.getSession().getId();
+			}
+			else {
+				switch (opcao) {
+				case "visualizarTurmas":
+					request.getRequestDispatcher("view_coordenador/visualizar_turmas.jsp").forward(request, response);
+					break;
+				case "visualizarProjetos":
+					request.getRequestDispatcher("view_coordenador/visualizar_projetos.jsp").forward(request, response);
+					break;
+				case "sair": //Limpa o cache, destroi a sessao e redireciona pra tela de login.
+					//request.getRequestDispatcher("ServletLogout").forward(request, response);
+					response.sendRedirect("ServletLogout");
+					return;
+					//break;
+				default:
+					//request.getRequestDispatcher("dashboardAdministrador.jsp").forward(request, response);
+					break;
+				}
+			}
+		}
+	}
+	
+	/*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
@@ -143,6 +178,7 @@ public class ServletDashboardCoordenador extends HttpServlet {
 		
 		writer.write(html);
 	}
+	*/
 	
 	// verifica os parametros da pagina para saber se há alguma ação a ser executada pelo servlet
 	// retorna true se a ação redireciona a pagina

@@ -26,11 +26,8 @@ public class ServletDashboardProfessor extends HttpServlet {
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
-			// Se não houver professor logado, faz login automatico para facilitar os testes
-			// Futuramente mudar essa parte para redirecionar para a pagina de login
-			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
-			request.getSession().setAttribute("pessoa", professor);
+			response.sendRedirect("login.html");
+			return;
 		}
 		
 		System.out.println(professor);
@@ -121,9 +118,9 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if (vizualizarAlunosCandidatosTCC) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"candidatosTCC\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"visualizarTurmas\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span style=\"text-align:center\">Alunos candidatos a TCC</span></a>\r\n"
+			+ "                    <span style=\"text-align:center\">Vincular alunos a sua turma de TCC</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (visualizarProjetosDisponiveis) {

@@ -120,7 +120,7 @@ public class ServletDashboardAluno extends HttpServlet {
 			
 			
 			+ "			 <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"editAluno\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Editar Cadastro</span></a>\r\n"
 			+ "            </li>\r\n"
@@ -149,10 +149,16 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "    <!-- Custom scripts for all pages-->\r\n"
 			+ "    <script src=\"resources/bootstrap/js/sb-admin-2.min.js\"></script>\r\n"
 			+ "\r\n"
-			+ "</body>\r\n"
-			+ "\r\n"
+			+ "</body>\r\n";
+			
+			if ("OK".equals(request.getParameter("editaAluno"))) {
+				html += "<script>alert(\"Você editou seu cadastro com sucesso!\");</script>";
+			}
+			
+			html += "\r\n"
 			+ "</html>";
-		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		writer.write(html);
 	}
 
