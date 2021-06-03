@@ -106,7 +106,7 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		+ "            <li class=\"nav-item\">\r\n"
 		+ "                <a class=\"nav-link\" href=\"exibirTurma\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-		+ "                    <span style=\"text-align:center\">Vizualizar turmas de TCC</span></a>\r\n"
+		+ "                    <span style=\"text-align:center\">Visualizar turmas de TCC</span></a>\r\n"
 		+ "            </li>\r\n"
 	
 		+ "           <!-- Item Cadastro Professor Orientador -->\r\n"
@@ -125,15 +125,15 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		
 		+ "           <!-- Item Cadastro Professor Orientador -->\r\n"
 		+ "            <li class=\"nav-item\">\r\n"
-		+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+		+ "                <a class=\"nav-link\" href=\"VisualizarTodosProjetos?opcao=pesquisarProjetos&prf=1\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-		+ "                    <span style=\"text-align:center\">Vizualizar projetos disponíveis</span></a>\r\n"
+		+ "                    <span style=\"text-align:center\">Visualizar todos os projetos </span></a>\r\n"
 		+ "            </li>\r\n"
 		
 		+ "   <!-- botao -->\r\n"
 		+ "	<li class=\"nav-item\">\r\n"
 		+"<i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-		+ "<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Voltar</a>\r\n"
+		+ "<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Sair</a>\r\n"
 				
 		+ "</li>\r\n"
 		+ "  </ul>\r\n"

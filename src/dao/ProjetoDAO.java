@@ -54,7 +54,7 @@ public class ProjetoDAO {
 			projeto.setDescricao(resultado.getString("descricao"));
 			projeto.getProfessor().setId(resultado.getInt("id_professor"));
 			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getId()));
-			projeto.setSituacao(SituacaoProjeto.valueOf(resultado.getString("descricao").toUpperCase()));
+			projeto.setSituacao(SituacaoProjeto.fromString(resultado.getString("descricao").toLowerCase()));
             
 			stm.close();
 		}
@@ -63,6 +63,57 @@ public class ProjetoDAO {
 		} finally {
 			return projeto;
 		}
+	}
+	
+	public ArrayList<Projeto> pesquisarProjetosDisponiveisEAtivos() {
+		ArrayList<Projeto> projetos = new ArrayList<>();
+		ResultSet resultado = null;
+		String sql;
+		SituacaoProjeto situacao = SituacaoProjeto.DISPONIVEL;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		int disponivel = SituacaoProjeto.toInt(SituacaoProjeto.DISPONIVEL);
+		int ativo = SituacaoProjeto.toInt(SituacaoProjeto.ATIVO);;
+		
+		sql = "SELECT * FROM " + BancoTabela.PROJETO + " WHERE id_situacao = "+ disponivel +" OR id_situacao = " + ativo +";";
+		
+		//System.out.println(sql);
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			while(resultado.next()) {
+				Projeto projeto = new Projeto();
+				projeto.setId(resultado.getInt("id_projeto"));
+				projeto.setTitulo(resultado.getString("titulo"));
+				projeto.setDescricao(resultado.getString("descricao"));
+				projeto.setProfessor(ProfessorDAO.getInstance().findById(resultado.getInt("id_professor")));
+				projeto.setSituacao(SituacaoProjeto.fromInt(resultado.getInt("id_situacao")));
+				
+				projetos.add(projeto);
+			}
+			stm.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			System.out.println("resultado de findAll() em ProjetoDAO");
+			for (Projeto projeto : projetos) {
+				System.out.println(projeto);
+			}
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		return projetos;			
 	}
 
 	// pesquisa todos projetos de um professor (especificado pelo id_professor) cuja situação do projeto seja igual ao parametro 'situacao' passado

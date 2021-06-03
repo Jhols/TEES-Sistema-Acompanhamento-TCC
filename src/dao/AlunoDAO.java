@@ -7,8 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.Perfil;
-
+import enums.SituacaoInscricao;
 import model.Aluno;
+import model.InscricaoProjeto;
 import model.Pessoa;
 import model.PessoaFactory;
 
@@ -422,7 +423,45 @@ public class AlunoDAO {
         }
 	}
 	
-	
-	
+	// Procura no banco um aluno de um projeto em que esteja associado
+	public Aluno pesquisarAlunoAssociadoAoProjeto(int idProjeto) {
+		Aluno aluno = null;
+		
+		ResultSet resultado = null;
+		String sql;
+		
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		sql = "SELECT * FROM "+ BancoTabela.INSCRICAO_ALUNO_PROJETO
+			+ " WHERE id_projeto = "+ idProjeto
+			+ " AND id_situacao_aluno_projeto = " + SituacaoInscricao.toInt(SituacaoInscricao.ASSOCIADO) +";";
+		
+		Statement stm = null;
+		try {
+			stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			if (resultado.next()) {
+				aluno = new Aluno();
+				
+				aluno = AlunoDAO.getInstance().findById(resultado.getInt("id_aluno"));
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+		
+		return aluno;
+	}
+
 	
 }
