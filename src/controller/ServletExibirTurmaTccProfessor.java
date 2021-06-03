@@ -1,25 +1,20 @@
 package controller;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import dao.AlunoDAO;
-
-import dao.LoginDAO;
-import dao.ProfessorDAO;
+import dao.TurmaDAO;
 import model.Aluno;
-
 import model.Professor;
+import model.Turma;
 
-@WebServlet( urlPatterns = {"/candidatosTCC"})
-public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
+//TELA DE PROFESSOR TCC QUE VISUALIZA AS SUAS TURMAS DO SEMESTRE ATUAL
+@WebServlet( urlPatterns = {"/visualizarTurmasTccProfessor"})
+public class ServletExibirTurmaTccProfessor extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -28,37 +23,25 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		
 		// Tentar pegar o professor que está logado atualmente
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
-		
+		int idTurma= (Integer.parseInt(request.getParameter("turma")));
 		if (professor == null) {
-			// Se não houver professor logado, faz login automatico para facilitar os testes
-			// Futuramente mudar essa parte para redirecionar para a pagina de login
-			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
-			request.getSession().setAttribute("pessoa", professor);
-		}
-
-		// verificar se há alguma ação a ser executada pelo servlet
-		if (verificarAcao(request, response)) {
-			// se houve alguma acao a ser executada nesse servlet
-			// e a pagina foi redirecionada, para a execução da função
+			response.sendRedirect("login.html");
 			return;
 		}
-		AlunoDAO alunoDAO= new AlunoDAO();
-		var alunos = alunoDAO.pesquisaStatusAlunoTccCandidato();
+
+		
+		
+		ArrayList<Aluno> alunosVinculados = TurmaDAO.getInstance().pesquisarAlunosPorTurma(idTurma);
 		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
-		for (Aluno aluno : alunos) {
+		for (Aluno aluno : alunosVinculados) {
 			
 			//preencher os dados que serão mostrados na tabela
 			// ou que serão usados pelos botões (aceitar e rejeitar)
 			var linha = new HashMap<String, String>();
 			linha.put("nome", aluno.getNome());
 			linha.put("matricula", aluno.getMatricula());
-			linha.put("email", aluno.getEmail());
-			linha.put("telefone", aluno.getTelefone());
-			linha.put("idAluno",String.valueOf(aluno.getIdAluno()));
-			linha.put("idProfessor",String.valueOf(professor.getIdProfessor()));
 			linhas.add(linha);
 		}	
 		
@@ -108,7 +91,7 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Alunos Candidatos a TCC</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Suas turmas de TCC nesse semestre</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -119,22 +102,39 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
 		+ "                                            <th>Nome</th>\r\n"
-		+ "                                            <th>Matricula</th>\r\n"
-		+ "                                            <th>Email</th>\r\n"
-		+ "                                            <th>Telefone</th>\r\n"
-		+ "                                            <th>Aceitar</th>\r\n"
-		+ "                                            <th>Rejeitar</th>\r\n"
+		+ "                                            <th>Semestre</th>\r\n"
+		+ "                                            <th></th>\r\n"
+		
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
 		// cada linha da tabela representa um aluno cujo status é candidato a tcc 
 		for (var linha : linhas) {
-			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("matricula")+ "<td>" + linha.get("email")+ "<td>" + linha.get("telefone");
+			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("matricula");
 			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
-			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=aceitar&idAluno="+ linha.get("idAluno")+"&idProfessor="+linha.get("idProfessor") +"\" role=\"button\">Aceitar</a>";
-			html+="<td ><a class=\"btn btn-primary\" href=\"candidatosTCC?acao=rejeitar&idAluno="+linha.get("idAluno")+"\" role=\"candidatosTCC\">Rejeitar</a>";
+			
 			html += "</tr>";
+			
+			/*
+			int idTurma = Integer.parseInt(linha.get("idTurma"));
+			ArrayList<Aluno> alunosVinculados = TurmaDAO.getInstance().pesquisarAlunosPorTurma(idTurma);
+			
+			html += "<tr><td colspan=3><table><tr><th>";
+			
+			if (alunosVinculados.size() == 0) {
+				html += "Sem alunos vinculados</table>";
+			}
+			else {
+				html += "Alunos Vinculados";
+				
+				for (Aluno aluno : alunosVinculados) {
+					html += "<tr><td>"+aluno.getNome()+"<td>"+aluno.getMatricula()+"</tr>";
+				}
+			}
+			html += "</table></td></tr>";
+			*/
+			
 		}
 		
 		
@@ -146,7 +146,7 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 		+ "                        </div>\r\n"
 		
 		+ "                    </div>\r\n"
-		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"visualizarTurmas\" role=\"button\">Voltar</a>\r\n"
 		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 		+ "\r\n"
 		+ "                </div>\r\n"
@@ -213,33 +213,5 @@ public class ServleteVizualizarAlunosCandidatosTcc extends HttpServlet{
 	}
 
 
-	// verifica os parametros da pagina para saber se há alguma ação a ser executada pelo servlet
-	// retorna true se a ação redireciona a pagina
-	private boolean verificarAcao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String acao = request.getParameter("acao");
-		if (acao == null) {
-			return false;
-		}
-		var idAluno = Integer.parseInt(request.getParameter("idAluno"));
-		switch (acao) {
-		case "rejeitar":
-			// na ação de rejeitar deve-se mudar o status do status_aluno_tcc para rejeitado
-			
-			
-			AlunoDAO.atualizaStatusAlunoParaRejeitado(idAluno);
-					
-			response.sendRedirect("candidatosTCC");
-			return true;
-		case "aceitar":
-			AlunoDAO.atualizaStatusAlunoParaAceito(idAluno);
-			var idProfessor = Integer.parseInt(request.getParameter("idProfessor"));
-			AlunoDAO.adicionaAlunoNaTurmaAssociadaAProfessor(idAluno,idProfessor);
-			
-			//System.out.println("********************"+ idProfessor);
-			response.sendRedirect("candidatosTCC");
-			return true;
-			
-		}
-		return false;
-	}
+	
 }
