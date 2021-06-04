@@ -28,11 +28,8 @@ public class ServletImprimirTermo  extends HttpServlet {
 		// Tentar pegar o aluno que está logado atualmente
 		var aluno = (Aluno) request.getSession().getAttribute("pessoa");
 		if (aluno == null) {
-			// Se não houver aluno logado, faz login automatico para facilitar os testes
-			// Futuramente mudar essa parte para redirecionar para a pagina de login
-			System.out.println("login automatico");
-			aluno = (Aluno) LoginDAO.pesquisaPessoa("carol", "1234");
-			request.getSession().setAttribute("pessoa", aluno);
+			response.sendRedirect("login.html");
+			return;
 		}
 		
 		// ao entrar nessa pagina o parametro 'inscricao' deve indicar o id da inscricao cujo termo será impresso 

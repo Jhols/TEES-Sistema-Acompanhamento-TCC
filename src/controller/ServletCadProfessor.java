@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.ProfessorDAO;
 import model.Professor;
 
-
+//CADASTRO PROFESSOR ORIENTADOR
 @WebServlet(name = "Usuarios", urlPatterns = {"/cadProfessor"})
 public class ServletCadProfessor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,6 +32,7 @@ public class ServletCadProfessor extends HttpServlet {
 		
 		if (professor == null) {
 			response.sendRedirect("login");
+			return;
 		}
 		
 		String nome_professor = professor.getNome();
@@ -40,7 +41,8 @@ public class ServletCadProfessor extends HttpServlet {
 		String matricula= professor.getMatricula();
 		
 		if (nome_professor == null) {
-			nome_professor = "Prof Teste";
+			response.sendRedirect("login.html");
+			return;
 		}
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");

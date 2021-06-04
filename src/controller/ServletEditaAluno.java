@@ -43,6 +43,7 @@ public class ServletEditaAluno extends HttpServlet {
 		
 		if (aluno == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 		
 		String nome_aluno = aluno.getNome();

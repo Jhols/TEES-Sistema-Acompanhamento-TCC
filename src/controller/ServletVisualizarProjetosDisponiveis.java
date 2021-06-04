@@ -7,13 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import dao.TurmaDAO;
+import dao.ProfessorDAO;
+import dao.ProjetoDAO;
 import model.Professor;
-import model.Turma;
+import model.Projeto;
 
-//TELA DE PROFESSOR TCC QUE VISUALIZA AS SUAS TURMAS DO SEMESTRE ATUAL
-@WebServlet( urlPatterns = {"/visualizarTurmas"})
-public class ServletVisualizarTurmasTcc extends HttpServlet{
+@WebServlet(urlPatterns = {"/projetosDisponiveisVisualizar"})
+public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -28,21 +28,24 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 			return;
 		}
 
-		TurmaDAO turmaDAO= new TurmaDAO();
-		var turmas = turmaDAO.pesquisarTurmaDoSemestreAtualDeCadaProfessor(professor);
+				
+		// busca a lista de projetos do professor 
+		var projetos = ProjetoDAO.pesquisarProjetosDisponiveisEAtivos();
+				
 		// uma lista de linha para preencher a tabela de visualização
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
-		for (Turma turma : turmas) {
-			
-			//preencher os dados que serão mostrados na tabela
-			// ou que serão usados pelos botões (aceitar e rejeitar)
-			var linha = new HashMap<String, String>();
-			linha.put("nome", turma.getNome());
-			linha.put("semestre", turma.getSemestre());
-			linha.put("idTurma",String.valueOf(turma.getId()));
-			linhas.add(linha);
-		}	
+		for (Projeto projeto : projetos) {
+					//Professor professorProjeto=ProfessorDAO.pesquisarPorIdProfessor(projeto.getIdProfessor());
+					var linha = new HashMap<String, String>();
+					linha.put("titulo", projeto.getTitulo());
+					linha.put("descricao", projeto.getDescricao());
+					linha.put("orientador",projeto.getProfessor().getNome());
+					linha.put("situacao", projeto.getSituacao().getNomeSituacao());
+					linhas.add(linha);
+		}
+				
+	
 		
 		
 		response.setCharacterEncoding("UTF-8");
@@ -90,7 +93,7 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Suas turmas de TCC nesse semestre</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Alunos Candidatos</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -100,24 +103,18 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
-		+ "                                            <th>Nome</th>\r\n"
-		+ "                                            <th>Semestre</th>\r\n"
-		+ "                                            <th></th>\r\n"
-		+ "                                            <th></th>\r\n"
+		+ "                                            <th>Título</th>\r\n"
+		+ "                                            <th>Descrição</th>\r\n"
+		+ "                                            <th>Orientador</th>\r\n"
+		+ "                                            <th>Situação</th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
-		// cada linha da tabela representa um aluno cujo status é candidato a tcc 
+		// cada linha da tabela representa uma inscrição valida para um projeto desse professor
 		for (var linha : linhas) {
-			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("semestre");
-			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
-			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarAlunosCandidatosTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Vincular Alunos</a>";
-			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarTurmasTccProfessor?turma="+ linha.get("idTurma")+"\" role=\"button\">Exibir turma</a>";
+			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("descricao")+ "<td>" + linha.get("orientador")+ "<td>" + linha.get("situacao");
 			html += "</tr>";
-			
-			
-						
 		}
 		
 		
@@ -190,11 +187,11 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 		+ "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
-		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(html);
 		
 	}
 
 
-	
-}
+	}

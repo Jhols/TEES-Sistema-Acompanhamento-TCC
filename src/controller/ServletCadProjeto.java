@@ -1,18 +1,19 @@
 package controller;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import dao.LoginDAO;
 import dao.ProjetoDAO;
 import enums.SituacaoProjeto;
 import model.Professor;
 import model.Projeto;
+
+
+//CADASTRO DE PROJETOS 
 
 @WebServlet( urlPatterns = {"/cadProjeto"})
 public class ServletCadProjeto extends HttpServlet {

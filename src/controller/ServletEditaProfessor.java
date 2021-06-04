@@ -40,6 +40,7 @@ public class ServletEditaProfessor extends HttpServlet {
 		
 		if (professor == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 		
 		String nome_professor = professor.getNome();

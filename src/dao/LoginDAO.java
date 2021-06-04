@@ -17,7 +17,7 @@ public class LoginDAO {
 
 	private static LoginDAO uniqueInstance; //Singleton
 	
-	private LoginDAO() { }
+	public LoginDAO() { }
 	
 	public static synchronized LoginDAO getInstance() {
 		if (uniqueInstance == null)

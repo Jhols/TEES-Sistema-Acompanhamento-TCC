@@ -1,7 +1,6 @@
 package controller;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.AlunoDAO;
+import dao.LoginDAO;
 import dao.TurmaDAO;
 import model.Aluno;
 import model.Professor;
-import model.Turma;
+
 
 //TELA DE PROFESSOR TCC QUE VISUALIZA DOS ALUNOS CANDIDATOS A TCC
 @WebServlet( urlPatterns = {"/visualizarAlunosCandidatosTcc"})
@@ -92,7 +92,7 @@ public class ServletVisualizarAlunoCandidatosTcc extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Suas turmas de TCC nesse semestre</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Alunos candidatos</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -218,6 +218,10 @@ public class ServletVisualizarAlunoCandidatosTcc extends HttpServlet{
 				int idAluno = Integer.parseInt(request.getParameter(name));
 				TurmaDAO.getInstance().vincularAluno(idTurma, idAluno);
 				AlunoDAO.atualizaStatusAlunoParaAceito(idAluno);
+				LoginDAO login = new LoginDAO();
+				Aluno aluno = AlunoDAO.getInstance().pesquisarAlunoPorIdAluno(idAluno);
+				login.addLogin(aluno.getId(), aluno.getEmail(), aluno.getMatricula());
+				
 				System.out.println("Vinculando aluno id = " + idAluno);
 				foundAluno = true;
 			}

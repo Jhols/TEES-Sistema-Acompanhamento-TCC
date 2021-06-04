@@ -15,7 +15,7 @@ import model.Aluno;
 import model.Pessoa;
 import model.PessoaFactory;
 
-
+//CADASTRO DE ALUNOS 
 @WebServlet("/CadastroAlunoServlet")
 public class ServletCadastroAluno extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,9 +28,6 @@ public class ServletCadastroAluno extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String primeiroNome = request.getParameter("primeiroNome");
@@ -38,13 +35,16 @@ public class ServletCadastroAluno extends HttpServlet {
     	String email = request.getParameter("email");
     	String telefone = request.getParameter("telefone");
     	String matricula = request.getParameter("matricula");
+    	System.out.println(matricula);
     	
     	//Cria um registro de uma nova pessoa como aluno
-    	Pessoa aluno = PessoaFactory.getPessoa(Perfil.ALUNO, primeiroNome + " " + sobrenome, matricula);
+    	Aluno aluno = (Aluno) PessoaFactory.getPessoa(Perfil.ALUNO, primeiroNome + " " + sobrenome, matricula);
     	aluno.setEmail(email);
     	aluno.setTelefone(telefone);
     	
     	((Aluno) aluno).setstatusAlunoTCC(2); //TIPO CANDIDATO
+    	
+    	System.out.println(aluno.getMatricula());
     	
     	//Incluir aluno no banco. Caso haja sucesso na inclusao e' exibida uma pagina de confirmacao do cadastro. Senao apresenta uma tela de erro.
     	boolean confirmado = AlunoDAO.getInstance().addAluno((Aluno) aluno);

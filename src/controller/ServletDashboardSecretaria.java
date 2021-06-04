@@ -20,6 +20,7 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		
 		if (secretaria == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 		
 		System.out.println(secretaria);
@@ -122,7 +123,7 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		+ "            <li class=\"nav-item\">\r\n"
 		+ "                <a class=\"nav-link\" href=\"VisualizarTodosProjetos?opcao=pesquisarProjetos&prf=1\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-		+ "                    <span style=\"text-align:center\">Visualizar todos os projetos </span></a>\r\n"
+		+ "                    <span style=\"text-align:center\">Visualizar projetos  </span></a>\r\n"
 		+ "            </li>\r\n"
 		
 		+ "   <!-- botao -->\r\n"

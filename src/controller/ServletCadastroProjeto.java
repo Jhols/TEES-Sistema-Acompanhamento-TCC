@@ -13,7 +13,7 @@ import enums.SituacaoProjeto;
 import model.Projeto;
 
 /**
- * Servlet implementation class CadastroProjetoServlet
+ * CADASTRO DE PROJETOS
  */
 @WebServlet(name = "CadastroProjeto", urlPatterns = { "/cadastroProjeto" })
 public class ServletCadastroProjeto extends HttpServlet {

@@ -25,6 +25,7 @@ public class ServletDashboardAluno extends HttpServlet {
 		var aluno = (Aluno) request.getSession().getAttribute("pessoa");
 		if (aluno == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 		
 		System.out.println("ALUNO LOGADO "+aluno);

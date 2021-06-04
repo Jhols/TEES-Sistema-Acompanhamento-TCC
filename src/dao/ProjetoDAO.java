@@ -65,11 +65,11 @@ public class ProjetoDAO {
 		}
 	}
 	
-	public ArrayList<Projeto> pesquisarProjetosDisponiveisEAtivos() {
+	public static ArrayList<Projeto> pesquisarProjetosDisponiveisEAtivos() {
 		ArrayList<Projeto> projetos = new ArrayList<>();
 		ResultSet resultado = null;
 		String sql;
-		SituacaoProjeto situacao = SituacaoProjeto.DISPONIVEL;
+		
 		
 		Connection conexao = null;
 		try {

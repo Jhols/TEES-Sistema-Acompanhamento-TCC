@@ -31,11 +31,8 @@ public class ServletGerarTermo extends HttpServlet {
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
-			// Se não houver professor logado, faz login automatico para facilitar os testes
-			// Futuramente mudar essa parte para redirecionar para a pagina de login
-			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
-			request.getSession().setAttribute("pessoa", professor);
+			response.sendRedirect("login.html");
+			return;
 		}
 		
 		// o id do aluno e do projeto cujo termo será mostrado são passados por parametro

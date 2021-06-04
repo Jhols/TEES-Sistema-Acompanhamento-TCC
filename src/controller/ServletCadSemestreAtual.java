@@ -17,7 +17,7 @@ import enums.Perfil;
 import model.Pessoa;
 import model.Semestre;
 
-
+//CADASTRO SEMESTRE ATUAL
 @WebServlet( urlPatterns = {"/cadSemestreAtual"})
 public class ServletCadSemestreAtual extends HttpServlet {
 	private static final long serialVersionUID = 1L;

@@ -16,7 +16,7 @@ import model.Pessoa;
 import model.PessoaFactory;
 
 /**
- * Servlet implementation class CadastroSecretariaServlet
+ * Cadastro secretaria
  */
 @WebServlet("/CadastroSecretariaServlet")
 public class ServletCadastroSecretaria extends HttpServlet {

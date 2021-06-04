@@ -28,6 +28,7 @@ public class ServletCadTurma extends HttpServlet {
 		
 		if (secretaria == null) {
 			response.sendRedirect("login.html");
+			return;
 		}
 		System.out.println(request.getParameter("idTurma"));
 		if (request.getParameter("idTurma") == null) {

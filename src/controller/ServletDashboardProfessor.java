@@ -126,9 +126,9 @@ public class ServletDashboardProfessor extends HttpServlet {
 		if (visualizarProjetosDisponiveis) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
-			+ "                <a class=\"nav-link\" href=\"404.jsp\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"projetosDisponiveisVisualizar\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span style=\"text-align:center\">Visualizar projetos disponíveis</span></a>\r\n"
+			+ "                    <span style=\"text-align:center\">Visualizar projetos </span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (visualizarAlunosDaTurma) {
@@ -160,7 +160,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "            <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"candidatos\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span>Alunos candidatos</span></a>\r\n"
+			+ "                    <span>Alunos candidatos aos projetos</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		if (projetosComOrientandos) {

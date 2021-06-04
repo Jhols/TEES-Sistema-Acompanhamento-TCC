@@ -16,6 +16,7 @@ public enum SituacaoProjeto {
 	public String getNomeSituacao() {
 		return nomeSituacao;
 	}
+	//str
 	public static SituacaoProjeto fromString(String value)
 	{
 		if (value.equals(SituacaoProjeto.EXCLUIDO.getNomeSituacao())) {

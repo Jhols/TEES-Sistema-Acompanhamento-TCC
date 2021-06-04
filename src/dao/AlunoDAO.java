@@ -362,6 +362,7 @@ public class AlunoDAO {
 			stm.setInt(1, idPessoa);
 			stm.setString(2, aluno.getMatricula());
 			stm.setInt(3, Aluno.toInt(aluno.getStatusAlunoTCC()));
+			
 			int rowsAffected = stm.executeUpdate(); 
 			// retorna qtde de linhas que foi alterada pelo sql
 			// idealmente 1, pois foi inserido 01 linha

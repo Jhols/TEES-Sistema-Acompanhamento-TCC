@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.InscricaoProjetoDAO;
-import dao.LoginDAO;
+
 import dao.ProjetoDAO;
 import enums.SituacaoInscricao;
 import enums.SituacaoProjeto;
@@ -31,11 +31,8 @@ public class ServletVisualizarCandidatos extends HttpServlet{
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		
 		if (professor == null) {
-			// Se não houver professor logado, faz login automatico para facilitar os testes
-			// Futuramente mudar essa parte para redirecionar para a pagina de login
-			System.out.println("login automatico");
-			professor = (Professor) LoginDAO.pesquisaPessoa("alexandre", "1234");
-			request.getSession().setAttribute("pessoa", professor);
+			response.sendRedirect("login.html");
+			return;
 		}
 
 		// verificar se há alguma ação a ser executada pelo servlet
