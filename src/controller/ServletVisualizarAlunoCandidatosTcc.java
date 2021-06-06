@@ -118,6 +118,7 @@ public class ServletVisualizarAlunoCandidatosTcc extends HttpServlet{
 			html += "<td><input type=\"checkbox\" name=\"idAluno"+contador+"\" value=\"" +linha.get("idAluno") +"\" >";
 			
 			html += "</tr>";
+			contador++;
 		}
 		
 		
@@ -132,7 +133,7 @@ public class ServletVisualizarAlunoCandidatosTcc extends HttpServlet{
 		+ "                        </div>\r\n"
 		
 		+ "                    </div>\r\n"
-		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"visualizarTurmas\" role=\"button\">Voltar</a>\r\n"
 		+ "\n<a class= \"btn btn-primary\" align=\"center\" href= \"login.html\" role=\"button\">Login</a>\r\n"
 		+ "\r\n"
 		+ "                </div>\r\n"
