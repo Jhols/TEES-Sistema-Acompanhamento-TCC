@@ -5,15 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
 import enums.BancoTabela;
 import model.Pessoa;
+import model.Secretaria;
 import util.ConnectionFactory;
 
 public class SecretariaDAO {
 	private static SecretariaDAO uniqueInstance; //Singleton
 	
-	public SecretariaDAO() { }
+	private SecretariaDAO() { }
 	
 	public static synchronized SecretariaDAO getInstance() {
 		if (uniqueInstance == null)
@@ -83,5 +84,79 @@ public class SecretariaDAO {
         }
         return id;
 	}
+	
+	// Consulta todos os alunos no banco de dados e os inclui numa lista a ser retornada.
+		
+		public ArrayList<Secretaria> pesquisarTodasSecretarias() {
+			ArrayList<Secretaria> secretarias = new ArrayList<>();
+			ResultSet resultado = null;
+			try {
+				Connection con = ConnectionFactory.getConnection();
+				
+				String sql = "Select * from " + BancoTabela.PESSOA 
+						+ " inner join "+BancoTabela.PERFIL_PESSOA + " on "+ BancoTabela.PESSOA +".id_pessoa= "
+						+BancoTabela.PERFIL_PESSOA+".id_pessoa where "+BancoTabela.PERFIL_PESSOA+".id_perfil=3";
+				Statement stm = con.createStatement();
+				resultado = stm.executeQuery(sql);
+				
+				while (resultado.next()) {
+					Secretaria secretaria = new Secretaria();
+					popularSecretaria(secretaria, resultado);
+					secretarias.add(secretaria);
+				}
+						
+			}
+			
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			return secretarias;
+		}
+		
+		public Secretaria pesquisarSecretariaPorID(int idSecretaria) {
+			Secretaria secretaria = null;
+			ResultSet resultado = null;
+			try {
+				Connection con = ConnectionFactory.getConnection();
+				
+				String sql = "Select * from " + BancoTabela.PESSOA 
+						+ " inner join "+BancoTabela.PERFIL_PESSOA + " on "+ BancoTabela.PESSOA +".id_pessoa= "
+						+BancoTabela.PERFIL_PESSOA+".id_pessoa where "+BancoTabela.PERFIL_PESSOA+".id_perfil=3 	and "+
+						BancoTabela.PESSOA+".id_pessoa=?";
+						
+						
+				PreparedStatement stm = con.prepareStatement(sql);
+				stm.setInt(1, idSecretaria);
+				resultado = stm.executeQuery();
+				if (resultado.next()) {
+					secretaria = new Secretaria();
+					popularSecretaria(secretaria, resultado);
+				}
+				
+			}
+			
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			return secretaria;
+		}
+		
+		public void updateSecretaria(Secretaria secretaria) {
+			PessoaDAO.getInstance().updatePessoa(secretaria);
+		}
+		
+		// Popula os campos de secretaria a partir do resultado de uma consulta sql
+		private static void popularSecretaria(Secretaria secretaria, ResultSet resultado) throws SQLException {
+			secretaria.setEmail(resultado.getString("email"));
+			secretaria.setId(resultado.getInt("id_pessoa"));
+			secretaria.setNome(resultado.getString("nome"));
+			secretaria.setTelefone(resultado.getString("telefone"));
+			
+		}
+		
+		
+		
 	
 }

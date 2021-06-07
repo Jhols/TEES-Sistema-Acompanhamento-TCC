@@ -165,8 +165,6 @@ public class PessoaDAO {
 	
 	//adiciona uma pessoa 
 	public int addPessoa(Pessoa pessoa) {
-		
-		
 		String sql;
 		
 		Connection conexao = null;
@@ -202,6 +200,23 @@ public class PessoaDAO {
 	        }
 		 return 0;
 		
+	}
+	
+	public void updatePessoa(Pessoa pessoa) {
+		try {
+			String sql = "Update pessoa set nome=?, email=?, telefone=? where id_pessoa=?";
+			Connection con = ConnectionFactory.getConnection();
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setString(1, pessoa.getNome());
+			stm.setString(2, pessoa.getEmail());
+			stm.setString(3, pessoa.getTelefone());
+			stm.setInt(4, pessoa.getId());
+			
+			stm.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 
