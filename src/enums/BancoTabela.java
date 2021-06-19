@@ -17,7 +17,8 @@ public enum BancoTabela {
 	TURMA_ALUNO("turma_aluno"),
 	SITUACAO_TURMA("situacao_turma"),
 	TURMA("turma"),
-	SEMESTRE("semestre");
+	SEMESTRE("semestre"),
+	RELATORIO("relatorio");
 	
 	private String nomeTabela;
 	

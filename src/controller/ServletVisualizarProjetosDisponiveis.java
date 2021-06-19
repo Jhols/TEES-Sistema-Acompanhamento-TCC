@@ -103,10 +103,10 @@ public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
-		+ "                                            <th>TÃ­tulo</th>\r\n"
-		+ "                                            <th>DescriÃ§Ã£o</th>\r\n"
+		+ "                                            <th>TÍtulo</th>\r\n"
+		+ "                                            <th>Descrição</th>\r\n"
 		+ "                                            <th>Orientador</th>\r\n"
-		+ "                                            <th>SituaÃ§Ã£o</th>\r\n"
+		+ "                                            <th>Situação</th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";

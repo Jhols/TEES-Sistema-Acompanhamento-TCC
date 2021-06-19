@@ -311,9 +311,6 @@ public class ProjetoDAO {
 	}
 	
 	
-	
-	
-	
 	// atualiza para 'ativo' a situação do projeto especificado pelo id
 	public void atualizarParaAtivo(int idProjeto) {
 		

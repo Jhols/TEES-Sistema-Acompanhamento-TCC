@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,12 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import dao.AlunoDAO;
 import dao.InscricaoProjetoDAO;
 import dao.ProjetoDAO;
+import dao.RelatorioDAO;
 import enums.Perfil;
 import model.Aluno;
 import model.InscricaoProjeto;
 import model.Pessoa;
 import model.PessoaFactory;
 import model.Projeto;
+import model.Relatorio;
 
 /**
  * Servlet implementation class InscricaoProjetoServlet
@@ -40,7 +43,9 @@ public class ServletInscricaoProjeto extends HttpServlet {
     	
     	switch(opcao) {
 	    	case "buscar":
-	    		buscarInscricaoAssociada(request, response);
+	    		buscarInscricaoAssociada(request);
+	    		buscarRelatorios(request);
+	    		request.getRequestDispatcher("aluno_projeto.jsp").forward(request, response);
 	    		break;
 	    		
 	    	case "incluir": //Insere uma inscricao no banco de dados e atualiza a situacao do aluno em relacao ao projeto
@@ -57,6 +62,10 @@ public class ServletInscricaoProjeto extends HttpServlet {
 	    	case "teste":
 	    		teste(request, response);
 	    		break;
+	    		
+	    	case "apresentarRelatorio":
+	    		apresentarRelatorio(request, response);
+	    		break;
     	}
     }
     
@@ -66,12 +75,38 @@ public class ServletInscricaoProjeto extends HttpServlet {
     }
     
     //Pesquisa pela inscricao em que um aluno possua um projeto associado
-    protected void buscarInscricaoAssociada(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void buscarInscricaoAssociada(HttpServletRequest request) throws IOException, ServletException {
     	InscricaoProjeto inscricao = new InscricaoProjeto();
     	int id = (int) request.getSession().getAttribute("idAluno");
     	inscricao = InscricaoProjetoDAO.getInstance().pesquisarProjetoAssociado(id);
     	request.setAttribute("inscricao", inscricao);
-    	request.getRequestDispatcher("aluno_projeto.jsp").forward(request, response);
+    }
+    
+    protected void buscarRelatorios(HttpServletRequest request) {
+    	ArrayList<Relatorio> relatoriosRecebidos = new ArrayList<Relatorio>();
+    	ArrayList<Relatorio> relatoriosEnviados = new ArrayList<Relatorio>();
+    	
+    	int idPessoa =  (int) request.getSession().getAttribute("idPessoa");
+    	
+    	relatoriosRecebidos = RelatorioDAO.getInstance().findAllRelatoriosByDestinatario(idPessoa);
+    	relatoriosEnviados = RelatorioDAO.getInstance().findAllRelatoriosByAutor(idPessoa);
+    	
+    	request.setAttribute("relatoriosRecebidos", relatoriosRecebidos);
+    	request.setAttribute("relatoriosEnviados", relatoriosEnviados);
+    	System.out.println("Relatorios Procurados");
+    }
+    
+    protected void apresentarRelatorio(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	int idRelatorio = Integer.parseInt(request.getParameter("idRelatorio"));
+    	Relatorio relatorio = new Relatorio();
+    	System.out.println("req " + request.getParameter("idRelatorio"));
+    	System.out.println("id " + idRelatorio);
+    	relatorio = RelatorioDAO.getInstance().findRelatorioById(idRelatorio);
+    	
+    	response.setContentType("text/Plain");
+		PrintWriter out = response.getWriter();
+		
+		out.print(relatorio.getTexto());
     }
     
 	protected void incluirInscricao(HttpServletRequest request, HttpServletResponse response) throws IOException {
