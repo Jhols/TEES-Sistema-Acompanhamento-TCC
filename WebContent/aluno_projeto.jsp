@@ -142,7 +142,7 @@
 				    <input id="tituloRelatorio" type="text" class="form-control form-control-user" required><br>
 				    <label for="destinatarioRelatorio"> Destinatário </label><br>
 				    <select id="destinatarioRelatorio"  class="form-control form-control-user" required>
-				    	<option value="<%= inscricao.getProjeto().getProfessor().getId() %>"> Orientador </option>
+				    	<option value="<%= inscricao.getProjeto().getProfessor().getId() %>" selected> Orientador </option>
 				    </select>
 				    <br>
 			    	<div style="margin-top:130px"></div>
@@ -234,7 +234,7 @@ $(document).ready(function() {
 });
 $("#textoRelatorio").keyup(verificarCampos);
 $("#tituloRelatorio").keyup(verificarCampos);
-$("#destinatarioRelatorio").keyup(verificarCampos);
+$("#destinatarioRelatorio").change(verificarCampos);
 
 function verificarCampos() {
 	var t1 = false, t2 = false, t3 = false;
@@ -243,7 +243,7 @@ function verificarCampos() {
 		t1 = true;
 	if ($("#tituloRelatorio").val() != "")
 		t2 = true;
-	if ($("#destinatarioRelatorio").val() != "")
+	if ($("#destinatarioRelatorio").val() != null)
 		t3 = true;
 	if (t1 == t2 && t2 == t3 && t1 == true) {
 		$("#btn-enviar").prop("disabled", false);
