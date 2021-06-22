@@ -297,6 +297,9 @@ function verificarCampos() {
 		margin: 0;
 	}
 
+	.tab_label:hover {
+    	background-color: #525252;
+	}
 
 	.nav_tabs .rd_tab { 
 		display:none;

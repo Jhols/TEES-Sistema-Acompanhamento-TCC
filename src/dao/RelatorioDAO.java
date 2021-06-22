@@ -160,8 +160,7 @@ public class RelatorioDAO {
 			relatorio.setTitulo(resultado.getString("titulo"));
 			relatorio.setIdAutor(resultado.getInt("id_autor_pessoa"));
 			relatorio.setIdDestinatario(resultado.getInt("id_destinatario_pessoa"));
-			Pessoa p = PessoaDAO.getInstance().findById(Perfil.NENHHUM, resultado.getInt("id_destinatario_pessoa"));
-			relatorio.setNomeDestinatario(p.getNome());
+			relatorio.setNomeDestinatario(PessoaDAO.getInstance().findById(Perfil.NENHHUM, relatorio.getIdDestinatario()).getNome());
 			relatorio.setData(resultado.getDate("data"));
 			relatorio.setNomeAutor(resultado.getString("nome"));
 			relatorio.setTexto(resultado.getString("texto"));
