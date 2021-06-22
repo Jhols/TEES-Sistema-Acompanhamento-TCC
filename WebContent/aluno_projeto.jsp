@@ -136,7 +136,7 @@
 		
 		<div id="regiaoTexto">
 			<form id="formulario">
-				<textarea id="textoRelatorio" cols="50" rows="14" readonly> Selecione um relatório na lista ao lado para ler </textarea>
+				<textarea id="textoRelatorio" cols="50" rows="14" readonly> </textarea>
 				<div id="camposRelatorio">
 				    <label for="tituloRelatorio"> Título </label><br>
 				    <input id="tituloRelatorio" type="text" class="form-control form-control-user" required><br>
@@ -229,6 +229,9 @@ function enviarRelatorio(idAutor) {
 	})
 }
 
+$(document).ready(function() {
+	$("#textoRelatorio").val("Selecione um relatório na lista ao lado para ler");
+});
 $("#textoRelatorio").keyup(verificarCampos);
 $("#tituloRelatorio").keyup(verificarCampos);
 $("#destinatarioRelatorio").keyup(verificarCampos);
