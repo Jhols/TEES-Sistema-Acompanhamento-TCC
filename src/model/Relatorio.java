@@ -3,7 +3,7 @@ package model;
 import java.util.Date;
 
 public class Relatorio {
-	int idRelatorio, autor, destinatario;
+	int idRelatorio, idAutor, idDestinatario;
 	String titulo, texto, nomeAutor;
 	Date data;
 	
@@ -15,12 +15,17 @@ public class Relatorio {
 		super();
 		this.idRelatorio = idRelatorio;
 	}
-
-	public Relatorio(int autor, int destinatario, String texto, Date data) {
+	
+	public Relatorio(String titulo, int autor, int destinatario, String texto) {
 		super();
-		this.autor = autor;
-		this.destinatario = destinatario;
+		this.titulo = titulo;
+		this.idAutor = autor;
+		this.idDestinatario = destinatario;
 		this.texto = texto;
+	}
+
+	public Relatorio(String titulo, int autor, int destinatario, String texto, Date data) {
+		this(titulo, autor, destinatario, texto);
 		this.data = data;
 	}
 
@@ -31,16 +36,16 @@ public class Relatorio {
 		this.idRelatorio = idRelatorio;
 	}
 	public int getAutor() {
-		return autor;
+		return idAutor;
 	}
 	public void setAutor(int autor) {
-		this.autor = autor;
+		this.idAutor = autor;
 	}
 	public int getDestinatario() {
-		return destinatario;
+		return idDestinatario;
 	}
 	public void setDestinatario(int destinatario) {
-		this.destinatario = destinatario;
+		this.idDestinatario = destinatario;
 	}
 	public String getTexto() {
 		return texto;

@@ -1,12 +1,16 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
+import enums.SituacaoProjeto;
+import model.Projeto;
 import model.Relatorio;
 import util.ConnectionFactory;
 
@@ -163,5 +167,43 @@ public class RelatorioDAO {
 		}
 		return relatorio;
 	}
+	
+	public boolean addRelatorio(Relatorio relatorio) {
+		
+		boolean sucesso = false;
+		
+		String sql;
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.RELATORIO + " (titulo, id_autor_pessoa, id_destinatario_pessoa, data, texto) values (?, ?, ?, ?, ? )";
+		
+		PreparedStatement prepareStatement = null;
+        try {
+        	prepareStatement = conexao.prepareStatement(sql);
+        			
+            prepareStatement.setString(1, relatorio.getTitulo());
+            prepareStatement.setInt(2, relatorio.getAutor());
+            prepareStatement.setInt(3, relatorio.getDestinatario());
+            prepareStatement.setDate(4, new java.sql.Date(relatorio.getData().getTime()));
+            prepareStatement.setString(5, relatorio.getTexto());
+            
+            prepareStatement.executeUpdate();
+            sucesso = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+			try {prepareStatement.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+		}
+        
+        return sucesso;
+    }
 	
 }

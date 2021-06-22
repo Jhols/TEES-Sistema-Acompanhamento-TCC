@@ -127,12 +127,28 @@
 						</article>
 					</div>
 				</li>
+				<li id="tabCriarRelatorio">
+				  <input type="button" name="envRelatorio" class="btn btn-primary" value="Novo relatório" onClick="criarRelatorio()">
+				</li>
 			</ul>
 		</nav>
 		</div>
 		
-		<div style="">
-			<textarea id="textoRelatorio" cols="50" rows="14" readonly> Selecione um relatório na lista ao lado para ler </textarea>
+		<div id="regiaoTexto">
+			<form id="formulario">
+				<textarea id="textoRelatorio" cols="50" rows="14" readonly> Selecione um relatório na lista ao lado para ler </textarea>
+				<div id="camposRelatorio">
+				    <label for="tituloRelatorio"> Título </label><br>
+				    <input id="tituloRelatorio" type="text" class="form-control form-control-user" required><br>
+				    <label for="destinatarioRelatorio"> Destinatário </label><br>
+				    <select id="destinatarioRelatorio"  class="form-control form-control-user" required>
+				    	<option value="<%= inscricao.getProjeto().getProfessor().getId() %>"> Orientador </option>
+				    </select>
+				    <br>
+			    	<div style="margin-top:130px"></div>
+			    	<input type="button" id="btn-enviar" name="enviar" class="btn btn-primary" value="Enviar Relatório" onclick="enviarRelatorio(<%= request.getSession().getAttribute("idPessoa") %>)">
+			    </div>
+		    </form>
 		</div>
 	</div>
 		
@@ -156,7 +172,9 @@
 <%@include file="template_rodape.html"%>
 
 <script>
-function apresentarRelatorio(idRelatorio) {	
+//Funcao que apresenta um relatorio na TextArea, como se fosse um email
+function apresentarRelatorio(idRelatorio) {
+	$("#camposRelatorio").css("visibility", "hidden");
 	$.ajax({
 		method : "POST",
 		url : "InscricaoProjetoServlet?opcao=apresentarRelatorio",
@@ -168,10 +186,68 @@ function apresentarRelatorio(idRelatorio) {
 			$("#textoRelatorio").val("Carregando mensagem...");
 		},
 		success : function(msg) { //Em caso de sucesso na requisicao, executa a seguinte funcao
+			$("#textoRelatorio").attr("readonly", "readonly");
 			$("#textoRelatorio").css("color", "#383838");
-			$("#textoRelatorio").val(msg);
+			$("#textoRelatorio").val(msg); //Apresenta a mensagem
 		}
 	})
+}
+
+//Funcao executada apos clicar no botao "Novo relatorio".
+//Permite o aluno criar um relatorio para ser enviado para um professor
+function criarRelatorio() {
+	$("#camposRelatorio").css("visibility", "visible");
+	$("#textoRelatorio").val("");
+	$("#tituloRelatorio").val("");
+	$("#destinatarioRelatorio").val("");
+	$("#textoRelatorio").focus();
+	$("#textoRelatorio").prop("readonly", false);
+	$("#btn-enviar").prop("disabled", "disabled");
+}
+
+function enviarRelatorio(idAutor) {
+	$.ajax({
+		method : "POST",
+		url : "InscricaoProjetoServlet?opcao=enviarRelatorio",
+		data : {
+			'titulo' : $("#tituloRelatorio").val(),
+			'autor' : idAutor,
+			'destinatario' : $("#destinatarioRelatorio").val(),
+			'texto' : $("#textoRelatorio").val()
+		},
+		beforeSend: function() { //Mensagem de carregamento da mensagem
+			$("#btn-enviar").prop("disabled", "disabled");
+			$("#btn-enviar").removeClass("btn btn-primary").addClass("btn btn-secondary");
+			$("#btn-enviar").val("Enviando, aguarde...");
+		},
+		success : function(msg) { //Em caso de sucesso na requisicao, executa a seguinte funcao
+			$("#textoRelatorio").prop("readonly", "readonly");
+			$("#textoRelatorio").css("color", "#383838");
+			$("#btn-enviar").removeClass("btn btn-secondary").addClass("btn btn-success");
+			$("#btn-enviar").val(msg);
+		}
+	})
+}
+
+$("#textoRelatorio").keyup(verificarCampos);
+$("#tituloRelatorio").keyup(verificarCampos);
+$("#destinatarioRelatorio").keyup(verificarCampos);
+
+function verificarCampos() {
+	var t1 = false, t2 = false, t3 = false;
+	
+	if ($("#textoRelatorio").val() != "")
+		t1 = true;
+	if ($("#tituloRelatorio").val() != "")
+		t2 = true;
+	if ($("#destinatarioRelatorio").val() != "")
+		t3 = true;
+	if (t1 == t2 && t2 == t3 && t1 == true) {
+		$("#btn-enviar").prop("disabled", false);
+	}
+	else {
+		$("#btn-enviar").prop("disabled", true);
+	}
 }
 </script>
 
@@ -293,5 +369,20 @@ function apresentarRelatorio(idRelatorio) {
 	#textoRelatorio {
 		 resize: none;
 		 margin-top:80px;
+	}
+	
+	#tabCriarRelatorio {
+		margin-top: 8px;
+		float: right;
+	}
+	
+	#camposRelatorio {
+		float:right;
+		margin: 80px 0 0 20px;
+		visibility: hidden;
+	}
+	
+	#camposRelatorio .form-control {
+		width: 320px;
 	}
 </style>

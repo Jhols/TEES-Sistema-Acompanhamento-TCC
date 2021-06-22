@@ -2,7 +2,9 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -66,6 +68,10 @@ public class ServletInscricaoProjeto extends HttpServlet {
 	    	case "apresentarRelatorio":
 	    		apresentarRelatorio(request, response);
 	    		break;
+	    		
+	    	case "enviarRelatorio":
+	    		enviarRelatorio(request, response);
+	    		break;
     	}
     }
     
@@ -107,6 +113,27 @@ public class ServletInscricaoProjeto extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		out.print(relatorio.getTexto());
+    }
+    
+    //Armazena o relatorio enviado no banco.
+    protected void enviarRelatorio(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	String titulo = request.getParameter("titulo");
+    	int autor = Integer.parseInt(request.getParameter("autor"));
+    	int destinatario = Integer.parseInt(request.getParameter("destinatario"));
+    	String texto = request.getParameter("texto");
+    	Date data = new Date();
+    	
+    	PrintWriter out;
+    	response.setContentType("text/Plain");
+    	out = response.getWriter();
+    	
+    	Relatorio relatorio = new Relatorio(titulo, autor, destinatario, texto, data);
+    	if (RelatorioDAO.getInstance().addRelatorio(relatorio)) { //Se conseguir inserir o relatorio no banco
+    		out.print("Relatório Enviado!");		
+    	}
+    	else {
+    		out.print("Erro ao enviar o relatório!");
+    	}
     }
     
 	protected void incluirInscricao(HttpServletRequest request, HttpServletResponse response) throws IOException {

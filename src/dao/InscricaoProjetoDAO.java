@@ -175,7 +175,9 @@ public class InscricaoProjetoDAO {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
 			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 		}
 		return inscricao;
 	}

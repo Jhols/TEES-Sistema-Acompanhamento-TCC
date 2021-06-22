@@ -44,23 +44,26 @@ public class ProjetoDAO {
 				" ON " + BancoTabela.PROJETO+".id_"+BancoTabela.PROJETO+ " = " + id + 
 				" WHERE " + BancoTabela.PROJETO +".id_situacao = " +  BancoTabela.SITUACAO_PROJETO + ".id_situacao_projeto;";
 		
+		Statement stm = null;
 		try {
-            Statement stm = conexao.createStatement();
+            stm = conexao.createStatement();
             resultado = stm.executeQuery(sql);
             
             resultado.next();
 			projeto.setId(id);
 			projeto.setTitulo(resultado.getString("titulo"));
 			projeto.setDescricao(resultado.getString("descricao"));
-			projeto.getProfessor().setId(resultado.getInt("id_professor"));
-			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getId()));
+			projeto.getProfessor().setIdProfessor(resultado.getInt("id_professor"));
+			projeto.setProfessor(ProfessorDAO.getInstance().findById(projeto.getProfessor().getIdProfessor()));
 			projeto.setSituacao(SituacaoProjeto.fromString(resultado.getString("descricao").toLowerCase()));
             
-			stm.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			try {resultado.close();}catch(SQLException e){e.printStackTrace();}
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
 			return projeto;
 		}
 	}
@@ -351,9 +354,6 @@ public class ProjetoDAO {
 				e.printStackTrace();
 			} 
 	}
-	
-	
-
 
 	public boolean deletar() {
 		// TODO Auto-generated method stub

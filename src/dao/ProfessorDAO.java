@@ -34,6 +34,8 @@ public class ProfessorDAO {
 		
 		try {
 			resultado.next();
+			professor.setId(resultado.getInt("id_pessoa"));
+			((Professor)professor).setIdProfessor(idProfessor);
 			professor.setNome(resultado.getString("nome"));
 			((Aluno) professor).setMatricula(resultado.getString("matricula"));
 			professor.setEmail(resultado.getString("email"));
