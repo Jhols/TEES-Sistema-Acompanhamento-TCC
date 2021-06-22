@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import enums.BancoTabela;
+import enums.Perfil;
 import enums.SituacaoProjeto;
+import model.Pessoa;
 import model.Projeto;
 import model.Relatorio;
 import util.ConnectionFactory;
@@ -156,8 +158,10 @@ public class RelatorioDAO {
 		try {
 			relatorio.setIdRelatorio(resultado.getInt("id_relatorio"));
 			relatorio.setTitulo(resultado.getString("titulo"));
-			relatorio.setAutor(resultado.getInt("id_autor_pessoa"));
-			relatorio.setDestinatario(resultado.getInt("id_destinatario_pessoa"));
+			relatorio.setIdAutor(resultado.getInt("id_autor_pessoa"));
+			relatorio.setIdDestinatario(resultado.getInt("id_destinatario_pessoa"));
+			Pessoa p = PessoaDAO.getInstance().findById(Perfil.NENHHUM, resultado.getInt("id_destinatario_pessoa"));
+			relatorio.setNomeDestinatario(p.getNome());
 			relatorio.setData(resultado.getDate("data"));
 			relatorio.setNomeAutor(resultado.getString("nome"));
 			relatorio.setTexto(resultado.getString("texto"));
@@ -188,8 +192,8 @@ public class RelatorioDAO {
         	prepareStatement = conexao.prepareStatement(sql);
         			
             prepareStatement.setString(1, relatorio.getTitulo());
-            prepareStatement.setInt(2, relatorio.getAutor());
-            prepareStatement.setInt(3, relatorio.getDestinatario());
+            prepareStatement.setInt(2, relatorio.getIdAutor());
+            prepareStatement.setInt(3, relatorio.getIdDestinatario());
             prepareStatement.setDate(4, new java.sql.Date(relatorio.getData().getTime()));
             prepareStatement.setString(5, relatorio.getTexto());
             

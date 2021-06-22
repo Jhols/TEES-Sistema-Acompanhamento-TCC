@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Relatorio {
 	int idRelatorio, idAutor, idDestinatario;
-	String titulo, texto, nomeAutor;
+	String titulo, texto, nomeAutor, nomeDestinatario;
 	Date data;
 	
 	public Relatorio() {
@@ -16,16 +16,16 @@ public class Relatorio {
 		this.idRelatorio = idRelatorio;
 	}
 	
-	public Relatorio(String titulo, int autor, int destinatario, String texto) {
+	public Relatorio(String titulo, int idAutor, int idDestinatario, String texto) {
 		super();
 		this.titulo = titulo;
-		this.idAutor = autor;
-		this.idDestinatario = destinatario;
+		this.idAutor = idAutor;
+		this.idDestinatario = idDestinatario;
 		this.texto = texto;
 	}
 
-	public Relatorio(String titulo, int autor, int destinatario, String texto, Date data) {
-		this(titulo, autor, destinatario, texto);
+	public Relatorio(String titulo, int idAutor, int idDestinatario, String texto, Date data) {
+		this(titulo, idAutor, idDestinatario, texto);
 		this.data = data;
 	}
 
@@ -35,16 +35,16 @@ public class Relatorio {
 	public void setIdRelatorio(int idRelatorio) {
 		this.idRelatorio = idRelatorio;
 	}
-	public int getAutor() {
+	public int getIdAutor() {
 		return idAutor;
 	}
-	public void setAutor(int autor) {
+	public void setIdAutor(int autor) {
 		this.idAutor = autor;
 	}
-	public int getDestinatario() {
+	public int getIdDestinatario() {
 		return idDestinatario;
 	}
-	public void setDestinatario(int destinatario) {
+	public void setIdDestinatario(int destinatario) {
 		this.idDestinatario = destinatario;
 	}
 	public String getTexto() {
@@ -73,6 +73,14 @@ public class Relatorio {
 
 	public void setNomeAutor(String nomeAutor) {
 		this.nomeAutor = nomeAutor;
+	}
+	
+	public String getNomeDestinatario() {
+		return nomeDestinatario;
+	}
+
+	public void setNomeDestinatario(String nomeDestinatario) {
+		this.nomeDestinatario = nomeDestinatario;
 	}
 	
 }

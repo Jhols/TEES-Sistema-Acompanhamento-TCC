@@ -22,6 +22,11 @@ public abstract class PessoaFactory {
 		if (perfil == Perfil.COORDENADOR) {
 			return new Coordenador();
 		}
+		if (perfil == Perfil.NENHHUM ) {
+			Aluno a = new Aluno();
+			a.setPerfil(Perfil.NENHHUM);
+			return a;
+		}
 		return null;
 	}
 	

@@ -100,7 +100,7 @@
 								<thead>
 								<tr>
 									<td> Título </td>
-									<td> Remetente </td>
+									<td> Destinatário </td>
 									<td> Data </td>
 								</tr>
 								</thead>
@@ -111,7 +111,7 @@
 								   for (Relatorio relatorio : relatoriosEnviados) { %>
 									<tr class="regTabela" onclick="apresentarRelatorio(<%= relatorio.getIdRelatorio() %>)">
 										<td id="titulo<%=x%>"> <%=relatorio.getTitulo()%> </td>
-										<td id="autor<%=x%>"> <%=relatorio.getNomeAutor()%> </td>
+										<td id="autor<%=x%>"> <%=relatorio.getNomeDestinatario()%> </td>
 										<td id="data<%=x%>"> <%=fd.format(relatorio.getData())%> </td>
 									</tr>
 									<%x++;%>
