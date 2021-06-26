@@ -19,7 +19,8 @@ public enum BancoTabela {
 	TURMA("turma"),
 	SEMESTRE("semestre"),
 	RELATORIO("relatorio"),
-	ARQUIVO("arquivo");
+	ARQUIVO("arquivo"),
+	ARQUIVOTCC("arquivo_tcc");
 	
 	private String nomeTabela;
 	

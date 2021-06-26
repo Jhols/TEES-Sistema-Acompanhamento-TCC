@@ -7,15 +7,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import dao.ArquivoDAO;
+import dao.ArquivoDeTccDAO;
 import dao.ProjetoDAO;
+import dao.TurmaDAO;
 import enums.Perfil;
 import model.Arquivo;
+import model.ArquivoDeTcc;
 import model.Pessoa;
 
-//TELA DE VISUALIZAÇÃO DE ANEXOS POR PROJETOS PARA O PROFESSOR ORIENTADOR 
-@WebServlet(urlPatterns = {"/visualizarAnexosProjetos"})
+//TELA DE VISUALIZAÇÃO DE ANEXOS POR TURMAS PARA O PROFESSOR TCC
+@WebServlet(urlPatterns = {"/visualizarAnexosDeTcc"})
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
-public class ServletVisualizarAnexosProjetos extends HttpServlet{
+public class ServletVisualizarAnexosDeTcc extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -34,9 +37,9 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 			return;
 		}
 		
-		int idProjeto = Integer.parseInt(request.getParameter("idProjeto"));
-		var arquivos = ArquivoDAO.procurarAnexosPorProjeto(idProjeto);
-		var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
+		int idTurma = Integer.parseInt(request.getParameter("turma"));
+		var arquivos = ArquivoDeTccDAO.procurarAnexosPorTurma(idTurma);
+		var turma = TurmaDAO.getInstance().pesquisarTurmaPorId(idTurma);
 		
 
 		response.setCharacterEncoding("UTF-8");
@@ -65,7 +68,7 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 				+ "                        <!-- Nested Row within Card Body -->\r\n"
 				+ "                        <div class=\"page-header\">\r\n"
 				+ "                            <h1 class=\"text-center font-weight-bold\"></h1>\r\n"
-				+ "                            <h5>Arquivos anexos ao projeto <b>" + projeto.getTitulo() +"</b></h5>\r\n"
+				+ "                            <h5>Arquivos anexos a turma <b>" + turma.getNome() +"</b></h5>\r\n"
 				+ "                            <h5></h5>\r\n"
 				+ "                        </div>\r\n"
 				+ "                            <div class=\"table-responsive\">\r\n"
@@ -77,8 +80,8 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 				+ "                                        </tr>\r\n"
 				+ "                                    </thead>\r\n";
 				
-				for (Arquivo arquivo : arquivos) {
-					html += "<tr><td>"+arquivo.getFileName() + " <td><a href=\"downloadAnexo?anexo="+arquivo.getIdArquivo()+ "\" >Download</a> \r\n";
+				for (ArquivoDeTcc arquivo : arquivos) {
+					html += "<tr><td>"+arquivo.getFileName() + " <td><a href=\"downloadAnexoDeTCC?anexo="+arquivo.getId_arquivo()+ "\" >Download</a> \r\n";
 				}
 				
 				html += "</table>"

@@ -104,6 +104,8 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 		+ "                                            <th>Semestre</th>\r\n"
 		+ "                                            <th></th>\r\n"
 		+ "                                            <th></th>\r\n"
+		+ "                                            <th></th>\r\n"
+		+ "                                            <th></th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
@@ -114,6 +116,8 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 			// os botões de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
 			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarAlunosCandidatosTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Vincular Alunos</a>";
 			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarTurmasTccProfessor?turma="+ linha.get("idTurma")+"\" role=\"button\">Exibir turma</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"anexarArquivoDeTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Anexar</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarAnexosDeTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Visualizar Anexos</a>";
 			html += "</tr>";
 			
 			
@@ -186,11 +190,22 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 		+ "\r\n"
 		+ "    <!-- Page level custom scripts -->\r\n"
 		+ "    <script src=\"resources/bootstrap/js/demo/datatables-demo.js\"></script>\r\n"
-		+ "\r\n"
-		+ "</body>\r\n"
+		+ "\r\n";
+
+		if ("ok".equals(request.getParameter("msg"))) {
+			html += "<script>alert(\"Arquivo anexado com sucesso!\"); ";
+			html += "window.location.href = anexarArquivoProjeto; </script>";
+		}
+		
+		
+		
+		
+		
+		html += "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
-		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(html);
 		
 	}

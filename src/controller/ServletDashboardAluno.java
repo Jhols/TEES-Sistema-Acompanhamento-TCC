@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.InscricaoProjetoDAO;
 import dao.ProjetoDAO;
+import dao.TurmaDAO;
 import enums.SituacaoInscricao;
 import model.Aluno;
 import model.InscricaoProjeto;
@@ -41,6 +42,9 @@ public class ServletDashboardAluno extends HttpServlet {
 			inscricao = inscricoesAssociadas.get(0);
 			imprimirTermoDeAceite = true;
 		}
+		
+	   
+		
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -120,11 +124,17 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Meu Projeto</span></a>\r\n"
 			+ "            </li>\r\n";
+			
+			html += "			 <li class=\"nav-item\">\r\n"
+					+ "                <a class=\"nav-link\" href=\"visualizarAnexosDeTcc?turma="+TurmaDAO.getInstance().pesquisarTurmaDoAluno(aluno.getIdAluno()) +"\" >\r\n"
+					+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+					+ "                    <span>Visualizar Anexos de Tcc</span></a>\r\n"
+					+ "            </li>\r\n";
 		if (inscricao != null) {
 			html += "			 <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"visualizarAnexosProjetos?idProjeto="+inscricao.getIdProjeto() +"\" >\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-			+ "                    <span>Visualizar Anexos</span></a>\r\n"
+			+ "                    <span>Visualizar Anexos do projeto</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 			

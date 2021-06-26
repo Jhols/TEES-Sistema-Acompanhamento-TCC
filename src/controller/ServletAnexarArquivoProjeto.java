@@ -7,11 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import dao.ProfessorDAO;
 import dao.ProjetoDAO;
 import model.Professor;
 import model.Projeto;
-
+//TELA QUE LISTA OS PROJETOS DO PROFESSOR E TEM A OPÇÃO DE ANEXAR ARQUIVO AO PROJETO, LEVA PARA OUTRA TELA 
 @WebServlet(urlPatterns = {"/anexarArquivoProjeto"})
 public class ServletAnexarArquivoProjeto extends HttpServlet{
 	private static final long serialVersionUID = 1L;
