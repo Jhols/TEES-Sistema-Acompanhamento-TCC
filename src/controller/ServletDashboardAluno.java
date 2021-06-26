@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.InscricaoProjetoDAO;
-
+import dao.ProjetoDAO;
 import enums.SituacaoInscricao;
 import model.Aluno;
 import model.InscricaoProjeto;
+import model.Projeto;
 
 
 @WebServlet(name = "dashboardAluno", urlPatterns = {"/alunoDashboard"})
@@ -34,6 +35,7 @@ public class ServletDashboardAluno extends HttpServlet {
 		// busca as inscrições do aluno cuja situação seja 'ASSOCIADO'
 		var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
 		System.out.println("INSCRICOES DO ALUNO: "+inscricoesAssociadas);
+		
 		if (inscricoesAssociadas.size() > 0) {
 			// se houver inscricão 'associado' permitir que o botão de imprimir termo apareça no menu
 			inscricao = inscricoesAssociadas.get(0);
@@ -117,10 +119,16 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"InscricaoProjetoServlet?opcao=buscar\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Meu Projeto</span></a>\r\n"
-			+ "            </li>\r\n"
+			+ "            </li>\r\n";
+		if (inscricao != null) {
+			html += "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"visualizarAnexosProjetos?idProjeto="+inscricao.getIdProjeto() +"\" >\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Visualizar Anexos</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
 			
-			
-			+ "			 <li class=\"nav-item\">\r\n"
+			html += "			 <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"editAluno\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Editar Cadastro</span></a>\r\n"

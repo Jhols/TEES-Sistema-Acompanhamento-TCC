@@ -33,7 +33,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		System.out.println(professor);
 		// * Permissões para Funcionalidades *
 		
-		boolean vizualizarAlunosCandidatosTCC = ! professor.isOrientador();
+		boolean visualizarAlunosCandidatosTCC = ! professor.isOrientador();
 		boolean candidatarOrientador = ! professor.isOrientador();
 		boolean cadastroProjeto = professor.isOrientador();
 		boolean alunosCandidatos = professor.isOrientador();
@@ -44,7 +44,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean visualizarProjetosDisponiveis= !professor.isOrientador();
 		
 		if(professor.isTCC()){
-			vizualizarAlunosCandidatosTCC=true;
+			visualizarAlunosCandidatosTCC=true;
 			visualizarAlunosDaTurma=true;
 			candidatarOrientador=true;
 			editarCadastro=true;
@@ -115,7 +115,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		+ "                   \r\n"
 		+ "\r\n";
 		// Cada botão do menu só deve aparecer de acordo com o tipo de perfil que está visualizando a pagina
-		if (vizualizarAlunosCandidatosTCC) {
+		if (visualizarAlunosCandidatosTCC) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"visualizarTurmas\">\r\n"
@@ -186,6 +186,15 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"editProfessorOrientador\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Editar cadastro</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		
+		if (true) {
+			html += "            <!-- Item meus projetos -->\r\n"
+			+ "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"anexarArquivoProjeto\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Anexar arquivo</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		html += "   <!-- botao -->\r\n"

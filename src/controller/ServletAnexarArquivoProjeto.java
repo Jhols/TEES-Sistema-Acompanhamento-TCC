@@ -12,8 +12,8 @@ import dao.ProjetoDAO;
 import model.Professor;
 import model.Projeto;
 
-@WebServlet(urlPatterns = {"/projetosDisponiveisVisualizar"})
-public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
+@WebServlet(urlPatterns = {"/anexarArquivoProjeto"})
+public class ServletAnexarArquivoProjeto extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -40,8 +40,8 @@ public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
 					var linha = new HashMap<String, String>();
 					linha.put("titulo", projeto.getTitulo());
 					linha.put("descricao", projeto.getDescricao());
-					linha.put("orientador",projeto.getProfessor().getNome());
 					linha.put("situacao", projeto.getSituacao().getNomeSituacao());
+					linha.put("idProjeto", String.valueOf(projeto.getId()));
 					linhas.add(linha);
 		}
 				
@@ -93,7 +93,7 @@ public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
-		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Projetos disponíveis</h1>\r\n"
+		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Anexe aqui arquivos importantes para seus projetos!</h1>\r\n"
 		+ "\r\n"
 		+ "                    <!-- DataTales Example -->\r\n"
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
@@ -105,15 +105,16 @@ public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
 		+ "                                        <tr>\r\n"
 		+ "                                            <th>Título</th>\r\n"
 		+ "                                            <th>Descrição</th>\r\n"
-		+ "                                            <th>Orientador</th>\r\n"
 		+ "                                            <th>Situação</th>\r\n"
+		+ "                                            <th></th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
 		// cada linha da tabela representa uma inscrição valida para um projeto desse professor
 		for (var linha : linhas) {
-			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("descricao")+ "<td>" + linha.get("orientador")+ "<td>" + linha.get("situacao");
+			html += "<tr><td>" + linha.get("titulo") + "<td>" + linha.get("descricao")+ "<td>" + linha.get("situacao");
+			html+="<td ><a class=\"btn btn-primary\" href=\"anexarArquivo?idProjeto="+ linha.get("idProjeto")+"\" role=\"button\">Anexar</a>";
 			html += "</tr>";
 		}
 		
@@ -183,8 +184,19 @@ public class ServletVisualizarProjetosDisponiveis extends HttpServlet{
 		+ "\r\n"
 		+ "    <!-- Page level custom scripts -->\r\n"
 		+ "    <script src=\"resources/bootstrap/js/demo/datatables-demo.js\"></script>\r\n"
-		+ "\r\n"
-		+ "</body>\r\n"
+		+ "\r\n";
+		
+		
+		if ("ok".equals(request.getParameter("msg"))) {
+			html += "<script>alert(\"Arquivo anexado com sucesso!\"); ";
+			html += "window.location.href = anexarArquivoProjeto; </script>";
+		}
+		
+		
+		
+		
+		
+		html += "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
 		response.setCharacterEncoding("UTF-8");

@@ -34,6 +34,7 @@
 							<th>Descrição</th>
 							<th>Status do Projeto</th>
 							<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -76,6 +77,13 @@
 							"<td> <input type='button' class='btn btn-primary btn-icon-split, text' style='width:95%' id='btn-editar-"
 									+ x + "' onclick=\"editarProjeto('btn-editar-" + x + "', " + projeto.getId()
 									+ ")\" name='btn-editar' value='Editar'> </td>");
+							
+							out.println(
+									"<td><input type='button' class='btn btn-primary btn-icon-split, text' style='width:95%' id='btn-editar-"
+											+ x + "' onclick=\"visAnexos("+projeto.getId()
+											+ ")\" name='btn-anexos' value='Visualizar Anexos'> </td>"
+									);
+							
 							out.println("</tr>");
 							x++;
 						}
@@ -129,4 +137,9 @@
 	function editarProjeto(idBotao, idProjeto) {
 		window.location.href = "cadastro_projeto.jsp?idProjeto=" + idProjeto;
 	}
+	
+	function visAnexos(idProjeto) {
+		window.location.href = "visualizarAnexosProjetos?idProjeto=" + idProjeto;
+	}
+	
 </script>
