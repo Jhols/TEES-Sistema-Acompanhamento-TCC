@@ -19,7 +19,7 @@ public enum BancoTabela {
 	TURMA ("turma"),
 	SEMESTRE ("semestre"),
 	RELATORIO ("relatorio"),
-	ARQUIVO("arquivo");
+	ARQUIVO("arquivo"),
 	CALENDARIO_ENTREGA ("calendario_entrega"),
 	ENTREGA ("entrega"),
 	ENVIO_ENTREGA ("envio_entrega");
