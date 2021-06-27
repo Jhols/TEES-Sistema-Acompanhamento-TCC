@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import dao.SemestreDAO;
 import dao.TurmaDAO;
 import model.Aluno;
 import model.Professor;
@@ -29,8 +31,8 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 			return;
 		}
 
-		
-		
+		Turma turma = new Turma();
+		turma = TurmaDAO.getInstance().pesquisarTurmaPorId(idTurma);
 		ArrayList<Aluno> alunosVinculados = TurmaDAO.getInstance().pesquisarAlunosPorTurma(idTurma);
 		// uma lista de linha para preencher a tabela de visualizaÃ§Ã£o
 		var linhas = new ArrayList<HashMap<String, String>>();
@@ -90,6 +92,37 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                <!-- Begin Page Content -->\r\n"
 		+ "                <div class=\"container-fluid\">\r\n"
 		+ "\r\n"
+		+ "                    <!-- Page Heading -->\r\n"
+		+ "                     <h1 class=\"h3 mb-2 text-gray-800\">Informações da turma</h1>\r\n"
+		+ " 					<h5 class=\"h5 mb-2 text-gray-800\"> Nome: " + turma.getNome() + " </h5>\r\n"
+		+ " 					<h5 class=\"h5 mb-2 text-gray-800\"> Semestre: " + turma.getSemestre() + " </h5>\r\n"
+		+ "						<br>\r\n"
+		+ "					    <h4 class=\"h4 mb-2 text-gray-800\"> Calendário de Entregas </h4>\r\n"
+		+ "                    <!-- DataTales Example -->\r\n"
+		+ "                    <div class=\"card shadow mb-4\">\r\n"
+		+ "                        \r\n"
+		+ "                        <div class=\"card-body\">\r\n"
+		+ "                            <div class=\"table-responsive\">\r\n"
+		+ "								   <a href=\"#\"> + Criar uma nova tarefa </a><br>"
+		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
+		+ "                                    <thead>\r\n"
+		+ "                                        <tr>\r\n"
+		+ "                                            <th>Título</th>\r\n"
+		+ "                                            <th>Instruções</th>\r\n"
+		+ "                                            <th>Prazo</th>\r\n"
+		+ "                                        </tr>\r\n"
+		+ "                                    </thead>\r\n"
+		+ "                                    <tbody>\r\n"
+		+ "  										<tr>\r\n"
+		+ "												<td> Protótipo de baixa fidelidade </td>\r\n"
+		+ "												<td> Entregar o diagrama do protótipo de baixa fidelidade para desenvolver o projeto </td>\r\n"
+		+ "												<td> 20/07/2021 </td>\r\n"
+		+ "											</tr>\r\n"
+		+ "                                    </tbody>\r\n"
+		+ "                                </table>\r\n"
+		+ "                            </div>\r\n"
+		+ "                        </div>\r\n"
+		+ "                    </div>\r\n"
 		+ "                    <!-- Page Heading -->\r\n"
 		+ "                    <h1 class=\"h3 mb-2 text-gray-800\">Alunos da turma</h1>\r\n"
 		+ "\r\n"
