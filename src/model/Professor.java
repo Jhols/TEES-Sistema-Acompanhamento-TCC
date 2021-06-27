@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 
 import enums.Perfil;
-import enums.SituacaoProjeto;
 
 public class Professor extends Pessoa {
 	public enum StatusOrientador {

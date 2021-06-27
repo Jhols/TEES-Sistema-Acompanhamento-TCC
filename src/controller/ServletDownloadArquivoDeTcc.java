@@ -1,9 +1,6 @@
 package controller;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
@@ -11,18 +8,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import dao.ArquivoDAO;
+import dao.ArquivoDeTccDAO;
 import enums.Perfil;
-import model.Arquivo;
+import model.ArquivoDeTcc;
 import model.Pessoa;
-import model.Professor;
 import util.AnexoDeArquivo;
 
-@WebServlet(urlPatterns = {"/downloadAnexo"})
+
+@WebServlet(urlPatterns = {"/downloadAnexoDeTCC"})
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
 
-public class ServletDownloadArquivo extends HttpServlet{
+public class ServletDownloadArquivoDeTcc extends HttpServlet{
 
 
 	private static final long serialVersionUID = 1L;
@@ -46,7 +42,7 @@ public class ServletDownloadArquivo extends HttpServlet{
 		}
 		
 		int idArquivo = Integer.parseInt(request.getParameter("anexo"));
-		Arquivo arquivo = ArquivoDAO.procuarArquivoPorId(idArquivo);
+		ArquivoDeTcc arquivo = ArquivoDeTccDAO.procurarArquivoPorId(idArquivo);
 		
 		AnexoDeArquivo.dowloadArquivo(arquivo, response);
 		
