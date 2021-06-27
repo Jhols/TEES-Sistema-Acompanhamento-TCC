@@ -34,11 +34,9 @@ public class ServletVisualizarCalendarioTurma extends HttpServlet {
 		Pessoa pessoa = (Pessoa) request.getSession().getAttribute("pessoa");
 		if (pessoa == null || pessoa.getPerfil() != Perfil.ALUNO)
 		{
-			pessoa = LoginDAO.pesquisaPessoa("talita@gmail.com","301");
-			request.getSession().setAttribute("pessoa", pessoa);
 			// Se não estiver logado, ou se não for aluno
-			//response.sendRedirect("login.html");
-			//return;
+			response.sendRedirect("login.html");
+			return;
 		}
 		
 		String opcao = request.getParameter("opcao");
