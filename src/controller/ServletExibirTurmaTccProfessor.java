@@ -39,8 +39,8 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		
 		for (Aluno aluno : alunosVinculados) {
 			
-			//preencher os dados que ser√£o mostrados na tabela
-			// ou que ser√£o usados pelos bot√µes (aceitar e rejeitar)
+			//preencher os dados que serao mostrados na tabela
+			// ou que serao usados pelos bot√µes (aceitar e rejeitar)
 			var linha = new HashMap<String, String>();
 			linha.put("nome", aluno.getNome());
 			linha.put("matricula", aluno.getMatricula());
@@ -72,6 +72,7 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "\r\n"
 		+ "    <!-- Custom styles for this template -->\r\n"
 		+ "    <link href=\"resources/bootstrap/css/sb-admin-2.min.css\" rel=\"stylesheet\">\r\n"
+		+ "	   <script src=\"resources/bootstrap/vendor/jquery/jquery.js\"></script>\r\n"
 		+ "\r\n"
 		+ "    <!-- Custom styles for this page -->\r\n"
 		+ "    <link href=\"resources/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css\" rel=\"stylesheet\">\r\n"
@@ -103,7 +104,8 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                        \r\n"
 		+ "                        <div class=\"card-body\">\r\n"
 		+ "                            <div class=\"table-responsive\">\r\n"
-		+ "								   <a href=\"#\"> + Criar uma nova tarefa </a><br>"
+		+ "								   <a href=\"#\" data-toggle=\"modal\" data-target=\"#ExemploModalCentralizado\"> + Criar uma nova tarefa </a><br><br>"
+	    
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
 		+ "                                        <tr>\r\n"
@@ -219,6 +221,37 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "    <!-- Page level custom scripts -->\r\n"
 		+ "    <script src=\"resources/bootstrap/js/demo/datatables-demo.js\"></script>\r\n"
 		+ "\r\n"
+		
+		
+		+ " 		<!-- Modal -->"
+		+ " 		<div class=\"modal fade\" id=\"ExemploModalCentralizado\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"TituloModalCentralizado\" aria-hidden\"true\">"
+		+ " 			<div class=\"modal-dialog modal-dialog-centered\" role=\"document\">"
+		+ "			    	<div class=\"modal-content\">"
+		+ " 					<div class=\"modal-header\">"
+		+ " 						 <h5 class=\"modal-title\" id=\"TituloModalCentralizado\"> Criar nova Tarefa </h5>"
+		+ "	 			    	     <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Fechar\">"
+		+ "							 <span aria-hidden=\"true\">&times;</span>"
+		+ "							</button>"
+	    + " 					</div>"
+	    + "						 <div class=\"modal-body\">"
+	    + "							 <form class=\"card mb-4\">"
+	    + "								<label> TÌtulo </label>"
+	    + "								<input type=\"textfield\" name=\"tituloTarefa\" id=\"tituloTarefa\">"
+	    + "								<label> InstruÁıes </label>"
+	    + "								<textarea rows=\"3\" style=\"resize: none\" type=\"textfield\" name=\"instrucaoTarefa\" id=name=\"instrucaoTarefa\"></textarea>"
+	    + "								<label> Prazo de entrega </label>"
+	    + "								<input type=\"date\" name=\"prazoTarefa\" id=name=\"prazoTarefa\">"
+	    + "							 </form>"
+	    + "	 					 </div>"
+	    + " 					<div class=\"modal-footer\">"
+	    + "		 					<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Fechar</button>"
+	    + "		 					<button type=\"button\" class=\"btn btn-primary\" id=\"salvarTarefa\">Salvar mudanÁas</button>"
+	    + " 					</div>"
+	    + " 				</div>"
+	    + " 			</div>"
+		+ " 		</div>"
+    
+		
 		+ "</body>\r\n"
 		+ "\r\n"
 		+ "</html>";
