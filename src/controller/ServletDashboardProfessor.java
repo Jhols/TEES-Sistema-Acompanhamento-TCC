@@ -42,7 +42,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean editarCadastro=professor.isOrientador();
 		boolean visualizarAlunosDaTurma= ! professor.isOrientador();
 		boolean visualizarProjetosDisponiveis= !professor.isOrientador();
-		
+		boolean anexoArquivoProjeto = professor.isOrientador();
 		if(professor.isTCC()){
 			visualizarAlunosCandidatosTCC=true;
 			visualizarAlunosDaTurma=true;
@@ -189,7 +189,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "            </li>\r\n";
 		}
 		
-		if (true) {
+		if (anexoArquivoProjeto) {
 			html += "            <!-- Item meus projetos -->\r\n"
 			+ "			 <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"anexarArquivoProjeto\">\r\n"

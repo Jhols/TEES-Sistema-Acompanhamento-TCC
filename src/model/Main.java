@@ -1,22 +1,9 @@
 package model;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.postgresql.util.PSQLException;
-
-import dao.AlunoDAO;
-import dao.InscricaoProjetoDAO;
 import dao.ProfessorDAO;
-import dao.ProjetoDAO;
-import enums.BancoTabela;
-import enums.Perfil;
-import enums.SituacaoInscricao;
-import enums.SituacaoProjeto;
-import util.ConnectionFactory;
 
 public class Main {
 

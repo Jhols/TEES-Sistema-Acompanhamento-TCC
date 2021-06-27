@@ -1,21 +1,21 @@
 package controller;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import dao.ArquivoDAO;
-import dao.ProjetoDAO;
-import enums.Perfil;
-import model.Arquivo;
-import model.Pessoa;
+import javax.servlet.http.Part;
+import dao.ArquivoDeTccDAO;
+import model.ArquivoDeTcc;
+import model.Professor;
+import util.AnexoDeArquivo;
 
-//TELA DE VISUALIZAÇÃO DE ANEXOS POR PROJETOS PARA O PROFESSOR ORIENTADOR 
-@WebServlet(urlPatterns = {"/visualizarAnexosProjetos"})
+@WebServlet(urlPatterns = {"/anexarArquivoDeTcc"})
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
-public class ServletVisualizarAnexosProjetos extends HttpServlet{
+public class ServletAnexarArquivoDeTcc extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -23,21 +23,12 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 		
 		
 		// Tentar pegar o professor que está logado atualmente
-		Pessoa pessoa = (Pessoa) request.getSession().getAttribute("pessoa");
-		if (pessoa == null) {
+		var professor = (Professor) request.getSession().getAttribute("pessoa");
+		
+		if (professor == null) {
 			response.sendRedirect("login.html");
 			return;
 		}
-		if (pessoa.getPerfil() != Perfil.PROFESSOR && pessoa.getPerfil() != Perfil.ALUNO) {
-			System.out.println("Não é professor nem aluno");
-			response.sendRedirect("login.html");
-			return;
-		}
-		
-		int idProjeto = Integer.parseInt(request.getParameter("idProjeto"));
-		var arquivos = ArquivoDAO.procurarAnexosPorProjeto(idProjeto);
-		var projeto = ProjetoDAO.pesquisarProjetoPorIdProjeto(idProjeto);
-		
 
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -58,14 +49,14 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 				+ "        <link href=\"resources/bootstrap/css/sb-admin-2.css\" rel=\"stylesheet\" />\r\n"
 				+ "    </head>\r\n"
 				+ "    <body class=\"bg-gradient-primary\">\r\n"
-				+ "        <form method=\"POST\" action=\"anexarArquivo\" enctype=\"multipart/form-data\">\r\n"
+				+ "        <form method=\"POST\" action=\"anexarArquivoDeTcc\" enctype=\"multipart/form-data\">\r\n"
 				+ "            <div class=\"container\">\r\n"
 				+ "                <div class=\"card o-hidden border-0 shadow-lg my-5\">\r\n"
 				+ "                    <div class=\"card-body\">\r\n"
 				+ "                        <!-- Nested Row within Card Body -->\r\n"
 				+ "                        <div class=\"page-header\">\r\n"
 				+ "                            <h1 class=\"text-center font-weight-bold\"></h1>\r\n"
-				+ "                            <h5>Arquivos anexos ao projeto <b>" + projeto.getTitulo() +"</b></h5>\r\n"
+				+ "                            <h5>Anexe aqui os arquivos da matéria de TCC!</h5>\r\n"
 				+ "                            <h5></h5>\r\n"
 				+ "                        </div>\r\n"
 				+ "                            <div class=\"table-responsive\">\r\n"
@@ -73,28 +64,27 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 				+ "                                    <thead>\r\n"
 				+ "                                        <tr>\r\n"
 				+ "                                            <th>Arquivo</th>\r\n"
-				+ "                                            <th>Download</th>\r\n"
+				+ "                                            <th>Enviar</th>\r\n"
 				+ "                                        </tr>\r\n"
-				+ "                                    </thead>\r\n";
+				+ "                                    </thead>\r\n"
+				+ "<tr><td>"
+				+ "                                <label for=\"exampleFormControlInput1\">Nome</label>\r\n" 
+				+ "                                <input type=\"file\" name=\"arquivo\"  required >\r\n" 
+				+ " <input type=\"hidden\" name=\"idTurma\" value=\""+request.getParameter("turma")+"\" >"
+				+ "<td>"
+				+ "            						<input type=\"submit\" >\r\n"
 				
-				for (Arquivo arquivo : arquivos) {
-					html += "<tr><td>"+arquivo.getFileName() + " <td><a href=\"downloadAnexo?anexo="+arquivo.getIdArquivo()+ "\" >Download</a> \r\n";
-				}
+				+ "                                    <tbody>\r\n"
+				+"</table>"
 				
-				html += "</table>"
+				
 				
 				+ "                            \r\n"
 				+ "                            \r\n"
 			
-				+ "                        <a class=\"btn btn-primary\" align=\"center\" href=\"login.html\" role=\"button\">Login</a>\r\n";
-				if (pessoa.getPerfil() == Perfil.PROFESSOR) {
-					html += "                        <a class=\"btn btn-primary\" align=\"center\" href=\"professorDashboard\" role=\"button\">Voltar</a>\r\n";
-				}
-				else {
-					html += "                        <a class=\"btn btn-primary\" align=\"center\" href=\"alunoDashboard\" role=\"button\">Voltar</a>\r\n";
-				}
-				
-				html += "\r\n"
+				+ "                        <a class=\"btn btn-primary\" align=\"center\" href=\"login.html\" role=\"button\">Login</a>\r\n"
+				+ "                        <a class=\"btn btn-primary\" align=\"center\" href=\"professorDashboard\" role=\"button\">Voltar</a>\r\n"
+				+ "\r\n"
 				+ "                        \r\n"
 				+ "                    </div>\r\n"
 				+ "                </div>\r\n"
@@ -118,5 +108,32 @@ public class ServletVisualizarAnexosProjetos extends HttpServlet{
 		response.getWriter().write(html);
 		
 	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		// Tentar pegar o professor que está logado atualmente
+		var professor = (Professor) request.getSession().getAttribute("pessoa");
+		
+		if (professor == null) {
+			response.sendRedirect("login.html");
+			return;
+		}
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		ArquivoDeTcc arquivo = new ArquivoDeTcc();
+		arquivo.setId_turma(Integer.parseInt(request.getParameter("idTurma")));
+
+		if (AnexoDeArquivo.extrairArquivo(arquivo, request)) {
+			ArquivoDeTccDAO.addArquivo(arquivo);
+			response.sendRedirect("visualizarTurmas?msg=ok");
+		}
+		else {
+			System.out.println("Não foi possivel carregar arquivo");
+			response.sendRedirect("visualizarTurmas");
+		}
+		
+	}
+	
 
 }

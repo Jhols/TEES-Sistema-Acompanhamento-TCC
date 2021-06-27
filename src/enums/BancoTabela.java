@@ -13,16 +13,17 @@ public enum BancoTabela {
 	PERFIL_PESSOA ("perfil_pessoa"),
 	INSCRICAO_ALUNO_PROJETO ("inscricao_aluno_projeto"),
 	SITUACAO_ALUNO_PROJETO ("situacao_aluno_projeto"),
-	TURMA_PROFESSOR ("turma_professor"),
-	TURMA_ALUNO ("turma_aluno"),
-	SITUACAO_TURMA ("situacao_turma"),
-	TURMA ("turma"),
-	SEMESTRE ("semestre"),
-	RELATORIO ("relatorio"),
+	TURMA_PROFESSOR("turma_professor"),
+	TURMA_ALUNO("turma_aluno"),
+	SITUACAO_TURMA("situacao_turma"),
+	TURMA("turma"),
+	SEMESTRE("semestre"),
+	RELATORIO("relatorio"),
 	ARQUIVO("arquivo"),
-	CALENDARIO_ENTREGA ("calendario_entrega"),
-	ENTREGA ("entrega"),
-	ENVIO_ENTREGA ("envio_entrega");
+	ARQUIVOTCC("arquivo_tcc"),
+	ENTREGA("entrega"),
+	CALENDARIO_ENTREGA("calendario_entrega"),
+	ENVIO_ENTREGA("envio_entrega");
 	
 	private String nomeTabela;
 	
