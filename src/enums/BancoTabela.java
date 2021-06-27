@@ -20,7 +20,10 @@ public enum BancoTabela {
 	SEMESTRE("semestre"),
 	RELATORIO("relatorio"),
 	ARQUIVO("arquivo"),
-	ARQUIVOTCC("arquivo_tcc");
+	ARQUIVOTCC("arquivo_tcc"),
+	ENTREGA("entrega"),
+	CALENDARIO_ENTREGA("calendario_entrega"),
+	ENVIO_ENTREGA("envio_entrega");
 	
 	private String nomeTabela;
 	

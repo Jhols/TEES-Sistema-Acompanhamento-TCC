@@ -1,13 +1,9 @@
 package model;
 
-import java.io.InputStream;
 
-public class ArquivoDeTcc {
+public class ArquivoDeTcc extends ArquivoAnexado {
 	private int id_arquivo;
 	private int id_turma;
-	private InputStream anexo;
-	private String fileName;
-	private String contentType;
 	
 	public ArquivoDeTcc() {
 		
@@ -24,24 +20,5 @@ public class ArquivoDeTcc {
 	public void setId_turma(int id_turma) {
 		this.id_turma = id_turma;
 	}
-	public InputStream getAnexo() {
-		return anexo;
-	}
-	public void setAnexo(InputStream anexo) {
-		this.anexo = anexo;
-	}
-	public String getFileName() {
-		return fileName;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	public String getContentType() {
-		return contentType;
-	}
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-	
 	
 }

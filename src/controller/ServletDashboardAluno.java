@@ -32,15 +32,23 @@ public class ServletDashboardAluno extends HttpServlet {
 		
 		System.out.println("ALUNO LOGADO "+aluno);
 		boolean imprimirTermoDeAceite = false; // Condição para mostar o botão de imprimir termo de aceite no menu do aluno
+		boolean visuzalizarAnexosTcc=false;
 		InscricaoProjeto inscricao = null;
 		// busca as inscrições do aluno cuja situação seja 'ASSOCIADO'
 		var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
 		System.out.println("INSCRICOES DO ALUNO: "+inscricoesAssociadas);
 		
+		var turmaAluno = TurmaDAO.getInstance().pesquisarTurmaDoAluno(aluno.getIdAluno());
+		
 		if (inscricoesAssociadas.size() > 0) {
 			// se houver inscricão 'associado' permitir que o botão de imprimir termo apareça no menu
 			inscricao = inscricoesAssociadas.get(0);
 			imprimirTermoDeAceite = true;
+		}
+		
+		if(turmaAluno > 0)
+		{
+			visuzalizarAnexosTcc= true;
 		}
 		
 	   
@@ -124,12 +132,19 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Meu Projeto</span></a>\r\n"
 			+ "            </li>\r\n";
+		
+			html += "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"visualizarAnexosDeTcc?turma="+TurmaDAO.getInstance().pesquisarTurmaDoAluno(aluno.getIdAluno()) +"\" >\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Visualizar Anexos do professor de TCC</span></a>\r\n"
+			+ "            </li>\r\n";
 			
 			html += "			 <li class=\"nav-item\">\r\n"
 					+ "                <a class=\"nav-link\" href=\"visualizarAnexosDeTcc?turma="+TurmaDAO.getInstance().pesquisarTurmaDoAluno(aluno.getIdAluno()) +"\" >\r\n"
 					+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
-					+ "                    <span>Visualizar Anexos de Tcc</span></a>\r\n"
+					+ "                    <span>Postagem das entregas de TCC</span></a>\r\n"
 					+ "            </li>\r\n";
+			
 		if (inscricao != null) {
 			html += "			 <li class=\"nav-item\">\r\n"
 			+ "                <a class=\"nav-link\" href=\"visualizarAnexosProjetos?idProjeto="+inscricao.getIdProjeto() +"\" >\r\n"

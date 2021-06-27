@@ -17,6 +17,7 @@ import enums.Perfil;
 import model.Arquivo;
 import model.Pessoa;
 import model.Professor;
+import util.AnexoDeArquivo;
 
 @WebServlet(urlPatterns = {"/downloadAnexo"})
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
@@ -47,19 +48,7 @@ public class ServletDownloadArquivo extends HttpServlet{
 		int idArquivo = Integer.parseInt(request.getParameter("anexo"));
 		Arquivo arquivo = ArquivoDAO.procuarArquivoPorId(idArquivo);
 		
-		
-		response.setContentType(arquivo.getContentType());
-		response.setHeader( "Content-Disposition", "filename=" + arquivo.getFileName());
-		InputStream in = arquivo.getAnexo(); 
-		ServletOutputStream out = response.getOutputStream();
-		byte[] buffer = new byte[4096];
-		while(in.read(buffer, 0, 4096) != -1) {
-			out.write(buffer, 0, 4096);
-		}
-		in.close();
-		out.flush();
-		out.close();
-		
+		AnexoDeArquivo.dowloadArquivo(arquivo, response);
 		
 	}
 

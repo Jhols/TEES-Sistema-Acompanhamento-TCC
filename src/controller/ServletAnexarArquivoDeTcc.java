@@ -11,6 +11,7 @@ import javax.servlet.http.Part;
 import dao.ArquivoDeTccDAO;
 import model.ArquivoDeTcc;
 import model.Professor;
+import util.AnexoDeArquivo;
 
 @WebServlet(urlPatterns = {"/anexarArquivoDeTcc"})
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
@@ -120,43 +121,19 @@ public class ServletAnexarArquivoDeTcc extends HttpServlet{
 		
 		request.setCharacterEncoding("UTF-8");
 		
-		ArquivoDeTcc arquivo;
-		arquivo = new ArquivoDeTcc();
-		
+		ArquivoDeTcc arquivo = new ArquivoDeTcc();
 		arquivo.setId_turma(Integer.parseInt(request.getParameter("idTurma")));
 
-		// obtains the upload file part in this multipart request
-		Part filePart = request.getPart("arquivo");
-		if (filePart != null) {
-			System.out.println(filePart.getName());
-			System.out.println(filePart.getSize());
-			System.out.println(filePart.getContentType());
-			String fileName = extractFileName(filePart);
-			System.out.println(fileName);
-			
-			InputStream inputStream = filePart.getInputStream();
-			arquivo.setAnexo(inputStream);
-			arquivo.setFileName(fileName);
-			arquivo.setContentType(filePart.getContentType());
+		if (AnexoDeArquivo.extrairArquivo(arquivo, request)) {
 			ArquivoDeTccDAO.addArquivo(arquivo);
+			response.sendRedirect("visualizarTurmas?msg=ok");
 		}
 		else {
 			System.out.println("Não foi possivel carregar arquivo");
+			response.sendRedirect("visualizarTurmas");
 		}
-		
-		response.sendRedirect("visualizarTurmas?msg=ok");
 		
 	}
 	
-	private String extractFileName(Part part) {
-		String contentDisp = part.getHeader("content-disposition");
-		String[] items = contentDisp.split(";");
-		for (String s : items) {
-			if (s.trim().startsWith("filename")) {
-				return s.substring(s.indexOf("=") + 2, s.length()-1);
-			}
-		}
-		return "";
-	}
 
 }
