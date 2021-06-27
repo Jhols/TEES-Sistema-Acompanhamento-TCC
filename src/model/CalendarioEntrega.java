@@ -2,18 +2,17 @@ package model;
 
 public class CalendarioEntrega {
 	private int idCalendario, idTurma, idSemestre;
-	private String titulo, descricao;
+	private String descricao;
 	
 	public CalendarioEntrega() {
 		super();
 	}
 	
-	public CalendarioEntrega(int idCalendario, int idTurma, int idSemestre, String titulo, String descricao) {
+	public CalendarioEntrega(int idCalendario, int idTurma, int idSemestre, String descricao) {
 		super();
 		this.idCalendario = idCalendario;
 		this.idTurma = idTurma;
 		this.idSemestre = idSemestre;
-		this.titulo = titulo;
 		this.descricao = descricao;
 	}
 	
@@ -23,10 +22,10 @@ public class CalendarioEntrega {
 	public void setIdCalendario(int idCalendario) {
 		this.idCalendario = idCalendario;
 	}
-	public int getIdProfessor() {
+	public int getIdTurma() {
 		return idTurma;
 	}
-	public void setIdProfessor(int idTurma) {
+	public void setIdTurma(int idTurma) {
 		this.idTurma = idTurma;
 	}
 	public int getIdSemestre() {
@@ -34,12 +33,6 @@ public class CalendarioEntrega {
 	}
 	public void setIdSemestre(int idSemestre) {
 		this.idSemestre = idSemestre;
-	}
-	public String getTitulo() {
-		return titulo;
-	}
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
 	}
 	public String getDescricao() {
 		return descricao;

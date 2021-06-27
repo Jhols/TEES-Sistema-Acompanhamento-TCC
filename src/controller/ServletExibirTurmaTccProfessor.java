@@ -2,15 +2,18 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.SemestreDAO;
+import dao.CalendarioDAO;
 import dao.TurmaDAO;
 import model.Aluno;
+import model.CalendarioEntrega;
+import model.Entrega;
 import model.Professor;
 import model.Turma;
 
@@ -22,31 +25,33 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		// Tentar pegar o professor que estÃ¡ logado atualmente
+		// Tentar pegar o professor que esta logado atualmente
 		var professor = (Professor) request.getSession().getAttribute("pessoa");
 		int idTurma= (Integer.parseInt(request.getParameter("turma")));
 		if (professor == null) {
 			response.sendRedirect("login.html");
 			return;
 		}
-
+		
 		Turma turma = new Turma();
 		turma = TurmaDAO.getInstance().pesquisarTurmaPorId(idTurma);
 		ArrayList<Aluno> alunosVinculados = TurmaDAO.getInstance().pesquisarAlunosPorTurma(idTurma);
-		// uma lista de linha para preencher a tabela de visualizaÃ§Ã£o
+		// uma lista de linha para preencher a tabela de visualizacao
 		var linhas = new ArrayList<HashMap<String, String>>();
 		
 		for (Aluno aluno : alunosVinculados) {
-			
 			//preencher os dados que serao mostrados na tabela
-			// ou que serao usados pelos botÃµes (aceitar e rejeitar)
+			// ou que serao usados pelos botoes (aceitar e rejeitar)
 			var linha = new HashMap<String, String>();
 			linha.put("nome", aluno.getNome());
 			linha.put("matricula", aluno.getMatricula());
 			linhas.add(linha);
-		}	
+		}
 		
+		CalendarioEntrega calendario = new CalendarioEntrega();
+		calendario = CalendarioDAO.getInstance().findByIdTurma(idTurma);
+		ArrayList<Entrega> entregas = new ArrayList<Entrega>();
+		entregas = CalendarioDAO.buscarEntregasPorTurma(turma.getId());
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -103,8 +108,11 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                    <div class=\"card shadow mb-4\">\r\n"
 		+ "                        \r\n"
 		+ "                        <div class=\"card-body\">\r\n"
-		+ "                            <div class=\"table-responsive\">\r\n"
-		+ "								   <a href=\"#\" data-toggle=\"modal\" data-target=\"#ExemploModalCentralizado\"> + Criar uma nova tarefa </a><br><br>"
+		+ "                            <div class=\"table-responsive\">\r\n";
+								if (!calendario.getDescricao().equals("")) {
+		html += "						  <p> "+ calendario.getDescricao() +" </p>";
+								}
+		html += "						  <a href=\"#\" data-toggle=\"modal\" data-target=\"#ExemploModalCentralizado\"> + Criar uma nova tarefa </a><br><br>"
 	    
 		+ "                                <table class=\"table table-bordered\" id=\"dataTable\" width=\"100%\" cellspacing=\"0\">\r\n"
 		+ "                                    <thead>\r\n"
@@ -114,13 +122,19 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                                            <th>Prazo</th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
-		+ "                                    <tbody>\r\n"
-		+ "  										<tr>\r\n"
-		+ "												<td> Protótipo de baixa fidelidade </td>\r\n"
-		+ "												<td> Entregar o diagrama do protótipo de baixa fidelidade para desenvolver o projeto </td>\r\n"
-		+ "												<td> 20/07/2021 </td>\r\n"
-		+ "											</tr>\r\n"
-		+ "                                    </tbody>\r\n"
+		+ "                                    <tbody>\r\n";
+												if (entregas.isEmpty()) {													
+		html += " 									<tr><td colspan=3> Não há nenhuma entrega cadastrada no momento... </td></tr>";
+												} else {
+													for (Entrega entrega : entregas) {
+		html += "  										<tr>\r\n"
+		+ "													<td> Protótipo de baixa fidelidade </td>\r\n"
+		+ "													<td> Entregar o diagrama do protótipo de baixa fidelidade para desenvolver o projeto </td>\r\n"
+		+ "													<td> 20/07/2021 </td>\r\n"
+		+ "												</tr>\r\n";
+													}
+												}
+		html += "                              </tbody>\r\n"
 		+ "                                </table>\r\n"
 		+ "                            </div>\r\n"
 		+ "                        </div>\r\n"
@@ -235,17 +249,17 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 	    + " 					</div>"
 	    + "						 <div class=\"modal-body\">"
 	    + "							 <form class=\"card mb-4\">"
-	    + "								<label> Título </label>"
-	    + "								<input type=\"textfield\" name=\"tituloTarefa\" id=\"tituloTarefa\">"
-	    + "								<label> Instruções </label>"
-	    + "								<textarea rows=\"3\" style=\"resize: none\" type=\"textfield\" name=\"instrucaoTarefa\" id=name=\"instrucaoTarefa\"></textarea>"
-	    + "								<label> Prazo de entrega </label>"
-	    + "								<input type=\"date\" name=\"prazoTarefa\" id=name=\"prazoTarefa\">"
+	    + "								<label for=\"tituloTarefa\"> Título </label>"
+	    + "								<input type=\"textfield\" class=\"form-control form-control-user\" name=\"tituloTarefa\" id=\"tituloTarefa\" style=\"margin-bottom:15px\">"
+	    + "								<label for=\"instrucaoTarefa\"> Instruções </label>"
+	    + "								<textarea rows=\"3\" class=\"form-control form-control-user\" style=\"resize: none; margin-bottom:15px\" type=\"textfield\" name=\"instrucaoTarefa\" id=name=\"instrucaoTarefa\"></textarea>"
+	    + "								<label for=\"prazoTarefa\"> Prazo de entrega </label>"
+	    + "								<input type=\"date\" class=\"form-control form-control-user\" name=\"prazoTarefa\" id=name=\"prazoTarefa\">"
 	    + "							 </form>"
 	    + "	 					 </div>"
 	    + " 					<div class=\"modal-footer\">"
 	    + "		 					<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Fechar</button>"
-	    + "		 					<button type=\"button\" class=\"btn btn-primary\" id=\"salvarTarefa\">Salvar mudanças</button>"
+	    + "		 					<button type=\"button\" class=\"btn btn-primary\" id=\"salvarTarefa\" onclick=\"inserirTarefa()\">Salvar mudanças</button>"
 	    + " 					</div>"
 	    + " 				</div>"
 	    + " 			</div>"
@@ -254,7 +268,11 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		
 		+ "</body>\r\n"
 		+ "\r\n"
-		+ "</html>";
+		+ "</html>"
+		+ "<script>"
+		+ "	  var today = new Date().toISOString().split('T')[0];\r\n"
+		+ "	  document.getElementsByName(\"prazoTarefa\")[0].setAttribute('min', today);"
+		+ "</script>";
 		
 		response.getWriter().write(html);
 		
