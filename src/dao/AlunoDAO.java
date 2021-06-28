@@ -36,9 +36,10 @@ public class AlunoDAO {
 		
 		try {
 			resultado.next();
-			aluno.setId(idAluno);
+			aluno.setId(resultado.getInt("id_pessoa"));
 			aluno.setNome(resultado.getString("nome"));
 			((Aluno) aluno).setMatricula(resultado.getString("matricula"));
+			((Aluno) aluno).setIdAluno(resultado.getInt("id_aluno"));
 			aluno.setEmail(resultado.getString("email"));
 			aluno.setTelefone(resultado.getString("telefone"));
 			

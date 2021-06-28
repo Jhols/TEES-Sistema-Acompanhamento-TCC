@@ -68,10 +68,10 @@ public class InscricaoProjeto {
 	}*/
 	
 	public int getIdAluno() {
-		return this.aluno.getId();
+		return this.aluno.getIdAluno();
 	}
 	public void setIdAluno(int idAluno) {
-		this.aluno.setId(idAluno);
+		this.aluno.setIdAluno(idAluno);
 	}
 	public int getIdProjeto() {
 		return projeto.getId();

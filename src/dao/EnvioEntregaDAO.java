@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import enums.BancoTabela;
 import model.EnvioEntrega;
@@ -11,6 +12,27 @@ import util.ConnectionFactory;
 
 public class EnvioEntregaDAO {
 	private EnvioEntregaDAO() {}
+	
+	public static ArrayList<EnvioEntrega> buscarTodosEnviosPorEntrega(int idEntrega) {
+		ArrayList<EnvioEntrega> envios = new ArrayList<EnvioEntrega>();
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.ENVIO_ENTREGA 
+					+ " where id_entrega=?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, idEntrega);
+			ResultSet result = stm.executeQuery();
+			while (result.next()) {
+				EnvioEntrega envio = new EnvioEntrega();
+				popularEnvioEntrega(envio, result);
+				envios.add(envio);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return envios;
+	}
 	
 	public static EnvioEntrega buscarEnvioEntregaPorAluno(int idEntrega, int idAluno) {
 		try {
