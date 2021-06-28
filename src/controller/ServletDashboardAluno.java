@@ -32,7 +32,6 @@ public class ServletDashboardAluno extends HttpServlet {
 		
 		System.out.println("ALUNO LOGADO "+aluno);
 		boolean imprimirTermoDeAceite = false; // Condição para mostar o botão de imprimir termo de aceite no menu do aluno
-		boolean visuzalizarAnexosTcc=false;
 		InscricaoProjeto inscricao = null;
 		// busca as inscrições do aluno cuja situação seja 'ASSOCIADO'
 		var inscricoesAssociadas = InscricaoProjetoDAO.getInstance().pesquisarInscricoesPorAluno(aluno.getIdAluno(), SituacaoInscricao.ASSOCIADO);
@@ -45,14 +44,6 @@ public class ServletDashboardAluno extends HttpServlet {
 			inscricao = inscricoesAssociadas.get(0);
 			imprimirTermoDeAceite = true;
 		}
-		
-		if(turmaAluno > 0)
-		{
-			visuzalizarAnexosTcc= true;
-		}
-		
-	   
-		
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
@@ -140,7 +131,7 @@ public class ServletDashboardAluno extends HttpServlet {
 			+ "            </li>\r\n";
 			
 			html += "			 <li class=\"nav-item\">\r\n"
-					+ "                <a class=\"nav-link\" href=\"visualizarAnexosDeTcc?turma="+TurmaDAO.getInstance().pesquisarTurmaDoAluno(aluno.getIdAluno()) +"\" >\r\n"
+					+ "                <a class=\"nav-link\" href=\"calendarioTurmaAluno\" >\r\n"
 					+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 					+ "                    <span>Postagem das entregas de TCC</span></a>\r\n"
 					+ "            </li>\r\n";

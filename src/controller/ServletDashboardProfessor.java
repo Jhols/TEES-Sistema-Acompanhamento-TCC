@@ -43,12 +43,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean visualizarAlunosDaTurma= ! professor.isOrientador();
 		boolean visualizarProjetosDisponiveis= !professor.isOrientador();
 		boolean anexoArquivoProjeto = professor.isOrientador();
+		
 		if(professor.isTCC()){
 			visualizarAlunosCandidatosTCC=true;
 			visualizarAlunosDaTurma=true;
 			candidatarOrientador=true;
 			editarCadastro=true;
 			visualizarProjetosDisponiveis=true;
+			
 		}
 		
 		// verificar se há alguma ação a ser executada pelo servlet
@@ -139,6 +141,8 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                    <span style=\"text-align:center\">Visualizar seus alunos de TCC</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
+		
+		
 		if (candidatarOrientador) {
 			html += "           <!-- Item Cadastro Professor Orientador -->\r\n"
 			+ "            <li class=\"nav-item\">\r\n"

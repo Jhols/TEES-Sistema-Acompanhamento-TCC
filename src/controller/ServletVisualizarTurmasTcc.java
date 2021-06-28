@@ -106,6 +106,7 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 		+ "                                            <th></th>\r\n"
 		+ "                                            <th></th>\r\n"
 		+ "                                            <th></th>\r\n"
+		+ "                                            <th></th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
@@ -118,6 +119,7 @@ public class ServletVisualizarTurmasTcc extends HttpServlet{
 			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarTurmasTccProfessor?turma="+ linha.get("idTurma")+"\" role=\"button\">Exibir turma</a>";
 			html+="<td ><a class=\"btn btn-primary\" href=\"anexarArquivoDeTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Anexar</a>";
 			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarAnexosDeTcc?turma="+ linha.get("idTurma")+"\" role=\"button\">Visualizar Anexos</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"postagemTcc?idTurma="+ linha.get("idTurma")+"\" role=\"button\">Visualizar Postagens</a>";
 			html += "</tr>";
 			
 			

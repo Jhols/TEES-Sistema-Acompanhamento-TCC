@@ -286,7 +286,7 @@ public class TurmaDAO {
 	public int pesquisarTurmaDoAluno(int idAluno) {
 		int idTurma=-1;
 		try {
-			String sql = "Select turma_id from turma_aluno inner join aluno \r\n"
+			String sql = "Select turma_id from turma_aluno inner join aluno "
 					+ "			on aluno_id = id_aluno where id_aluno=?";
 			
 			Connection con = ConnectionFactory.getConnection();
@@ -294,7 +294,7 @@ public class TurmaDAO {
 			stm.setInt(1, idAluno);
 			ResultSet resultado = stm.executeQuery();
 			while (resultado.next()) {
-			 idTurma = resultado.getInt("turma_id");
+				idTurma = resultado.getInt("turma_id");
 			}
 			con.close();
 		}

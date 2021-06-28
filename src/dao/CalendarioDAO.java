@@ -102,6 +102,29 @@ public class CalendarioDAO {
 		return cronograma;
 	}
 	
+
+	
+	public static Entrega buscarEntregaPorId(int idEntrega) {
+		try {
+			Connection con = ConnectionFactory.getConnection();
+			String sql = "Select * from " + BancoTabela.ENTREGA
+					+ " where " + BancoTabela.ENTREGA + ".id_entrega = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, idEntrega);
+			ResultSet result = stm.executeQuery();
+			if (result.next()) {
+				Entrega entrega = new Entrega();
+				popularEntrega(entrega, result);
+				return entrega;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	public static ArrayList<Entrega> buscarEntregasPorTurma(int idTurma) {
 		ArrayList<Entrega> entregas = new ArrayList<Entrega>();
 		try {
