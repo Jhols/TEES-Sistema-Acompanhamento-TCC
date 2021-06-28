@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import enums.BancoTabela;
 import enums.SituacaoTurma;
 import model.Aluno;
+import model.CalendarioEntrega;
 import model.Professor;
 import model.Semestre;
 import model.Turma;
@@ -54,7 +55,16 @@ public class TurmaDAO {
 			Statement stm = conexao.createStatement();
 			ResultSet resultado = stm.executeQuery(sql);
 			resultado.next();
-			return resultado.getInt("currval");
+			
+			int id = resultado.getInt("currval");
+			
+			boolean incluirCalendario = CalendarioDAO.getInstance().inserirCalendario(new CalendarioEntrega(id));
+			if(incluirCalendario)
+				System.out.println("Calendario da turma criado");
+			else 
+				System.out.println("Erro ao criar o calendario da turma");
+			
+			return id;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

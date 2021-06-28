@@ -8,6 +8,11 @@ public class CalendarioEntrega {
 		super();
 	}
 	
+	public CalendarioEntrega(int idTurma) {
+		super();
+		this.idTurma = idTurma;
+	}
+	
 	public CalendarioEntrega(int idCalendario, int idTurma, int idSemestre, String descricao) {
 		super();
 		this.idCalendario = idCalendario;

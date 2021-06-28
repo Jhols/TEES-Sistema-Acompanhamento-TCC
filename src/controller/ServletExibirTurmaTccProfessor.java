@@ -1,5 +1,6 @@
 package controller;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -122,16 +123,18 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                                            <th>Prazo</th>\r\n"
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
-		+ "                                    <tbody>\r\n";
+		+ "                                    <tbody id=\"tabEntregas\">\r\n";
 												if (entregas.isEmpty()) {													
 		html += " 									<tr><td colspan=3> Não há nenhuma entrega cadastrada no momento... </td></tr>";
 												} else {
+													int x = 1;
 													for (Entrega entrega : entregas) {
-		html += "  										<tr>\r\n"
-		+ "													<td> Protótipo de baixa fidelidade </td>\r\n"
-		+ "													<td> Entregar o diagrama do protótipo de baixa fidelidade para desenvolver o projeto </td>\r\n"
-		+ "													<td> 20/07/2021 </td>\r\n"
+		html += "  										<tr id=\"tarefa"+x+"\">\r\n"
+		+ "													<td> "+ entrega.getTitulo() +" </td>\r\n"
+		+ "													<td> "+ entrega.getInstrucao() +" </td>\r\n"
+		+ "													<td> "+ new SimpleDateFormat("dd/MM/yyyy").format(entrega.getDataPrazo()).toString() +" </td>\r\n"
 		+ "												</tr>\r\n";
+														x++;
 													}
 												}
 		html += "                              </tbody>\r\n"
@@ -157,10 +160,10 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
 		
-		// cada linha da tabela representa um aluno cujo status Ã© candidato a tcc 
+		// cada linha da tabela representa um aluno cujo status e' candidato a tcc 
 		for (var linha : linhas) {
 			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("matricula");
-			// os botÃµes de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
+			// os botoees de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
 			
 			html += "</tr>";
 			
@@ -252,9 +255,9 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 	    + "								<label for=\"tituloTarefa\"> Título </label>"
 	    + "								<input type=\"textfield\" class=\"form-control form-control-user\" name=\"tituloTarefa\" id=\"tituloTarefa\" style=\"margin-bottom:15px\">"
 	    + "								<label for=\"instrucaoTarefa\"> Instruções </label>"
-	    + "								<textarea rows=\"3\" class=\"form-control form-control-user\" style=\"resize: none; margin-bottom:15px\" type=\"textfield\" name=\"instrucaoTarefa\" id=name=\"instrucaoTarefa\"></textarea>"
+	    + "								<textarea rows=\"3\" class=\"form-control form-control-user\" style=\"resize: none; margin-bottom:15px\" type=\"textfield\" name=\"instrucaoTarefa\" id=\"instrucaoTarefa\"></textarea>"
 	    + "								<label for=\"prazoTarefa\"> Prazo de entrega </label>"
-	    + "								<input type=\"date\" class=\"form-control form-control-user\" name=\"prazoTarefa\" id=name=\"prazoTarefa\">"
+	    + "								<input type=\"date\" class=\"form-control form-control-user\" name=\"prazoTarefa\" id=\"prazoTarefa\">"
 	    + "							 </form>"
 	    + "	 					 </div>"
 	    + " 					<div class=\"modal-footer\">"
@@ -269,15 +272,34 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "</body>\r\n"
 		+ "\r\n"
 		+ "</html>"
-		+ "<script>"
+		+ "<script>\r\n"
 		+ "	  var today = new Date().toISOString().split('T')[0];\r\n"
-		+ "	  document.getElementsByName(\"prazoTarefa\")[0].setAttribute('min', today);"
+		+ "	  document.getElementsByName(\"prazoTarefa\")[0].setAttribute('min', today);\r\n"
+			
+		+ "	  function inserirTarefa() {\r\n"
+		+ "		$.ajax({\r\n"
+		+ "			method : \"POST\",\r\n"
+		+ "			url : \"ServletCalendarioEntrega?opcao=incluir\",\r\n"
+		+ "			data : {\r\n"
+		+ "				'idCalendario' : '" + calendario.getIdCalendario() + "',\r\n"
+		+ "				'titulo' : $(\"#tituloTarefa\").val(),\r\n"
+		+ "				'instrucoes' : $(\"#instrucaoTarefa\").val(),\r\n"
+		+ "				'prazo' : $(\"#prazoTarefa\").val()\r\n"
+		+ "			},\r\n"
+		+ "			success : function(msg) { //Em caso de sucesso na requisicao, executa a seguinte funcao\r\n"
+		+ "				alert(msg);\r\n"
+		+ "				$(\"#tabEntregas\")."
+		+ "			}\r\n"
+		+ "		})\r\n"
+		+ "	  }\r\n"
 		+ "</script>";
 		
 		response.getWriter().write(html);
 		
 	}
 
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
 	
 }

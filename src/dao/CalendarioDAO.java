@@ -145,7 +145,8 @@ public class CalendarioDAO {
 		entrega.setDataPrazo(result.getDate("data_prazo"));
 	}
 	
-	public void inserirEntrega(Entrega entrega) {
+	public boolean inserirEntrega(Entrega entrega) {
+		boolean inclusao = false;
 		String sql;
 		Connection conexao = null;
 		try {
@@ -167,13 +168,47 @@ public class CalendarioDAO {
             stm.setDate(4, new java.sql.Date(entrega.getDataPrazo().getTime()));
             
             stm.executeUpdate();
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
         finally {
 			try {stm.close();}catch(SQLException e){e.printStackTrace();}
 			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+			inclusao = true;
         }
+        return inclusao;
+	}
+	
+	public boolean inserirCalendario(CalendarioEntrega calendario) {
+		boolean inclusao = false;
+		String sql;
+		Connection conexao = null;
+		try {
+			conexao = ConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		sql = "INSERT INTO " + BancoTabela.CALENDARIO_ENTREGA + " (id_turma) VALUES (?)";
+		
+		PreparedStatement stm = null;
+        try {
+        	stm = conexao.prepareStatement(sql);
+        			
+            stm.setInt(1, calendario.getIdTurma());
+            
+            stm.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+			try {stm.close();}catch(SQLException e){e.printStackTrace();}
+			try {conexao.close();}catch(SQLException e){e.printStackTrace();}
+			inclusao = true;
+        }
+        return inclusao;
 	}
 }
