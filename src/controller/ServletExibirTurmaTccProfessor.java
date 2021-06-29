@@ -292,7 +292,6 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "			}\r\n"
 		+ "		})\r\n"
 		+ "	  }\r\n"
-		+ "</script>"
 		
 		
 		+ " function conferirCampos() {\r\n"
