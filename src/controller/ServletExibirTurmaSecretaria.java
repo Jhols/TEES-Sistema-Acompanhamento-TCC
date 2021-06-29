@@ -115,6 +115,9 @@ public class ServletExibirTurmaSecretaria extends HttpServlet{
 		
 		
 		+ "                                            <th></th>\r\n"
+
+		+ "                                            <th></th>\r\n"
+		
 		+ "                                        </tr>\r\n"
 		+ "                                    </thead>\r\n"
 		+ "                                    <tbody>\r\n";
@@ -124,6 +127,7 @@ public class ServletExibirTurmaSecretaria extends HttpServlet{
 			html += "<tr><td>" + linha.get("nome") + "<td>" + linha.get("semestre");
 			// os bot√µes de aceitar e rejeitar passam por parametro o id do projeto e do aluno ou o id da inscricao
 			html+="<td ><a class=\"btn btn-primary\" href=\"cadTurmasTcc?turma="+ linha.get("id_turma") +"\" role=\"button\">Editar</a>";
+			html+="<td ><a class=\"btn btn-primary\" href=\"visualizarCalendarioSecretaria?opcao=exibir_calendario&turma="+ linha.get("id_turma") +"\" role=\"button\">Calend·rio</a>";
 			
 			html += "</tr>";
 		}

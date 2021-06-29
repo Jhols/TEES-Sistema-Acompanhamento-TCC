@@ -108,7 +108,7 @@ public class ServletDashboardSecretaria extends HttpServlet {
 		+ "                <a class=\"nav-link\" href=\"exibirTurma\">\r\n"
 		+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 
-		+ "                    <span style=\"text-align:center\">Vizualizar e editar turmas de TCC</span></a>\r\n"
+		+ "                    <span style=\"text-align:center\">Visualizar Turmas de TCC</span></a>\r\n"
 
 		+ "            </li>\r\n"
 	
