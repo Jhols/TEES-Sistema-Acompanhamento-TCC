@@ -4,7 +4,7 @@
 <%@page import="java.util.Date" %>
 <%@page import="java.text.SimpleDateFormat" %>
 
-<%@include file="topo_secretaria.html" %>
+<%@include file="topo_admin.html" %>
 	
 	<%  %>
 	<!-- DataTales Example -->
@@ -44,4 +44,4 @@
 		</div>
 	</div>
 	
-<%@include file="rodape_secretaria.html" %>
+<%@include file="rodape_admin.html" %>

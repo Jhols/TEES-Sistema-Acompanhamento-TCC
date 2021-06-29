@@ -49,6 +49,8 @@ public class ServletDashboardAdministrador extends HttpServlet {
 					break;
 				case "cadProfessor":
 					request.getRequestDispatcher("view_administrador/cadastro_professor_tcc.jsp").forward(request, response);
+				case "visualizar_turmas":
+					request.getRequestDispatcher("view_administrador/visualizar_turmas_tcc.jsp").forward(request, response);
 					break;
 				case "sair": //Limpa o cache, destroi a sessao e redireciona pra tela de login.
 					//request.getRequestDispatcher("ServletLogout").forward(request, response);
