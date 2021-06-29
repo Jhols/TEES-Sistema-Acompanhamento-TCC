@@ -4,7 +4,7 @@
 <%@page import="java.util.Date" %>
 <%@page import="java.text.SimpleDateFormat" %>
 
-<%@include file="topo_secretaria.html" %>
+<%@include file="topo_coordenador.html" %>
 	
 	<%  %>
 	<!-- DataTales Example -->
@@ -41,8 +41,8 @@
 					</tbody>
 				</table>
 			</div>
-			<a class="btn btn-primary" href="secretariaDashboard" role="button">Voltar</a>
+			<a class="btn btn-primary" href="coordenadorDashboard?opcao=visualizarTurmas" role="button">Voltar</a>
 		</div>
 	</div>
 	
-<%@include file="rodape_secretaria.html" %>
+<%@include file="rodape_coordenador.html" %>

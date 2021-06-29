@@ -4,7 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Turma" %>
 <%@ page import="dao.TurmaDAO" %>
-<%@ include file="topo_coordenador.html"%>
+<%@ include file="topo_admin.html"%>
 
 <!-- Begin Page Content -->
 <div class="container">
@@ -33,7 +33,7 @@
 						<tr>
 							<td><%= turma.getNome() %></td>
 							<td><%= turma.getSemestre() %></td>
-							<td><a class="btn btn-primary" href="visualizarCalendarioCoordenador?opcao=exibir_calendario&turma=<%=turma.getId() %>" role="button">Calendário</a></td>
+							<td><a class="btn btn-primary" href="visualizarCalendarioAdministrador?opcao=exibir_calendario&turma=<%=turma.getId() %>" role="button">Calendário</a></td>
 						</tr>
 					<% } %>
 					</tbody>
@@ -42,17 +42,9 @@
 			<a class="btn btn-primary" href="coordenadorDashboard" role="button">Voltar</a>
 	<a class="btn btn-primary" href="login.html" role="button">Login</a>
 		</div>
+		
 	</div>
 	
 </div>
 <!-- /.container-fluid -->
-<%@include file="rodape_coordenador.html"%>
-<!-- Page level plugins -->
-
-<script
-	src="resources/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
-<script
-	src="resources/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="resources/bootstrap/js/demo/datatables-demo.js"></script>
+<%@include file="rodape_admin.html"%>
