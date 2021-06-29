@@ -41,6 +41,7 @@
 					</tbody>
 				</table>
 			</div>
+			<a class="btn btn-primary" href="administradorDashboard" role="button">Voltar</a>
 		</div>
 	</div>
 	
