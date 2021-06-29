@@ -24,6 +24,7 @@
 						<tr>
 							<th>Turma</th>
 							<th>Semestre</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -31,16 +32,18 @@
 					<% for (Turma turma : listaTurmas) { %>
 						<tr>
 							<td><%= turma.getNome() %></td>
-							<td><%= turma.getSemestre() %>
+							<td><%= turma.getSemestre() %></td>
+							<td><a class="btn btn-primary" href="visualizarCalendarioCoordenador?opcao=exibir_calendario&turma=<%=turma.getId() %>" role="button">Calendário</a></td>
 						</tr>
 					<% } %>
 					</tbody>
 				</table>
 			</div>
+			<a class="btn btn-primary" href="coordenadorDashboard" role="button">Voltar</a>
+	<a class="btn btn-primary" href="login.html" role="button">Login</a>
 		</div>
 	</div>
-	<a class="btn btn-primary" href="coordenadorDashboard" role="button">Voltar</a>
-	<a class="btn btn-primary" href="login.html" role="button">Login</a>
+	
 </div>
 <!-- /.container-fluid -->
 <%@include file="rodape_coordenador.html"%>
