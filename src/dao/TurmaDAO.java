@@ -318,6 +318,14 @@ public class TurmaDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	private static Connection conexao = null;
+	private static Connection getConnection() throws SQLException {
+		if (conexao == null) {
+			conexao = ConnectionFactory.getConnection();
+		}
+		return conexao;
+	}
 }
 
 

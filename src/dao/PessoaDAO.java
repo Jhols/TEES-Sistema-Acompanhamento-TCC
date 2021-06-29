@@ -89,6 +89,11 @@ public class PessoaDAO {
 			System.out.println(e.getMessage());
 		}
 		finally {
+			try {
+				conexao.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			return resultado;
 		}
 		
@@ -139,19 +144,15 @@ public class PessoaDAO {
 		Connection conexao = null;
 		try {
 			conexao = ConnectionFactory.getConnection();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
-		sql = "SELECT * FROM " + perfil + " INNER JOIN " + BancoTabela.PESSOA 
+			sql = "SELECT * FROM " + perfil + " INNER JOIN " + BancoTabela.PESSOA 
 				+ " ON " + perfil +".id_pessoa = " +  BancoTabela.PESSOA + ".id_pessoa "
 				+ " WHERE " + perfil+".id_"+perfil + " = " + id;
-				
-		
-		try {
-            Statement stm = conexao.createStatement();
-            resultado = stm.executeQuery(sql);
+			
+			Statement stm = conexao.createStatement();
+			resultado = stm.executeQuery(sql);
+			
+			conexao.close();
 		}
 		catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -213,6 +214,7 @@ public class PessoaDAO {
 			stm.setInt(4, pessoa.getId());
 			
 			stm.executeUpdate();
+			con.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -235,4 +237,7 @@ public class PessoaDAO {
 		return false;
 	}
 	
+	
+	
+
 }

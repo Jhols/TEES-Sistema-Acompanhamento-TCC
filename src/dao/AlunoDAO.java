@@ -18,7 +18,6 @@ import util.ConnectionFactory;
 public class AlunoDAO {
 	
 	private static AlunoDAO uniqueInstance; //Singleton
-	private static Connection conexao;
 	
 	public AlunoDAO() { }
 	
@@ -162,8 +161,8 @@ public class AlunoDAO {
 				// usa o id_pessoa encontrado para retornar a pessoa
 				int idPessoa = resultado.getInt("id_pessoa");
 				aluno = pesquisarAlunoPorIdPessoa(idPessoa);
-				
 			}
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -195,7 +194,7 @@ public class AlunoDAO {
 				
 				alunos.add(aluno);
 			}
-			
+			connection.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -249,7 +248,7 @@ public class AlunoDAO {
 					" WHERE id_aluno = " + idAluno;
 			PreparedStatement stm = connection.prepareStatement(sql);
 			stm.executeUpdate();
-			
+			connection.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -294,6 +293,7 @@ public class AlunoDAO {
             	stm.executeUpdate();
             	
 			stm.close();
+			connection.close();
             }catch (SQLException e) {
             	e.printStackTrace();
 		} 
@@ -340,7 +340,7 @@ public class AlunoDAO {
             		listaAlunos.add(aluno.pesquisarAlunoPorIdAluno(listaIdAluno.get(i)));
             	}
             
-            	
+            connection.close();
 			
             }catch (SQLException e) {
             	e.printStackTrace();
@@ -349,12 +349,13 @@ public class AlunoDAO {
 	}
 	
 	public boolean addAluno(Aluno aluno) {
+		Connection con = null;
 		
 		try {
 			
 			int idPessoa = PessoaDAO.getInstance().addPessoa(aluno);
 			
-			Connection con = ConnectionFactory.getConnection();
+			con = ConnectionFactory.getConnection();
 			
 			String sql = "Insert into " +BancoTabela.ALUNO +
 					" (id_pessoa, matricula, status_aluno_tcc) values (?, ?, ?)";
@@ -381,9 +382,19 @@ public class AlunoDAO {
 			if (rowsAffected == 0) {
 				return false;
 			}
+			
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return true;
@@ -393,14 +404,13 @@ public class AlunoDAO {
 		
 		String sql;
 		
-		conexao = null;
 		try {
 	
 		sql = "UPDATE  " + BancoTabela.PESSOA + " SET  nome=?, email=?, telefone=? WHERE " + 
 				 BancoTabela.PESSOA + ".id_pessoa = ?";
-		
-			conexao = ConnectionFactory.getConnection();
-        	PreparedStatement  prepareStatement = conexao.prepareStatement(sql);
+			
+			var con = ConnectionFactory.getConnection();
+        	PreparedStatement  prepareStatement = con.prepareStatement(sql);
         	
         	int id_pessoa= aluno.getId();
         	
@@ -415,11 +425,12 @@ public class AlunoDAO {
             sql = "UPDATE " + BancoTabela.ALUNO + " SET matricula=? WHERE " +
    				 BancoTabela.ALUNO + ".id_pessoa = ?";
             
-   			prepareStatement = conexao.prepareStatement(sql);
+   			prepareStatement = con.prepareStatement(sql);
    			prepareStatement.setString(1, aluno.getMatricula());
    			prepareStatement.setInt(2, id_pessoa);
             prepareStatement.executeUpdate();
             
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
