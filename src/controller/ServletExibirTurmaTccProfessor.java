@@ -288,7 +288,7 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "			},\r\n"
 		+ "			success : function(msg) { //Em caso de sucesso na requisicao, executa a seguinte funcao\r\n"
 		+ "				alert(msg);\r\n"
-		+ "				$(\"#tabEntregas\")."
+		+ "				//$(\"#tabEntregas\").\r\n"
 		+ "			}\r\n"
 		+ "		})\r\n"
 		+ "	  }\r\n"
