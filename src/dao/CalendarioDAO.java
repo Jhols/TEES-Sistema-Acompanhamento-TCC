@@ -135,7 +135,7 @@ public class CalendarioDAO {
 					+ " inner join " + BancoTabela.ENTREGA
 						+ " on " + BancoTabela.CALENDARIO_ENTREGA + ".id_calendario_entrega=" + BancoTabela.ENTREGA+".id_calendario_entrega"
 					+ " where " + BancoTabela.TURMA + ".turma_id = ?"
-					+ " order by " + BancoTabela.ENTREGA + ".data_prazo";
+					+ " order by " + BancoTabela.ENTREGA + ".data_prazo DESC";
 			System.out.println(sql);
 			System.out.println(idTurma);
 			PreparedStatement stm = con.prepareStatement(sql);
