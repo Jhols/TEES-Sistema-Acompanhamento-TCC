@@ -271,7 +271,6 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		
 		+ "</body>\r\n"
 		+ "\r\n"
-		+ "</html>"
 		+ "<script>\r\n"
 		+ "	  var today = new Date().toISOString().split('T')[0];\r\n"
 		+ "	  document.getElementsByName(\"prazoTarefa\")[0].setAttribute('min', today);\r\n"
@@ -292,7 +291,8 @@ public class ServletExibirTurmaTccProfessor extends HttpServlet{
 		+ "			}\r\n"
 		+ "		})\r\n"
 		+ "	  }\r\n"
-		+ "</script>";
+		+ "</script>"
+		+ "</html>";
 		
 		response.getWriter().write(html);
 		

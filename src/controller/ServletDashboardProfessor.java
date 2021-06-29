@@ -43,6 +43,7 @@ public class ServletDashboardProfessor extends HttpServlet {
 		boolean visualizarAlunosDaTurma= ! professor.isOrientador();
 		boolean visualizarProjetosDisponiveis= !professor.isOrientador();
 		boolean anexoArquivoProjeto = professor.isOrientador();
+		boolean visualizaPostagem = professor.isOrientador();
 		
 		if(professor.isTCC()){
 			visualizarAlunosCandidatosTCC=true;
@@ -199,6 +200,14 @@ public class ServletDashboardProfessor extends HttpServlet {
 			+ "                <a class=\"nav-link\" href=\"anexarArquivoProjeto\">\r\n"
 			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
 			+ "                    <span>Anexar arquivo</span></a>\r\n"
+			+ "            </li>\r\n";
+		}
+		if (visualizaPostagem) {
+			html += "            <!-- Item meus projetos -->\r\n"
+			+ "			 <li class=\"nav-item\">\r\n"
+			+ "                <a class=\"nav-link\" href=\"postagemTccOrientador\">\r\n"
+			+ "                    <i class=\"fas fa-fw fa-wrench\"></i>\r\n"
+			+ "                    <span>Visualizar postagens dos orientandos</span></a>\r\n"
 			+ "            </li>\r\n";
 		}
 		html += "   <!-- botao -->\r\n"
